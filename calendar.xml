@@ -1,0 +1,62 @@
+<Defaults>
+    <Text alignment="MiddleLeft" color="white" />
+    <Text class="year" color="red" fontSize="24" />
+    <Button class="main" width="45" height="45" textAlignment="MiddleCenter" fontStyle="Bold" textColor="white" colors="#2D2D2D00|#5D5D5D|#57575700|#171717" />
+
+    <!-- MONTH STUFF -->
+    <Panel class="january" color="#a31724" />
+    <Panel class="february" color="#541e76" />
+    <Panel class="march" color="#c9d6df" />
+    <Panel class="april" color="#ffffff" />
+    <Panel class="may" color="#056839" />
+    <Panel class="june" color="#c191c1" />
+    <Panel class="july" color="#ed1b24" />
+    <Panel class="august" color="#cfdd26" />
+    <Panel class="september" color="#2e3192" />
+    <Panel class="october" color="#f58b9f" />
+    <Panel class="november" color="#fba919" />
+    <Panel class="december" color="#00a793" />
+
+    <Text class="january" color="white" />
+    <Text class="february" color="white" />
+    <Text class="march" color="black" />
+    <Text class="april" color="black" />
+    <Text class="may" color="white" />
+    <Text class="june" color="black" />
+    <Text class="july" color="white" />
+    <Text class="august" color="black" />
+    <Text class="september" color="white" />
+    <Text class="october" color="black" />
+    <Text class="november" color="black" />
+    <Text class="december" color="white" />
+
+    <Button class="january" textColor="white" />
+    <Button class="february" textColor="white" />
+    <Button class="march" textColor="black" />
+    <Button class="april" textColor="black" />
+    <Button class="may" textColor="white" />
+    <Button class="june" textColor="black" />
+    <Button class="july" textColor="white" />
+    <Button class="august" textColor="black" />
+    <Button class="september" textColor="white" />
+    <Button class="october" textColor="black" />
+    <Button class="november" textColor="black" />
+    <Button class="december" textColor="white" />
+</Defaults>
+
+
+<Panel position="0 210 -15" width="280" height="40">
+    <Text text="Year:" />
+    <Text class="year" id="yearvalue" text="525" position="50 0 0" />
+
+    <Button class="main" id="yearBackward" onclick="UIYearForward" position="-15 0 0">-</Button>
+    <Button class="main" id="yearForward" onclick="UIYearBackward" position="35 0 0">+</Button>
+</Panel>
+
+<Panel position="0 170 -15" width="293" height="40" class="march">
+    <Text class="march" id="monthText" position="5 0 0" text="Month:" />
+    <Text class="march" id="monthValue" text="March" position="55 0 0" />
+
+    <Button class="main march" id="monthBackward" onclick="UIMonthForward" position="0 0 0">-</Button>
+    <Button class="main march" id="monthForward" onclick="UIMonthBackward" position="50 0 0">+</Button>
+</Panel>

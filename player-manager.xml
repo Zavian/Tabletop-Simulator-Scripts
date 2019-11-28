@@ -1,0 +1,26 @@
+<Defaults>
+    <Button class="heal" colors="#2ECC40|#55DF65|#43A34E|gray" TextColor="white" textAlignment="MiddleCenter" FontSize="25" />
+    <Button class="damage" colors="#FF4136|#FB8881|#C93931|gray" TextColor="black" textAlignment="MiddleCenter" FontSize="25" />
+    <InputField textAlignment="MiddleCenter" FontSize="30" placeholder=" " />
+</Defaults>
+
+
+<Panel position="440 0 -50" width="650" height="300" rotation="0 0 0" color="#FFFFFF50" id="main">
+    <Button width="230" height="75" position="-200 80 0" class="heal" text="HEAL" id="healButton" />
+    <InputField width="230" height="75" position="-200 0 0" id="hpVariance" text="" />
+    <Button width="230" height="75" position="-200 -80 0" class="damage" text="DAMAGE" id="damageButton" />
+
+    <Text text="CURRENT" width="105" height="75" FontSize="20" color="#E4E4E4" position="-10 55 0" />
+    <InputField width="105" height="75" position="-20 0 0" id="currentHP" colors="#FFFFFF20|#E4E4E4|#FFFFFF|gray" text="" />
+
+    <Text text="/" width="10" height="75" FontSize="32" position="50 0 0" color="#E4E4E4" />
+
+    <Text text="MAX" width="105" height="75" FontSize="20" color="#E4E4E4" position="110 55 0" />
+    <InputField width="105" height="75" position="110 0 0" id="maxHP" colors="#FFFFFF20|#E4E4E4|#FFFFFF|gray" text="" />
+
+    <Text text="HIT POINTS" FontSize="25" FontStyle="Bold" position="50 -80 0" />
+
+    <Text text="TEMP" width="105" height="75" FontSize="20" color="#E4E4E4" position="230 55 0" />
+    <InputField width="105" height="75" position="230 0 0" id="tempHP" colors="#FFFFFF20|#E4E4E4|#FFFFFF|gray" text="" placeholder="--" />
+
+</Panel>

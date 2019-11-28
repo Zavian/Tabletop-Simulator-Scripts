@@ -1,0 +1,117 @@
+<!-- 
+| Number | Name                            |    |
+| x      | _______________________________ | 🖊 |
+| x      | _______________________________ | 🖊 |
+| x      | _______________________________ | 🖊 |
+| x      | _______________________________ | 🖊 |
+| x      | _______________________________ | 🖊 |
+| x      | _______________________________ | 🖊 |
+| x      | _______________________________ | 🖊 |
+| x      | _______________________________ | 🖊 |
+| x      | _______________________________ | 🖊 |
+
+legend size:
+w410 h30
+y140 z-15
+scale 1 1 1
+
+ colors = {
+        PLAYER = {bg = "#4646FF", fg = "#c1dffc"},
+        ENEMY = {bg = "#b70126", fg = "#FECACA"},
+        ALLY = {bg = "#009348", fg = "#ecfdca"},
+        NEUTRAL = {bg = "#fdd000", fg = "#FFFFAE"}
+    }
+ -->
+
+<Defaults>
+    <!-- <Button scale="0.5 0.5 0.5" value="false" onClick="toggleCheckBox" height="100" fontSize="60" textColor="#FFFFFF" fontStyle="Bold" color="#00000040"/> -->
+    <Text class="top" color="black" alignment="MiddleLeft" />
+
+    <Text class="name" minWidth="120" />
+
+    <Text alignment="MiddleLeft" color="white" />
+    <InputField textAlignment="MiddleCenter" fontSize="10" colors="#2D2D2D80|#5D5D5D|#57575780|#171717" textColor="white" minWidth="30" />
+    <Button textAlignment="Middle Center" fontStyle="Bold" textColor="white" colors="#2D2D2D00|#5D5D5D|#57575700|#171717" />
+    <HorizontalLayout spacing="4" width="100%" />
+
+    <HorizontalLayout class="odd" color="#00000080" />
+
+    <HorizontalLayout class="even-player" color="#4646FF80" />
+    <HorizontalLayout class="odd-player" color="#c1dffc80" />
+
+    <HorizontalLayout class="even-enemy" color="#b7012680" />
+    <HorizontalLayout class="odd-enemy" color="#FECACA80" />
+
+    <HorizontalLayout class="even-ally" color="#00934880" />
+    <HorizontalLayout class="odd-ally" color="#ecfdca80" />
+
+    <HorizontalLayout class="even-neutral" color="#fdd00080" />
+    <HorizontalLayout class="odd-neutral" color="#FFFFAE80" />
+
+    <Toggle colors="#2D2D2D80|#5D5D5D|#57575780|#171717" />
+
+    <!-- 
+	<Text class="top" color="black" width="250" height="70" />
+	
+	<Text class="hp" color="#2ECC40" />
+	<Button class="destroy" color="#FF4136" /> -->
+</Defaults>
+
+<HorizontalLayout position="0 210 -15" rotation="0 0 0" scale="1 1 1" visibility="Black" width="280" height="30" padding="5 5 0 0" color="#DDDDDD">
+    <Text class="top" text="Ini" />
+    <Text class="top" text="Name" position="55 0 0" minWidth="170" />
+</HorizontalLayout>
+<VerticalScrollView position="0 -20 -15" width="280" height="420" color="#FFFFFF00" verticalScrollbarVisibility="AutoHide">
+    <ToggleGroup width="265">
+        <VerticalLayout spacing="4">
+            <!-- <HorizontalLayout class="even-enemy">
+                <Toggle />
+                <InputField text="17" />
+                <Text class="name" text="Paul" />
+                <Button>↓</Button>
+            </HorizontalLayout>
+            <HorizontalLayout class="odd-enemy">
+                <Toggle />
+                <InputField text="17" />
+                <Text class="name" text="Paul" />
+                <Button>↓</Button>
+            </HorizontalLayout>
+            <HorizontalLayout class="even-player">
+                <Toggle />
+                <InputField text="17" />
+                <Text class="name" text="Paul" />
+                <Button>↓</Button>
+            </HorizontalLayout>
+            <HorizontalLayout class="odd-player">
+                <Toggle />
+                <InputField text="17" />
+                <Text class="name" text="Paul" />
+                <Button>↓</Button>
+            </HorizontalLayout>
+            <HorizontalLayout class="even-ally">
+                <Toggle />
+                <InputField text="17" />
+                <Text class="name" text="Paul" />
+                <Button>↓</Button>
+            </HorizontalLayout>
+            <HorizontalLayout class="odd-ally">
+                <Toggle />
+                <InputField text="17" />
+                <Text class="name" text="Paul" />
+                <Button>↓</Button>
+            </HorizontalLayout>
+            <HorizontalLayout class="even-neutral">
+                <Toggle />
+                <InputField text="17" />
+                <Text class="name" text="Paul" />
+                <Button>↓</Button>
+            </HorizontalLayout>
+            <HorizontalLayout class="odd-neutral">
+                <Toggle />
+                <InputField text="17" />
+                <Text class="name" text="Paul" />
+                <Button>↓</Button>
+            </HorizontalLayout> -->
+        </VerticalLayout>
+    </ToggleGroup>
+</VerticalScrollView>

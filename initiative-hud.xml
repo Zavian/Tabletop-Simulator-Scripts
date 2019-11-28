@@ -1,0 +1,44 @@
+<Defaults>
+    <Image height="46" />
+    <Image class="closed" width="249" />
+    <Image class="opened" width="375" />
+    <Image class="player" height="46" width="358" image="Player" allowDragging="true" returnToOriginalPositionWhenReleased="false" rectAlignment="Center" offsetXY="0 -285" />
+
+    <Button width="30" textAlignment="MiddleCenter" />
+    <Button class="closed" color="rgba(0,0,0,0)" offsetXY="115 0" rectAlignment="UpperLeft" />
+    <Button class="opened" color="rgba(0,0,0,0)" offsetXY="0 0" rectAlignment="UpperLeft" />
+    <Button class="activator" color="rgba(0,0,0,0)" offsetXY="160 0" width="154" rectAlignment="MiddleLeft" />
+    <Button class="finder" tooltipBackgroundColor="black" tooltipTextColor="white" tooltipBorderColor="white" tooltip="Find pawn." tooltipPosition="Above" color="rgba(0,0,0,0)" offsetXY="340 0" rectAlignment="MiddleLeft" width="25" />
+
+    <Text active="true" rectAlignment="MiddleLeft" textAlignment="MiddleCenter" />
+    <Text class="initiative" fontSize="22" width="25" offsetXY="340 0" />
+    <Text class="name" fontSize="24" offsetXY="160 0" width="154" />
+
+    <Toggle width="21" height="21" rectAlignment="MiddleRight" colors="#FFFFFF50|#FFFFFFFF|#B2B2B2FF|#FFFFFF00" active="true" />
+    <Toggle class="conc" tooltipBackgroundColor="black" tooltipTextColor="white" tooltipBorderColor="white" tooltip="The creature is concentrating" tooltipPosition="Above" offsetXY="30 0" rectAlignment="MiddleLeft" />
+    <Toggle class="react" tooltipBackgroundColor="black" tooltipTextColor="white" tooltipBorderColor="white" tooltip="The creature used its reaction (resets on new round)" tooltipPosition="Above" offsetXY="92 0" rectAlignment="MiddleLeft" />
+
+
+</Defaults>
+
+<Button id="toggle" visibility="black" text="_" width="35" height="35" rectAlignment="LowerRight" onClick="ToggleHud" offsetXY="0 255" />
+<Button id="nt" visibility="black" text="Next Turn" width="100" height="35" rectAlignment="LowerRight" onClick="NextTurn" offsetXY="-35 255" />
+<Button id="nr" visibility="black" text="Next Round" width="100" height="35" rectAlignment="LowerRight" onClick="NextRound" offsetXY="-135 255" />
+
+<VerticalScrollView visibility="black" color="#ffffff10" scrollbarBackgroundColor="#00000055" offsetXY="7 0" active="true" raycasttarget="true" id="widget" width="400" height="255" rectAlignment="LowerRight" movementType="Clamped" scrollSensitivity="15">
+    <VerticalLayout id="layout" width="375" height="10">
+
+    </VerticalLayout>
+</VerticalScrollView>
+<!-- scrollbarColors="white|#1F8EFF|#1F59FF|white" -->
+<Image class="player" active="false" id="green" visibility="Green" />
+<Image class="player" active="false" id="purple" visibility="Purple" />
+<Image class="player" active="false" id="red" visibility="Red" />
+<Image class="player" active="false" id="blue" visibility="Blue" />
+<Image class="player" active="false" id="yellow" visibility="Yellow" />
+<Image class="player" active="false" id="brown" visibility="Brown" />
+<Image class="player" active="false" id="white" visibility="White" />
+<Image class="player" active="false" id="teal" visibility="Teal" />
+<Image class="player" active="false" id="orange" visibility="Orange" />
+<Image class="player" active="false" id="pink" visibility="Pink" />
+

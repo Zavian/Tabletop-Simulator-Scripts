@@ -1,0 +1,2 @@
+<Button id="bg" raycasttarget="false" width="200" height="30" color="#ffffffaa" position="0 230 -90" rotation="90 270 90" />
+<Text id="txt" text="test" width="300" height="200" FontSize="25" color="#000000" position="0 230 -90" rotation="90 270 90" />

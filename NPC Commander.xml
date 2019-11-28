@@ -1,0 +1,56 @@
+<Defaults>
+	<!-- <Button scale="0.5 0.5 0.5" value="false" onClick="toggleCheckBox" height="100" fontSize="60" textColor="#FFFFFF" fontStyle="Bold" color="#00000040"/> -->
+	<InputField scale="1.5 1 1.5" fontSize="34" height="60" />
+	<Text scale="1.5 1.5 1.5" color="#FFFFFF" height="70" minWidth="150" width="250" fontSize="30" fontStyle="Bold" />
+	<Button fontSize="30" width="70" height="70" fontStyle="Bold" color="#ffffff040" />
+
+	<InputField class="calculate" visibility="Black" height="70" width="70" fontSize="25" characterValidation="Integer" />
+
+	<Text class="top" color="black" width="250" height="70" />
+	<Text class="name" minWidth="250" />
+	<Text class="hp" color="#2ECC40" />
+	<Button class="destroy" color="#FF4136" />
+
+
+</Defaults>
+
+<!--<InputField position="-650 770 -60" width="200">Name</InputField>-->
+<Text scale="1.53 1 1.53" position="0 630 -60" width="1650" fontSize="34" minWidth="1650" color="#ffffff">________________________________________________________</Text>
+<!--<Button scale="0.5 0.5 0.5" position="700 740 -60" width="400" height="150" fontSize="100" onClick="sync">Sync</Button>-->
+<HorizontalLayout width="1650" height="70" position="0 580 -60" color="#DDDDDD">
+	<Text color="black" minWidth="250" text="Name"></Text>
+	<Text class="top" text="Ini"></Text>
+	<Text class="top" text="HP"></Text>
+	<Text class="top" text="AC"></Text>
+	<Text class="top" text="DMG"></Text>
+	<Text class="top" text="ATK"></Text>
+	<InputField class="calculate" id="calculateAllText"></InputField>
+	<Button id="calculateAll">C</Button>
+	<Button class="destroy" id="destroyAll">X</Button>
+</HorizontalLayout>
+<VerticalScrollView position="0 -140 -60" width="1650" height="1350" color="#FFFFFF00" verticalScrollbarVisibility="AutoHide">	<!-- AutoHide -->
+	<VerticalLayout height="100">
+		<!-- <HorizontalLayout>
+			<Text class="name" text="Zwerg"></Text>
+			<Text text="+2"></Text>
+			<Text class="hp">10 <textcolor color="#FFFFFF">|</textcolor>10</Text>
+			<Text text="13"></Text>
+			<Text text="+4"></Text>
+			<Text text="2d6"></Text>
+			<InputField class="calculate"></InputField>
+			<Button>C</Button>
+			<Button class="destroy" onClick="f8d815/UI_Destroy(OMEGALUL)">X</Button>
+		</HorizontalLayout>
+		<HorizontalLayout color="#00000080">
+			<Text class="name" text="Chungus"></Text>
+			<Text text="+2"></Text>
+			<Text class="hp" text="88"></Text>
+			<Text text="13"></Text>
+			<Text text="+4"></Text>
+			<Text text="3d12"></Text>
+			<InputField class="calculate"></InputField>
+			<Button>C</Button>
+			<Button color="#FF4136">X</Button>
+		</HorizontalLayout> -->
+	</VerticalLayout>
+</VerticalScrollView> 
