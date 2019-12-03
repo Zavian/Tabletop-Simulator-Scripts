@@ -1,0 +1,20 @@
+<Defaults>
+    <Image class="state" preserveAspect="true" onclick="manage_state(id)" />
+</Defaults>
+
+<HorizontalLayout width="150" height="75" position="0 0 -250" rotation="270 270 90" id="states" childForceExpandWidth="false" childForceExpandHeight="false">
+    <Image class="state" active="true" id="blinded" image="blinded" />
+    <Image class="state" active="false" id="charmed" image="charmed" />
+    <Image class="state" active="false" id="concentration" image="concentration" />
+    <Image class="state" active="false" id="deafened" image="deafened" />
+    <Image class="state" active="false" id="frightened" image="frightened" />
+    <Image class="state" active="false" id="grappled" image="grappled" />
+    <Image class="state" active="false" id="incapacitated" image="incapacitated" />
+    <Image class="state" active="false" id="invisible" image="invisible" />
+    <Image class="state" active="false" id="on fire" image="on fire" />
+    <Image class="state" active="false" id="paralyzed" image="paralyzed" />
+    <Image class="state" active="false" id="petrified" image="petrified" />
+    <Image class="state" active="false" id="poisoned" image="poisoned" />
+    <Image class="state" active="false" id="restrained" image="restrained" />
+    <Image class="state" active="false" id="stunned" image="stunned" />
+</HorizontalLayout>
