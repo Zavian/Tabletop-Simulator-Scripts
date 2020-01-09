@@ -196,6 +196,7 @@ function place_object(obj, tar_params, offset)
     if tar_params[3] then
         obj.setScale(tar_params[3])
     end
+    obj.setLock(true)
 end
 
 function take_piece(obj)

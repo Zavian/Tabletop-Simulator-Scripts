@@ -2,15 +2,14 @@
 function buttonPress()
     if lockout == false then
         tokens = {
-            "229b08", --bastion
-            "699dc8", --kaz
-            "ede93f", --klaus
+            "ede93f", --erik
             "e5b5f7", --sai
             "3fe46d", --varan
             "374881", --chance
-            "6ea5eb" --zerrik
+            "6ea5eb" --erreus
         }
-        local startingPoint = {x = -48.96, y = 3.5, z = 23.16}
+        local coin = "a2f185" --coin
+        local startingPoint = {x = -82.45, y = 5.18, z = 22.95}
 
         for i = 1, #tokens do
             --local token_info = tokens[i]
@@ -23,6 +22,10 @@ function buttonPress()
 
             startingPoint.z = startingPoint.z - 2.5
         end
+        local obj = getObjectFromGUID(coin)
+        obj.setRotationSmooth({0, 90.0, 0}, false, true)
+        obj.setPositionSmooth({-87.35, 6.3, 12.09}, false, false)
+
         startingPoint = {x = -48.96, y = 3.5, z = 23.16}
     end
 end
