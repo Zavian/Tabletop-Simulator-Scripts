@@ -10,14 +10,16 @@ local _defaults = {
         "Erik",
         "Erreus",
         "Varan",
-        "Chance"
+        "Chance",
+        "Raymon"
     },
     playersColors = {
         sai = "Red",
         erik = "Brown",
         erreus = "Blue",
         varan = "Green",
-        chance = "Yellow"
+        chance = "Yellow",
+        raymon = "White"
     },
     offsets = {
         nr = "-35 255",
@@ -389,12 +391,14 @@ function findPawn(player, request, v)
     local guid = UI.getAttribute(v, "pawn")
     local pawn = getObjectFromGUID(guid)
     pawn.call("toggleVisualize", {input = "true", color = "Black"})
-    Player["Black"].lookAt({
-        position = pawn.getPosition(),
-        distance = 60,
-        pitch = 60,
-        yaw = 270
-    })
+    Player["Black"].lookAt(
+        {
+            position = pawn.getPosition(),
+            distance = 60,
+            pitch = 60,
+            yaw = 270
+        }
+    )
 end
 
 function seeCache(name, initiative, pawn, thing)
