@@ -19,7 +19,7 @@ local _defaults = {
         erreus = "Blue",
         varan = "Green",
         chance = "Yellow",
-        raymon = "White"
+        raymon = "Purple"
     },
     offsets = {
         nr = "-35 255",

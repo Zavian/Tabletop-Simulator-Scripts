@@ -541,21 +541,72 @@ function toggleVisualize(params)
     end
 end
 
+function UI_ConditionMenu(params)
+    local v = self.UI.getAttribute("ConditionMenu", "active")
+    if v == "true" then
+        self.UI.setAttribute("ConditionMenu", "active", "false")
+    elseif v == "false" then
+        self.UI.setAttribute("ConditionMenu", "active", "true")
+    end
+end
+
 local _conditions = {
-    blinded = "A blinded creature can't see and automatically fails any ability check that requires sight.\nAttack rolls against the creature have advantage, and the creature's attack rolls have disadvantage.",
-    charmed = "A charmed creature can't attack the charmer or target the charmer with harmful abilities or magical effects.\nThe charmer has advantage on any ability check to interact socially with the creature.",
-    concentration = "Whenever you take damage while you are concentrating on a spell, you must make a Constitution saving throw to maintain your Concentration. The DC equals 10 or half the damage you take, whichever number is higher. If you take damage from multiple sources, such as an arrow and a dragon’s breath, you make a separate saving throw for each source of damage.",
-    deafened = "A deafened creature can't hear and automatically fails any ability check that requires hearing.",
-    frightened = "A frightened creature has disadvantage on ability checks and attack rolls while the source of its fear is within line of sight.\nThe creature can't willingly move closer to the source of its fear.",
-    grappled = "A grappled creature's speed becomes 0, and it can't benefit from any bonus to its speed.\nThe condition ends if the grappler is incapacitated.\nThe condition also ends if an effect removes the grappled creature from the reach of the grappler or grappling effect, such as when a creature is hurled away by the thunderwave spell.",
-    incapacitated = "An incapacitated creature can't take actions or reactions.",
-    invisible = "An invisible creature is impossible to see without the aid of magic or a special sense. For the purpose of hiding, the creature is heavily obscured. The creature's location can be detected by any noise it makes or any tracks it leaves.\nAttack rolls against the creature have disadvantage, and the creature's attack rolls have advantage.",
-    on_fire = "A creature who is on fire takes 2d6 damage at the start of each of their turns.\nThe creature sheds bright light in a 20-foot radius and dim light for an additional 20 feet.\nThe effect can be ended early with the Extinguish action.",
-    paralyzed = "A paralyzed creature is incapacitated and can't move or speak.\nThe creature automatically fails Strength and Dexterity saving throws.\nAttack rolls against the creature have advantage.\nAny attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature.",
-    petrified = "A petrified creature is transformed, along with any nonmagical object it is wearing or carrying, into a solid inanimate substance (usually stone). Its weight increases by a factor of ten, and it ceases aging.\nThe creature is incapacitated, can't move or speak, and is unaware of its surroundings.\nAttack rolls against the creature have advantage.",
-    poisoned = "A poisoned creature has disadvantage on attack rolls and ability checks.",
-    restrained = "A restrained creature's speed becomes 0, and it can't benefit from any bonus to its speed.\nAttack rolls against the creature have advantage, and the creature's attack rolls have disadvantage.\nThe creature has disadvantage on Dexterity saving throws.",
-    stunned = "A stunned creature is incapacitated, can't move, and can speak only falteringly.\nThe creature automatically fails Strength and Dexterity saving throws.\nAttack rolls against the creature have advantage."
+    blinded = {
+        desc = "A blinded creature can't see and automatically fails any ability check that requires sight.\nAttack rolls against the creature have advantage, and the creature's attack rolls have disadvantage.",
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275757198/B9460859AEC458C86D9657C1E2B1580623F8B5BC/"
+    },
+    charmed = {
+        desc = "A charmed creature can't attack the charmer or target the charmer with harmful abilities or magical effects.\nThe charmer has advantage on any ability check to interact socially with the creature.",
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275760191/6D2618C57A6A8D5752E50125742B960D0D414D6D/"
+    },
+    concentration = {
+        desc = "Whenever you take damage while you are concentrating on a spell, you must make a Constitution saving throw to maintain your Concentration. The DC equals 10 or half the damage you take, whichever number is higher. If you take damage from multiple sources, such as an arrow and a dragon’s breath, you make a separate saving throw for each source of damage.",
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275760557/8157E260CED63CE99037D31D371B2F5A132CAA11/"
+    },
+    deafened = {
+        desc = "A deafened creature can't hear and automatically fails any ability check that requires hearing.",
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275760974/AC8120DF8234240B586A9BD4DA9CD35C52DFF29D/"
+    },
+    frightened = {
+        desc = "A frightened creature has disadvantage on ability checks and attack rolls while the source of its fear is within line of sight.\nThe creature can't willingly move closer to the source of its fear.",
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275761396/8C91C898822015B04A84DF5D906C1D168775BF1E/"
+    },
+    grappled = {
+        desc = "A grappled creature's speed becomes 0, and it can't benefit from any bonus to its speed.\nThe condition ends if the grappler is incapacitated.\nThe condition also ends if an effect removes the grappled creature from the reach of the grappler or grappling effect, such as when a creature is hurled away by the thunderwave spell.",
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275761896/5F051E43B6A18D016B30EA7743A55FE4F9A09B8F/"
+    },
+    incapacitated = {
+        desc = "An incapacitated creature can't take actions or reactions.",
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275762313/53D74876998BEE4A165CEBFF9B368731F71E5BCD/"
+    },
+    invisible = {
+        desc = "An invisible creature is impossible to see without the aid of magic or a special sense. For the purpose of hiding, the creature is heavily obscured. The creature's location can be detected by any noise it makes or any tracks it leaves.\nAttack rolls against the creature have disadvantage, and the creature's attack rolls have advantage.",
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275762789/7E623448A878DC2413455BEF0F9424636CB684B6/"
+    },
+    on_fire = {
+        desc = "A creature who is on fire takes 2d6 damage at the start of each of their turns.\nThe creature sheds bright light in a 20-foot radius and dim light for an additional 20 feet.\nThe effect can be ended early with the Extinguish action.",
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275763230/067BB26B3F9F76BD16053956D7617A25697F9B44/"
+    },
+    paralyzed = {
+        desc = "A paralyzed creature is incapacitated and can't move or speak.\nThe creature automatically fails Strength and Dexterity saving throws.\nAttack rolls against the creature have advantage.\nAny attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature.",
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275763685/0015B9C114E51C9FDDA0BB646DEE5C2D33BA3996/"
+    },
+    petrified = {
+        desc = "A petrified creature is transformed, along with any nonmagical object it is wearing or carrying, into a solid inanimate substance (usually stone). Its weight increases by a factor of ten, and it ceases aging.\nThe creature is incapacitated, can't move or speak, and is unaware of its surroundings.\nAttack rolls against the creature have advantage.",
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275764185/EECDE8DEC9F8652B7C039D25465E8005F27EADD6/"
+    },
+    poisoned = {
+        desc = "A poisoned creature has disadvantage on attack rolls and ability checks.",
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275764643/52B35B1737B0E3B7CF037E15F4BEED36FB72385B/"
+    },
+    restrained = {
+        desc = "A restrained creature's speed becomes 0, and it can't benefit from any bonus to its speed.\nAttack rolls against the creature have advantage, and the creature's attack rolls have disadvantage.\nThe creature has disadvantage on Dexterity saving throws.",
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275765227/4AC985009CE1EE4CB2D3797194FD6E57567C3951/"
+    },
+    stunned = {
+        desc = "A stunned creature is incapacitated, can't move, and can speak only falteringly.\nThe creature automatically fails Strength and Dexterity saving throws.\nAttack rolls against the creature have advantage.",
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275765722/2700DCCA22E84BA5297581E0B5C75581616D92E8/"
+    }
 }
 
 function manage_state(player, request, v)
@@ -563,8 +614,9 @@ function manage_state(player, request, v)
     -- v is the value of said variable. in this case we are in the button
     if player.color == "Black" then
         self.UI.setAttribute(v, "active", "false")
+        self.UI.setAttribute("btn_" .. v:gsub(" ", "_"), "color", "#ffffff")
     else
-        printToColor(v .. ": " .. _conditions[(v:gsub(" ", "_"))], player.color, {r = 1, g = 1, b = 1})
+        printToColor(v .. ": " .. _conditions[(v:gsub(" ", "_"))].desc, player.color, {r = 1, g = 1, b = 1})
     end
 end
 
@@ -577,13 +629,64 @@ function onCollisionEnter(info)
     --    relative_velocity = {x=0, y=20, z=0, 0, 20, 0}
     --}
     local obj = info.collision_object
-    if isCondition((obj.getName():gsub(" ", "_"))) then
-        self.UI.setAttribute(string.lower(obj.getName()), "active", "true")
-        obj.destruct()
+    local name = obj.getName()
+    if name ~= "" and name ~= nil then
+        if isCondition((name:gsub(" ", "_"))) then
+            if obj.tag == "Tile" or obj.tag == "GoPiece" then
+                self.UI.setAttribute(string.lower(obj.getName()), "active", "true")
+                obj.destruct()
+            end
+        end
     end
 end
 
+function UI_AddCondition(player, request, id)
+    local condition = string.lower(string.gsub(id, "btn_", ""))
+
+    local color = self.UI.getAttribute(id, "color")
+    if color == "#00ff00" then -- is selected
+        -- need to remove condition
+        color = "#ffffff"
+        self.UI.setAttribute(condition:gsub("_", " "), "active", "false")
+    else
+        -- add condition
+        local newPos = self.getPosition()
+        newPos.y = newPos.y + 4
+        local custom_object = {
+            type = "go_game_piece_black",
+            position = newPos,
+            callback_function = function(obj)
+                obj.setName(condition:gsub("_", " "))
+            end
+        }
+        spawnObject(custom_object)
+
+        color = "#00ff00"
+    end
+
+    self.UI.setAttribute(id, "color", color)
+
+    self.UI.setAttribute("ConditionMenu", "active", "false")
+end
+
+function UI_ShowCondition(player, request, id)
+    local condition = string.lower(string.gsub(id, "btn_", ""))
+    condition = condition:gsub("_", " ")
+    condition = condition:gsub("^%l", string.upper)
+    self.UI.setAttribute("ConditionType", "text", condition)
+end
+
+function UI_DefaultCondition()
+    self.UI.setAttribute("ConditionType", "text", "Condition")
+end
+
 function isCondition(condition)
-    condition = string.lower(condition)
-    return _conditions[condition] ~= nil
+    if condition ~= nil then
+        condition = string.lower(condition)
+        if _conditions[condition] ~= nil then
+            return _conditions[condition].desc ~= nil
+        else
+            return nil
+        end
+    end
 end
