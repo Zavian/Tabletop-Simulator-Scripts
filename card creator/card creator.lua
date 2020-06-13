@@ -53,23 +53,10 @@ function buttonPress()
                 --color
                 local sp = mysplit(str, " ")
                 take_card(sp[2] .. "|" .. sp[3] .. "|" .. sp[1], true)
+            elseif firstChar == "#" then
+                local sp = mysplit(str, " ")
+                take_card(sp[2] .. "|" .. sp[3] .. "|" .. sp[1], true, true)
             end
-            --if string.sub(lines[i], 1, 1) == "-" then
-            --    card[1] = "" -- beginning of a new card
-            --    card[2] = ""
-            --end
-            --if not readingBack then
-            --    if string.sub(lines[i], 1, 1) == "h" then
-            --        card[1] = lines[i]
-            --        readingBack = true
-            --    end
-            --else
-            --    if string.sub(lines[i], 1, 1) == "h" then
-            --        card[2] = lines[i]
-            --        readingBack = false
-            --        take_card(card)
-            --    end
-            --end
         end
 
         local waiter = function()
@@ -93,14 +80,21 @@ function buttonPress()
     end
 end
 
-function take_card(c, hasColor)
+function take_card(c, hasColor, isHex)
     local returner = {}
 
     local splitted = mysplit(c,"|")
     
     if hasColor then 
-        local colo = splitted[3]:gsub("-", "")
-        returner.color = colorTranslate(colo)         
+        if not isHex then
+            local colo = splitted[3]:gsub("-", "")
+            returner.color = colorTranslate(colo)         
+        else
+            log(splitted[3] .. "LUL")
+            local colo = hexToRgb(splitted[3])
+            log(colo)
+            returner.color = colo
+        end
     end
     returner.card = {splitted[1], splitted[2]}
     takeParams = {
@@ -223,37 +217,8 @@ function onDestroy()
     Timer.destroy(self.getGUID())
 end
 
-function printTable(t)
-    local printTable_cache = {}
-
-    local function sub_printTable(t, indent)
-        if (printTable_cache[tostring(t)]) then
-            print(indent .. "*" .. tostring(t))
-        else
-            printTable_cache[tostring(t)] = true
-            if (type(t) == "table") then
-                for pos, val in pairs(t) do
-                    if (type(val) == "table") then
-                        print(indent .. "[" .. pos .. "] => " .. tostring(t) .. " {")
-                        sub_printTable(val, indent .. string.rep(" ", string.len(pos) + 8))
-                        print(indent .. string.rep(" ", string.len(pos) + 6) .. "}")
-                    elseif (type(val) == "string") then
-                        print(indent .. "[" .. pos .. '] => "' .. val .. '"')
-                    else
-                        print(indent .. "[" .. pos .. "] => " .. tostring(val))
-                    end
-                end
-            else
-                print(indent .. tostring(t))
-            end
-        end
-    end
-
-    if (type(t) == "table") then
-        print(tostring(t) .. " {")
-        sub_printTable(t, "  ")
-        print("}")
-    else
-        sub_printTable(t, "  ")
-    end
+function hexToRgb(hex)
+    hex = hex:gsub("#", "")
+    if #hex < 8 then hex = hex.. "ff" end
+    return color(tonumber("0x".. hex:sub(1,2), 16) / 255, tonumber("0x".. hex:sub(3,4), 16) / 255, tonumber("0x".. hex:sub(5,6), 16) / 255, tonumber("0x".. hex:sub(7,8), 16) / 255)
 end

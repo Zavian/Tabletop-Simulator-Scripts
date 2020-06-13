@@ -4,9 +4,23 @@ function buttonPress()
         local desc = self.getDescription()
         if desc ~= "" then
             local obj = getObjectFromGUID(desc)
-            obj.setPositionSmooth({115.27, 11.88, -79.46}, false, true)
-            obj.setRotationSmooth({347.94, 314.99, 0.35}, false, true)
+
+            local notes = obj.getGMNotes()
+            local pos = {}
+            local rot = {}
+
+            if notes == "" then
+                pos = {115.27, 11.88, -79.46}
+                rot = {347.94, 314.99, 0.35}
+            else
+                local vars = JSON.decode(notes)
+                pos = {vars.pos.x, vars.pos.y, vars.pos.z}
+                rot = {vars.rot.x, vars.rot.y, vars.rot.z}
+            end
+            obj.setPositionSmooth(pos, false, true)
+            obj.setRotationSmooth(rot, false, true)
             obj.setLock(true)
+            self.setDescription("")
         end
 
         self.AssetBundle.playTriggerEffect(0) --triggers animation/sound
@@ -28,6 +42,15 @@ function onload()
         }
     )
     lockout = false
+end
+
+function onCollisionEnter(info)
+    local obj = info.collision_object
+    if obj.interactable then
+        if obj.getGUID() then
+            self.setDescription(obj.getGUID())
+        end
+    end
 end
 
 --Starts a timer that, when it ends, will unlock the button

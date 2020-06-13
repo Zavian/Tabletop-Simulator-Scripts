@@ -641,6 +641,8 @@ function getHeightMultiplier()
     return counter * 50
 end
 
+-- END INITIATIVE HUD
+
 function printTable(t)
     local printTable_cache = {}
 

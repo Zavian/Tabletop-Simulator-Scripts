@@ -17,8 +17,9 @@ Well, as a basis the nomenclature of the files makes pretty obvious, so through 
 -   debug button: It puts stuff in other stuff
 -   initiative-box: Abandoned project
 -   initiative-hud: UI for managing initiative for a dnd combat
--   npc commander v0: The creator of monsters and NPCs as pawns in the table, this is the central brain of everything in my table
--   npc commander: A rework of v0, when I have time I just work on it.
+-   ~~ npc commander v0: The creator of monsters and NPCs as pawns in the table, this is the central brain of everything in my table ~~
+-   ~~ npc commander: A rework of v0, when I have time I just work on it. ~~
+-   **NPC Commander 2.0**: New version of the NPC commander, don't use the old one for your own sake. Want to see it in action, check out the workshop page [Here](https://steamcommunity.com/sharedfiles/filedetails/?id=2116098254). This is a private project that is strictly connected to this github project, if you are to use this there is close to no support as it still at a very draft-y state.
 -   pin-positioner: A script to position things on a map
 -   pin: A script to manage informations on a 3D object
 -   player-manager: A UI based on DNDBEYOND HP tracker but for ingame stuff

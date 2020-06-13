@@ -450,7 +450,16 @@ function order_initiative(obj, color, alt)
     _initiativeTokens = {}
     local zone = getObjectFromGUID(_initiativeZone)
     local objs = zone.getObjects()
-    for i = 0, #objs do
+    for i = 1, #objs do
+        if objs[i] then
+            local name = objs[i].getName()
+            if isToken(name) then
+                objs[i].call("checkUpdates")
+            end
+        end
+    end
+
+    for i = 1, #objs do
         local obj = objs[i]
         if obj then
             local name = obj.getName()
@@ -470,7 +479,7 @@ function order_initiative(obj, color, alt)
             return k1.initiative > k2.initiative
         end
     )
-    local pos = {x = 101.86, y = 3.04, z = -31.76}
+    local pos = {x = 36.47, y = 0.69, z = -20.77}
 
     for i = 0, #_initiativeTokens do
         local t = _initiativeTokens[i]
