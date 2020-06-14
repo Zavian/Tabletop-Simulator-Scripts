@@ -3,9 +3,9 @@
 
     <Panel class="TopPanel" visibility="Black" color="#282828AA" />
     <Button class="TopPanel" rectAlignment="UpperLeft" onClick="UI_MassCalculate(id)" height="35" width="25%" textAlignment="Middle Center" fontStyle="Bold" fontSize="25" />
-    <Button class="Heal" colors="#2ECC40FF|#2EE443FF|#27A736FF|#00000000" />
-    <Button class="Damage" colors="#FF4136FF|#FF281CFF|#DB372EFF|#00000000" />
-    <Button class="Temp" colors="#0074D9ff|#007CE8ff|#006BC9ff|#00000000" />
+    <Button class="Heal" tooltip="Heal selected creatures" colors="#2ECC40FF|#2EE443FF|#27A736FF|#00000000" />
+    <Button class="Damage" tooltip="Damage selected creatures" colors="#FF4136FF|#FF281CFF|#DB372EFF|#00000000" />
+    <Button class="Temp" tooltip="Set Temporary HP on selected creatures" colors="#0074D9ff|#007CE8ff|#006BC9ff|#00000000" />
 </Defaults>
 
 <Button id="TopButton" class="TopButton" rectAlignment="UpperLeft" offsetXY="75 5" onClick="UI_SideToggle" />
