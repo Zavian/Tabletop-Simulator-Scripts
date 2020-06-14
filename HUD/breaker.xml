@@ -1,0 +1,17 @@
+<Defaults>
+    <Button class="TopButton" visibility="Black" height="30" width="300" text="▼" colors="#282828FF|#c8329bFF|#ff9b38FF|#00000000" textColor="#f0f0f0ff" />
+
+    <Panel class="TopPanel" visibility="Black" color="#282828AA" />
+    <Button class="TopPanel" rectAlignment="UpperLeft" onClick="UI_MassCalculate(id)" height="35" width="25%" textAlignment="Middle Center" fontStyle="Bold" fontSize="25" />
+    <Button class="Heal" colors="#2ECC40FF|#2EE443FF|#27A736FF|#00000000" />
+    <Button class="Damage" colors="#FF4136FF|#FF281CFF|#DB372EFF|#00000000" />
+    <Button class="Temp" colors="#0074D9ff|#007CE8ff|#006BC9ff|#00000000" />
+</Defaults>
+
+<Button id="TopButton" class="TopButton" rectAlignment="UpperLeft" offsetXY="75 5" onClick="UI_SideToggle" />
+<Panel active="false" id="TopPanel" class="TopPanel" width="300" height="110" rectAlignment="UpperLeft" offsetXY="75 0">
+    <InputField id="MassField" width="80%" height="40" fontSize="20" rectAlignment="UpperLeft" textAlignment="MiddleCenter" offsetXY="30 -10" onEndEdit="UI_UpdateValue(value)" />
+    <Button id="MassHeal" class="TopPanel Heal" text="+" offsetXY="30 -55" />
+    <Button id="MassDamage" class="TopPanel Damage" text="-" offsetXY="112 -55" />
+    <Button id="MassTemp" class="TopPanel Temp" text="T" offsetXY="196 -55" />
+</Panel>

@@ -38,7 +38,8 @@ local _defaults = {
         rToken = "0e4e22",
         roundPos = {x = 101.65, y = 4.00, z = -28.57},
         roundOffset = 0.38
-    }
+    },
+    textColor = "#f0f0f0ff"
 }
 
 -- ITEMS LEGEND:
@@ -342,6 +343,12 @@ function ShowHud()
     UI.setAttribute("nt", "offsetXY", _defaults.offsets.nr)
     UI.setAttribute("toggle", "offsetXY", _defaults.offsets.toggle)
     UI.setAttribute("nr", "active", "true")
+
+    UI.setAttribute("nt", "textColor", _defaults.textColor)
+    UI.setAttribute("toggle", "textColor", _defaults.textColor)
+    UI.setAttribute("nr", "textColor", _defaults.textColor)
+
+    textColor = ""
     TogglePlayer(true)
 end
 
@@ -350,6 +357,11 @@ function HideHud()
     UI.setAttribute("nt", "offsetXY", _defaults.insets.nr)
     UI.setAttribute("toggle", "offsetXY", _defaults.insets.toggle)
     UI.setAttribute("nr", "active", "false")
+
+    UI.setAttribute("nt", "textColor", _defaults.textColor)
+    UI.setAttribute("toggle", "textColor", _defaults.textColor)
+    UI.setAttribute("nr", "textColor", _defaults.textColor)
+
     TogglePlayer(false)
 end
 

@@ -104,7 +104,8 @@ function updateSave(value)
         MOD = _myMod,
         MOV = _myMovement,
         SIDE = _mySide,
-        tCOLOR = _tokenColor
+        tCOLOR = _tokenColor,
+        tHP = tempHP
     }
     JSON.encode(myData)
     self.script_state = saved_data
@@ -120,6 +121,7 @@ function _restore(data)
     _myMovement = data.MOV
     _mySide = data.SIDE
     _tokenColor = data.tCOLOR
+    tempHP = data.tHP
 
     self.editInput({index = 0, value = data.name})
     updateName()
@@ -214,43 +216,28 @@ function UICalculate()
         tmp = true
     else
         local calc = tonumber(_UIInput)
-        if tempHP > 0 then
-            if calc < 0 then
-                tempHP = tempHP + calc
-                if tempHP <= 0 then 
-                    calc = tempHP 
-                    tempHP = 0
-                else
-                    calc = 0
-                end
-            end
-        end
-        currentHP = currentHP + calc
+        HPMod(calc)
     end
     setHP()
-
-    if calc ~= 0 and not tmp then
-        self.UI.setAttribute("oldValue", "text", _UIInput)
-
-        Wait.time(
-            function()
-                self.UI.setAttribute("oldValue", "text", "")
-            end,
-            10
-        )
-    end
-
     updateSave()
 end
 
-function GlobalCalculate(params)
-    local i = params.input
-    currentHP = currentHP + tonumber(i)
-    setHP()
-    self.UI.setAttribute("oldValue", "text", i)
-    if not restored then
-        _master.UI.setAttribute("hp-" .. _myID, "text", currentHP .. " | " .. maxHP)
+function HPMod(value)
+    local calc = tonumber(value)
+    if tempHP > 0 then
+        if calc < 0 then
+            tempHP = tempHP + calc
+            if tempHP <= 0 then
+                calc = tempHP
+                tempHP = 0
+            else
+                calc = 0
+            end
+        end
     end
+    currentHP = currentHP + calc
+
+    self.UI.setAttribute("oldValue", "text", calc)
 
     Wait.time(
         function()
@@ -258,7 +245,19 @@ function GlobalCalculate(params)
         end,
         10
     )
+    return calc
+end
 
+function GlobalCalculate(params)
+    local i = params.input
+    local t = params.t
+
+    if t == "Temp" then
+        tempHP = tonumber(i)
+    else
+        HPMod(tonumber(i))
+    end
+    setHP()
     updateSave()
 end
 
@@ -270,7 +269,7 @@ end
 function setHP()
     self.UI.setAttribute("hp", "text", currentHP .. " / " .. maxHP)
     self.UI.setAttribute("hpBar", "percentage", (currentHP / maxHP) * 100)
-    
+
     if tempHP > 0 then
         self.UI.setAttribute("tempHP", "active", "true")
         self.UI.setAttribute("tempHP", "text", tempHP)

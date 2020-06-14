@@ -1,6 +1,3 @@
-local func_f = "function onLoad()\r\n    self.interactable = false\r\n    -searchable\r\nend"
-local func_t = "function onLoad()\r\n    self.interactable = true\r\n    -searchable\r\nend"
-
 function onLoad(save_state)
     self.createButton(
         {
@@ -31,38 +28,46 @@ function onLoad(save_state)
     )
 end
 
-
-
 function isMe(id)
     return id == self.getGUID()
 end
 
+function onCollisionEnter(info)
+    local id = info.collision_object.getGUID()
+    self.setDescription("Found: " .. id)
+end
+
 function make_interact(obj, player_clicker_color, alt_click)
     local id = self.getDescription()
-    if player_clicker_color == "Black" and not isMe(id) then
+    if Player[player_clicker_color].admin and not isMe(id) then
         local id = self.getDescription()
         if id == "" then
             return
         end
-        local obj = getObjectFromGUID(id)
-        obj.interactable = true
-        obj.setLuaScript(func_t)
+        local o = getObjectFromGUID(id)
+
+        o.interactable = true
         self.setDescription("")
         Player[player_clicker_color].pingTable(getObjectFromGUID(id).getPosition())
+
+        local code = "function onload() self.interactable = true end"
+        o.setLuaScript(code)
     end
 end
 
 function make_not_interact(obj, player_clicker_color, alt_click)
-    if player_clicker_color == "Black" and not isMe(id) then
+    if Player[player_clicker_color].admin and not isMe(id) then
         local id = self.getDescription()
         if id == "" then
             return
         end
-        local obj = getObjectFromGUID(id)
-        obj.interactable = false
-        obj.setLock(true)
-        obj.setLuaScript(func_f)
+        local o = getObjectFromGUID(id)
+        o.interactable = false
+        o.setLock(true)
         self.setDescription("")
         Player[player_clicker_color].pingTable(getObjectFromGUID(id).getPosition())
+
+        local code = "function onload() self.interactable = false end"
+        o.setLuaScript(code)
     end
 end
