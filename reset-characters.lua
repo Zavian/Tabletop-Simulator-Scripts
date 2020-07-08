@@ -1,32 +1,41 @@
 --Runs when the scripted button inside the button is clicked
 function buttonPress()
     if lockout == false then
-        tokens = {
-            "ede93f", --erik
-            "e5b5f7", --sai
-            "3fe46d", --varan
-            "374881", --chance
-            "6ea5eb" --erreus
+        local notes = self.getGMNotes()
+        local j = JSON.decode(notes)
+
+        local tokens = j.players
+        local coin = j.coin
+        local point = {
+            x = j.startingPoint.x and j.startingPoint.x or self.getPosition().x,
+            y = j.startingPoint.y and j.startingPoint.y or 5,
+            z = j.startingPoint.z and j.startingPoint.z or self.getPosition().z
         }
-        local coin = "a2f185" --coin
-        local startingPoint = {x = -82.45, y = 5.18, z = 22.95}
+        local coinPos = {
+            x = j.coinPos.x and j.coinPos.x or self.getPosition().x,
+            y = j.coinPos.y and j.coinPos.y or 5,
+            z = j.coinPos.z and j.coinPos.z or self.getPosition().z
+        }
+        local spacing = j.spacing and j.spacing or 1.7
 
         for i = 1, #tokens do
             --local token_info = tokens[i]
             local obj = getObjectFromGUID(tokens[i])
-            local pos = startingPoint
+            local pos = point
             local rotation = {0, 90.00, 0}
 
             obj.setRotationSmooth(rotation, false, true)
             obj.setPositionSmooth(pos, false, false)
 
-            startingPoint.z = startingPoint.z - 2.5
+            point.z = point.z - spacing
+            if i % 3 == 0 then
+                point.z = j.startingPoint.z and j.startingPoint.z or self.getPosition().z
+                point.x = point.x + spacing
+            end
         end
         local obj = getObjectFromGUID(coin)
         obj.setRotationSmooth({0, 90.0, 0}, false, true)
-        obj.setPositionSmooth({-87.35, 6.3, 12.09}, false, false)
-
-        startingPoint = {x = -48.96, y = 3.5, z = 23.16}
+        obj.setPositionSmooth(coinPos, false, false)
     end
 end
 
