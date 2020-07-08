@@ -36,4 +36,4 @@ If a file has a .xml version it means that it's both UI and Lua based.
 The things that I'm trying to achieve via these scripts is to reach a decent level of both automation and management of a DnD table, mostly for combat related activities. Many tools are inspired by other external programs such as Roll20, Foundry, FantasyGrounds, etc.
 The end goal is to have a table that is both **stable** (still working on it) and easy to understand with all the features you may be in need for managing a DnD game.
 
-Want to see it in action? I stream the games that I DM and play in every **Friday** and **Saturday** at 7PM CEST on www.mixer.com/DepressionMansion
+Want to see it in action? I stream the games that I DM and play in every **Friday** and **Saturday** at 7PM CEST on www.twitch.tv/DepressionMansion
