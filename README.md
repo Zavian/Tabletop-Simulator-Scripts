@@ -3,7 +3,7 @@
 This library is **not meant** for distribution, I use this place to share my code and to reference it when I do need it. If you found this place through a link given by me or by a friend, hi I guess. If you found this by googling, be aware that these scripts even though are optimized as much as I'm able to they are also very specific to my table (which is not released in the workshop, still thinking about that)
 
 I hope that whoever found this place will find the code within useful in some ways, sorry for no comments around but this is all stuff made for private usage.
-If you need help you can contact me @Zavian#8253 on discord, just be aware that I'm GMT+1 and if you are from another side of the planet it'll be hard for me to answer at all times. Peace 🐌
+If you need help you can contact me @Zavian#8253 on discord (you can also find me in the official tabletop simulator discord if you don't want to add random friends for simple questions, you can join it here https://discord.gg/tabletopsimulator. I am **NOT** a Berserk developer and even though I'd like to don't ping anybody but me if you really need to ping someone), just be aware that I'm GMT+1 and if you are from another side of the planet it'll be hard for me to answer at all times. Peace 🐌
 
 # What's all this stuff? How do I go around this repository?
 
