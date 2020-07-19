@@ -10,7 +10,7 @@
     <Text id="oldValue" position="130 0 0" width="60" fontSize="34" minWidth="80" color="#ffffff" text="" fontStyle="Bold" alignment="MiddleLeft" />
     <Text id="ac" position="-130 0 0" width="60" fontSize="34" minWidth="80" color="#ffffff" text="" fontStyle="Bold" />
     <Text id="movement" position="0 40 0" color="#ffffff" fontSize="34" text="Movement" />
-    <Button id="tempHP" active="false" position="70 0 0" width="40" height="33" color="#6E74EA" fontSize="20" textColor="white"/>
+    <Button id="tempHP" active="false" position="70 0 0" width="40" height="33" color="#6E74EA" fontSize="20" textColor="white" onclick="UI_ClickTMP" />
 </Panel>
 
 

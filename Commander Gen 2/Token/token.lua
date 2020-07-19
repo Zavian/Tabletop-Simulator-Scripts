@@ -210,12 +210,17 @@ end
 
 function UICalculate()
     local tmp = false
-    if string.find(_UIInput, ":") then
-        _UIInput = _UIInput:gsub(":", "")
-        tempHP = tempHP + tonumber(_UIInput)
+    local input = _UIInput
+    if string.find(input, ":") then -- tmp hp
+        input = input:gsub(":", "")
+        tempHP = tonumber(input)
+        tmp = true
+    elseif string.find(input, ";") then -- shield
+        input = input:gsub(";", "")
+        tempHP = tempHP + tonumber(input)
         tmp = true
     else
-        local calc = tonumber(_UIInput)
+        local calc = tonumber(input)
         HPMod(calc)
     end
     setHP()
@@ -236,6 +241,11 @@ function HPMod(value)
         end
     end
     currentHP = currentHP + calc
+    if currentHP >= maxHP then
+        currentHP = maxHP
+    elseif currentHP < 0 then
+        currentHP = 0
+    end
 
     self.UI.setAttribute("oldValue", "text", calc)
 
@@ -273,6 +283,15 @@ function setHP()
     if tempHP > 0 then
         self.UI.setAttribute("tempHP", "active", "true")
         self.UI.setAttribute("tempHP", "text", tempHP)
+        if tempHP >= 100 then
+            if tempHP >= 1000 then
+                self.UI.setAttribute("tempHP", "width", "80")
+            else
+                self.UI.setAttribute("tempHP", "width", "60")
+            end
+        else
+            self.UI.setAttribute("tempHP", "width", "40")
+        end
     else
         self.UI.setAttribute("tempHP", "active", "false")
     end
@@ -500,6 +519,12 @@ function UI_ConditionMenu(params)
     elseif v == "false" then
         self.UI.setAttribute("ConditionMenu", "active", "true")
     end
+end
+
+function UI_ClickTMP(params)
+    HPMod(-tempHP)
+    setHP()
+    updateSave()
 end
 
 local _conditions = {
