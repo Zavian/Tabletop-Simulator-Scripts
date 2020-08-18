@@ -1,371 +1,7 @@
-disableSave = false
-buttonFontColor = {0, 0, 0}
-buttonColor = {0.93, 0.88, 0.82}
-buttonScale = {0.1, 0.1, 0.1}
-defaultButtonData = {
-    textbox = {
-        {
-            pos = {0.906, 0.1, -2.14},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -2.028},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -1.916},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -1.804},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -1.692},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -1.580},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -1.468},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -1.356},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -1.244},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -1.132},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -1.020},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -0.908},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -0.796},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -0.684},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -0.572},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -0.460},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -0.348},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -0.236},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -0.124},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, -0.012},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 0.100},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 0.212},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 0.324},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 0.436},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 0.548},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 0.660},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 0.772},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 0.884},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 0.996},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 1.108},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 1.220},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 1.332},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 1.444},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 1.556},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 1.668},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 1.780},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 1.892},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 2.004},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 2.116},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        },
-        {
-            pos = {0.906, 0.1, 2.228},
-            rows = 2,
-            width = 5300,
-            font_size = 250,
-            label = "",
-            value = "",
-            alignment = 2
-        }
-    }
-}
+local _difference = 0.754
+local _initiativeZone = "6befe7"
+local _tokenName = {"player_token", "enemy_token", "ally_token", "neutral_token"}
+
 function updateSave()
     saved_data = JSON.encode(ref_buttonData)
     if disableSave == true then
@@ -373,24 +9,15 @@ function updateSave()
     end
     self.script_state = saved_data
 end
+
 function onload(saved_data)
     self.interactable = true
-    if disableSave == true then
-        saved_data = ""
-    end
-    if saved_data ~= "" then
-        local loaded_data = JSON.decode(saved_data)
-        ref_buttonData = loaded_data
-    else
-        ref_buttonData = defaultButtonData
-    end
-
     self.createButton(
         {
             click_function = "order_initiative",
             function_owner = self,
             label = "Order",
-            position = {x = 0.2, y = 0.1, z = -2.35},
+            position = {x = 0.2, y = 0.1, z = -2.32},
             rotation = {0, 0, 0},
             width = 350,
             height = 100,
@@ -401,9 +28,27 @@ function onload(saved_data)
             scale = {x = 0.5, y = 0.1, z = 0.5}
         }
     )
+    self.createButton(
+        {
+            click_function = "request_initiative",
+            function_owner = self,
+            label = "Take Initiative",
+            position = {0.910000026226044, 0.100000001490116, -2.3},
+            scale = {0.5, 0.100000001490116, 0.5},
+            width = 1070,
+            height = 190,
+            color = {0.4392, 0, 0.0313, 1},
+            font_color = {1, 0.498, 0.1529, 1},
+            tooltip = "Take Initiative"
+        }
+    )
 
-    spawnedButtonCount = 0
-    createTextbox()
+    local notes = self.getGMNotes()
+    local vars = JSON.decode(notes)
+
+    if vars["zone"] then
+        _initiativeZone = vars["zone"]
+    end
 end
 function click_textbox(i, value, selected)
     if selected == false then
@@ -414,37 +59,45 @@ end
 function click_none()
 end
 function createTextbox()
-    for i, data in ipairs(ref_buttonData.textbox) do
-        local funcName = "textbox" .. i
-        local func = function(_, _, val, sel)
-            click_textbox(i, val, sel)
-        end
-        self.setVar(funcName, func)
-
-        self.createInput(
-            {
-                input_function = funcName,
-                function_owner = self,
-                label = data.label,
-                alignment = data.alignment,
-                position = data.pos,
-                scale = buttonScale,
-                width = data.width,
-                height = (data.font_size * data.rows) + 24,
-                font_size = data.font_size,
-                color = buttonColor,
-                font_color = buttonFontColor,
-                value = data.value
-            }
-        )
-    end
+    -- for i, data in ipairs(ref_buttonData.textbox) do
+    --     local funcName = "textbox" .. i
+    --     local func = function(_, _, val, sel)
+    --         click_textbox(i, val, sel)
+    --     end
+    --     self.setVar(funcName, func)
+    --     self.createInput(
+    --         {
+    --             input_function = funcName,
+    --             function_owner = self,
+    --             label = data.label,
+    --             alignment = data.alignment,
+    --             position = data.pos,
+    --             scale = buttonScale,
+    --             width = data.width,
+    --             height = (data.font_size * data.rows) + 24,
+    --             font_size = data.font_size,
+    --             color = buttonColor,
+    --             font_color = buttonFontColor,
+    --             value = data.value
+    --         }
+    --     )
+    -- end
 end
 
 local _initiativeTokens = {}
 
-local _difference = 0.754
-local _initiativeZone = "6befe7"
-local _tokenName = {"player_token", "enemy_token", "ally_token", "neutral_token"}
+function request_initiative(obj, color, alt)
+    if color == "Black" then
+        local zone = getObjectFromGUID(_initiativeZone)
+        local objs = zone.getObjects()
+        for i = 1, #objs do
+            local name = objs[i].getName()
+            if name == "player_token" then
+                Global.call("requestPlayer", {p = objs[i].getDescription(), t = objs[i].getGUID()})
+            end
+        end
+    end
+end
 
 function order_initiative(obj, color, alt)
     _initiativeTokens = {}
@@ -479,7 +132,14 @@ function order_initiative(obj, color, alt)
             return k1.initiative > k2.initiative
         end
     )
+
+    local notes = self.getGMNotes()
+    local vars = JSON.decode(notes)
+
     local pos = {x = 36.47, y = 0.69, z = -20.77}
+    if vars["initial_pos"] then
+        pos = {x = vars["initial_pos"][1], y = vars["initial_pos"][2], z = vars["initial_pos"][3]}
+    end
 
     for i = 0, #_initiativeTokens do
         local t = _initiativeTokens[i]

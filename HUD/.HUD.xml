@@ -4,13 +4,16 @@
     <Image class="closed" width="249" />
     <Image class="opened" width="375" />
     <Image class="player" height="46" width="358" image="Player" allowDragging="true" returnToOriginalPositionWhenReleased="false" rectAlignment="Center" offsetXY="0 -285" />
+    <Image class="player_request" height="76" width="150" image="player_request" />
+
+    <Panel class="initiative_box" width="150" height="120" allowDragging="true" returnToOriginalPositionWhenReleased="false" rectAlignment="Center" offsetXY="0 -100" />
 
     <Button width="30" textAlignment="MiddleCenter" />
     <Button class="closed" color="rgba(0,0,0,0)" offsetXY="115 0" rectAlignment="UpperLeft" />
     <Button class="opened" color="rgba(0,0,0,0)" offsetXY="0 0" rectAlignment="UpperLeft" />
     <Button class="activator" color="rgba(0,0,0,0)" offsetXY="160 0" width="154" rectAlignment="MiddleLeft" />
     <Button class="finder" tooltipBackgroundColor="black" tooltipTextColor="white" tooltipBorderColor="white" tooltip="Find pawn." tooltipPosition="Above" color="rgba(0,0,0,0)" offsetXY="340 0" rectAlignment="MiddleLeft" width="25" />
-    <Button class="InitiativeHud" colors="#282828FF|#c8329bFF|#ff9b38FF|#00000000" textColor="#f0f0f0ff" />
+    <Button class="InitiativeHud" colors="#282828FF|#c8329bFF|#ff9b38FF|#00000000" />
 
 
     <Text active="true" rectAlignment="MiddleLeft" textAlignment="MiddleCenter" />
@@ -34,9 +37,9 @@
 
 
 <!--   INITIATIVE HUD   -->
-<Button id="toggle" class="InitiativeHud" visibility="black" text="_" width="35" height="35" rectAlignment="LowerRight" onClick="ToggleHud" offsetXY="0 255" />
-<Button id="nt" class="InitiativeHud" visibility="black" text="Next Turn" width="100" height="35" rectAlignment="LowerRight" onClick="NextTurn" offsetXY="-35 255" />
-<Button id="nr" class="InitiativeHud" visibility="black" text="Next Round" width="100" height="35" rectAlignment="LowerRight" onClick="NextRound" offsetXY="-135 255" />
+<Button id="toggle" class="InitiativeHud" textColor="#f0f0f0ff" visibility="black" text="_" width="35" height="35" rectAlignment="LowerRight" onClick="ToggleHud" offsetXY="0 255" />
+<Button id="nt" class="InitiativeHud" textColor="#f0f0f0ff" visibility="black" text="Next Turn" width="100" height="35" rectAlignment="LowerRight" onClick="NextTurn" offsetXY="-35 255" />
+<Button id="nr" class="InitiativeHud" textColor="#f0f0f0ff" visibility="black" text="Next Round" width="100" height="35" rectAlignment="LowerRight" onClick="NextRound" offsetXY="-135 255" />
 
 <VerticalScrollView visibility="black" color="#282828AA" scrollbarBackgroundColor="#00000055" offsetXY="7 0" active="true" raycasttarget="true" id="widget" width="400" height="255" rectAlignment="LowerRight" movementType="Clamped" scrollSensitivity="15">
     <VerticalLayout id="layout" width="375" height="10">
@@ -54,6 +57,58 @@
 <Image class="player" active="false" id="teal" visibility="Teal" />
 <Image class="player" active="false" id="orange" visibility="Orange" />
 <Image class="player" active="false" id="pink" visibility="Pink" />
+
+<Panel active="false" class="initiative_box" visibility="Green" id="green_box">
+    <Image class="player_request" active="true" id="green_request" />
+    <InputField id="green_initiative" onValueChanged="submitChange" value="" textColor="white" characterValidation="Integer" alignment="MiddleCenter" colors="#000000aa|#000000bb|#000000bc|#ffffff00" placeholder=" " resizeTextForBestFit="true" rectAlignment="MiddleLeft" width="82%" height="48" offsetXY="15 0" />
+    <Button fontSize="17" rectAlignment="LowerCenter" text="SUBMIT" width="75%" height="30" colors="#695e3e|#594F30|#574D2F|#000000" textColor="white" onClick="submitRequest" />
+</Panel>
+<Panel active="false" class="initiative_box" visibility="Purple" id="purple_box">
+    <Image class="player_request" active="true" id="purple_request" />
+    <InputField id="purple_initiative" onValueChanged="submitChange" value="" textColor="white" characterValidation="Integer" alignment="MiddleCenter" colors="#000000aa|#000000bb|#000000bc|#ffffff00" placeholder=" " resizeTextForBestFit="true" rectAlignment="MiddleLeft" width="82%" height="48" offsetXY="15 0" />
+    <Button fontSize="17" rectAlignment="LowerCenter" text="SUBMIT" width="75%" height="30" colors="#695e3e|#594F30|#574D2F|#000000" textColor="white" onClick="submitRequest" />
+</Panel>
+<Panel active="false" class="initiative_box" visibility="Red" id="red_box">
+    <Image class="player_request" active="true" id="red_request" />
+    <InputField id="red_initiative" onValueChanged="submitChange" value="" textColor="white" characterValidation="Integer" alignment="MiddleCenter" colors="#000000aa|#000000bb|#000000bc|#ffffff00" placeholder=" " resizeTextForBestFit="true" rectAlignment="MiddleLeft" width="82%" height="48" offsetXY="15 0" />
+    <Button fontSize="17" rectAlignment="LowerCenter" text="SUBMIT" width="75%" height="30" colors="#695e3e|#594F30|#574D2F|#000000" textColor="white" onClick="submitRequest" />
+</Panel>
+<Panel active="false" class="initiative_box" visibility="Blue" id="blue_box">
+    <Image class="player_request" active="true" id="blue_request" />
+    <InputField id="blue_initiative" onValueChanged="submitChange" value="" textColor="white" characterValidation="Integer" alignment="MiddleCenter" colors="#000000aa|#000000bb|#000000bc|#ffffff00" placeholder=" " resizeTextForBestFit="true" rectAlignment="MiddleLeft" width="82%" height="48" offsetXY="15 0" />
+    <Button fontSize="17" rectAlignment="LowerCenter" text="SUBMIT" width="75%" height="30" colors="#695e3e|#594F30|#574D2F|#000000" textColor="white" onClick="submitRequest" />
+</Panel>
+<Panel active="false" class="initiative_box" visibility="Yellow" id="yellow_box">
+    <Image class="player_request" active="true" id="yellow_request" />
+    <InputField id="yellow_initiative" onValueChanged="submitChange" value="" textColor="white" characterValidation="Integer" alignment="MiddleCenter" colors="#000000aa|#000000bb|#000000bc|#ffffff00" placeholder=" " resizeTextForBestFit="true" rectAlignment="MiddleLeft" width="82%" height="48" offsetXY="15 0" />
+    <Button fontSize="17" rectAlignment="LowerCenter" text="SUBMIT" width="75%" height="30" colors="#695e3e|#594F30|#574D2F|#000000" textColor="white" onClick="submitRequest" />
+</Panel>
+<Panel active="false" class="initiative_box" visibility="Brown" id="brown_box">
+    <Image class="player_request" active="true" id="brown_request" />
+    <InputField id="brown_initiative" onValueChanged="submitChange" value="" textColor="white" characterValidation="Integer" alignment="MiddleCenter" colors="#000000aa|#000000bb|#000000bc|#ffffff00" placeholder=" " resizeTextForBestFit="true" rectAlignment="MiddleLeft" width="82%" height="48" offsetXY="15 0" />
+    <Button fontSize="17" rectAlignment="LowerCenter" text="SUBMIT" width="75%" height="30" colors="#695e3e|#594F30|#574D2F|#000000" textColor="white" onClick="submitRequest" />
+</Panel>
+<Panel active="false" class="initiative_box" visibility="White" id="white_box">
+    <Image class="player_request" active="true" id="white_request" />
+    <InputField id="white_initiative" onValueChanged="submitChange" value="" textColor="white" characterValidation="Integer" alignment="MiddleCenter" colors="#000000aa|#000000bb|#000000bc|#ffffff00" placeholder=" " resizeTextForBestFit="true" rectAlignment="MiddleLeft" width="82%" height="48" offsetXY="15 0" />
+    <Button fontSize="17" rectAlignment="LowerCenter" text="SUBMIT" width="75%" height="30" colors="#695e3e|#594F30|#574D2F|#000000" textColor="white" onClick="submitRequest" />
+</Panel>
+<Panel active="false" class="initiative_box" visibility="Teal" id="teal_box">
+    <Image class="player_request" active="true" id="teal_request" />
+    <InputField id="teal_initiative" onValueChanged="submitChange" value="" textColor="white" characterValidation="Integer" alignment="MiddleCenter" colors="#000000aa|#000000bb|#000000bc|#ffffff00" placeholder=" " resizeTextForBestFit="true" rectAlignment="MiddleLeft" width="82%" height="48" offsetXY="15 0" />
+    <Button fontSize="17" rectAlignment="LowerCenter" text="SUBMIT" width="75%" height="30" colors="#695e3e|#594F30|#574D2F|#000000" textColor="white" onClick="submitRequest" />
+</Panel>
+<Panel active="false" class="initiative_box" visibility="Orange" id="orange_box">
+    <Image class="player_request" active="true" id="orange_request" />
+    <InputField id="orange_initiative" onValueChanged="submitChange" value="" textColor="white" characterValidation="Integer" alignment="MiddleCenter" colors="#000000aa|#000000bb|#000000bc|#ffffff00" placeholder=" " resizeTextForBestFit="true" rectAlignment="MiddleLeft" width="82%" height="48" offsetXY="15 0" />
+    <Button fontSize="17" rectAlignment="LowerCenter" text="SUBMIT" width="75%" height="30" colors="#695e3e|#594F30|#574D2F|#000000" textColor="white" onClick="submitRequest" />
+</Panel>
+<Panel active="false" class="initiative_box" visibility="Pink" id="pink_box">
+    <Image class="player_request" active="true" id="pink_request" />
+    <InputField id="pink_initiative" onValueChanged="submitChange" value="" textColor="white" characterValidation="Integer" alignment="MiddleCenter" colors="#000000aa|#000000bb|#000000bc|#ffffff00" placeholder=" " resizeTextForBestFit="true" rectAlignment="MiddleLeft" width="82%" height="48" offsetXY="15 0" />
+    <Button fontSize="17" rectAlignment="LowerCenter" text="SUBMIT" width="75%" height="30" colors="#695e3e|#594F30|#574D2F|#000000" textColor="white" onClick="submitRequest" />
+</Panel>
+
 
 <!--   BREAKER HUD   -->
 <Button id="TopButton" class="TopButton" rectAlignment="UpperLeft" offsetXY="75 5" onClick="UI_SideToggle" />

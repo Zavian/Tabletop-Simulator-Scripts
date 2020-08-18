@@ -1,5 +1,4 @@
--- START INITIATIVE HUD
-
+--#region initiative-hud
 local _defaults = {
     color = {
         ally = "#66ba6b",
@@ -17,7 +16,7 @@ local _defaults = {
     },
     playersColors = {
         sai = "Red",
-        erik = "Brown",
+        erik = "Teal",
         erreus = "Blue",
         varan = "Green",
         chance = "Yellow",
@@ -64,6 +63,8 @@ local elements = {}
 local xmlElements = {}
 
 local statusCache = {}
+
+local initiatives = {}
 
 local sound = nil
 
@@ -655,9 +656,44 @@ function getHeightMultiplier()
     return counter * 50
 end
 
--- END INITIATIVE HUD
+function requestPlayer(player)
+    UI.setAttribute(_defaults.playersColors[player.p] .. "_box", "active", "true")
+    initiatives[_defaults.playersColors[player.p]] = {t = player.t, i = ""}
+end
 
--- START BREAKER
+function submitRequest(player)
+    -- this activates on the submit button
+    if initiatives[player.color].i ~= "" then
+        UI.setAttribute(player.color .. "_box", "active", "false")
+        local playerName = getPlayerByColor(player.color)
+        playerName = playerName:sub(1, 1):upper() .. playerName:sub(2) -- capitalize name
+        printToAll(
+            "[" .. Color[player.color]:toHex(false) .. "]" .. playerName .. ":[-] " .. initiatives[player.color].i,
+            "White"
+        ) -- print initiative in the chat
+
+        local obj = getObjectFromGUID(initiatives[player.color].t)
+        obj.editInput({index = 0, value = playerName .. "\n" .. initiatives[player.color].i})
+    end
+end
+
+function submitChange(player, value, obj)
+    -- this activates while the player is writing on its little box
+    initiatives[player.color].i = value
+end
+
+function getPlayerByColor(color)
+    for k, v in pairs(_defaults.playersColors) do
+        if v == color then
+            return k
+        end
+    end
+    return nil
+end
+
+--#endregion
+
+--#region breaker
 function UI_SideToggle()
     local offset = self.UI.getAttribute("TopButton", "offsetXY")
     local closed = offset == "75 5"
@@ -701,7 +737,7 @@ end
 function UI_UpdateValue(player, value)
     _MassField = value
 end
--- END BREAKER
+--#endregion
 
 function printTable(t)
     local printTable_cache = {}

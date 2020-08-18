@@ -4,38 +4,54 @@ function buttonPress()
         local notes = self.getGMNotes()
         local j = JSON.decode(notes)
 
-        local tokens = j.players
-        local coin = j.coin
-        local point = {
-            x = j.startingPoint.x and j.startingPoint.x or self.getPosition().x,
-            y = j.startingPoint.y and j.startingPoint.y or 5,
-            z = j.startingPoint.z and j.startingPoint.z or self.getPosition().z
-        }
-        local coinPos = {
-            x = j.coinPos.x and j.coinPos.x or self.getPosition().x,
-            y = j.coinPos.y and j.coinPos.y or 5,
-            z = j.coinPos.z and j.coinPos.z or self.getPosition().z
-        }
+        local tokens = nil
+        local coin = nil
+        local point = nil
+        local coinPos = nil
+
+        if j.players then
+            tokens = j.players
+            point = {
+                x = j.startingPoint.x and j.startingPoint.x or self.getPosition().x,
+                y = j.startingPoint.y and j.startingPoint.y or 5,
+                z = j.startingPoint.z and j.startingPoint.z or self.getPosition().z
+            }
+        end
+        if j.coin then
+            coin = j.coin
+            coinPos = {
+                x = j.coinPos.x and j.coinPos.x or self.getPosition().x,
+                y = j.coinPos.y and j.coinPos.y or 5,
+                z = j.coinPos.z and j.coinPos.z or self.getPosition().z
+            }
+        end
         local spacing = j.spacing and j.spacing or 1.7
 
-        for i = 1, #tokens do
-            --local token_info = tokens[i]
-            local obj = getObjectFromGUID(tokens[i])
-            local pos = point
-            local rotation = {0, 90.00, 0}
+        if tokens then
+            for i = 1, #tokens do
+                --local token_info = tokens[i]
+                local obj = getObjectFromGUID(tokens[i])
+                local pos = point
+                local rotation = {0, 90.00, 0}
 
-            obj.setRotationSmooth(rotation, false, true)
-            obj.setPositionSmooth(pos, false, false)
+                obj.setRotationSmooth(rotation, false, true)
+                obj.setPositionSmooth(pos, false, false)
 
-            point.z = point.z - spacing
-            if i % 3 == 0 then
-                point.z = j.startingPoint.z and j.startingPoint.z or self.getPosition().z
-                point.x = point.x + spacing
+                point.z = point.z - spacing
+                if i % 3 == 0 then
+                    point.z = j.startingPoint.z and j.startingPoint.z or self.getPosition().z
+                    point.x = point.x + spacing
+                end
             end
+
+            if coin then
+                local obj = getObjectFromGUID(coin)
+                obj.setRotationSmooth({0, 90.0, 0}, false, true)
+                obj.setPositionSmooth(coinPos, false, false)
+            end
+        else
+            log("I do need some tokens from the resetter thinking")
         end
-        local obj = getObjectFromGUID(coin)
-        obj.setRotationSmooth({0, 90.0, 0}, false, true)
-        obj.setPositionSmooth(coinPos, false, false)
     end
 end
 

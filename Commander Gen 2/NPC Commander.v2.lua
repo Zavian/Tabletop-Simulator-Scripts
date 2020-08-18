@@ -527,7 +527,7 @@ end
 function getHP(literal)
     local hp = self.getInputs()[3].value
     if literal then
-        return hp
+        return tonumber(hp)
     end
 
     if string.sub(hp, 1, 1) == "r" then
@@ -536,7 +536,7 @@ function getHP(literal)
         hp = math.random(range[1], range[2])
     end
 
-    return hp
+    return tonumber(hp)
 end
 function setHP(params)
     self.editInput({index = 2, value = params.input})

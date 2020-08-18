@@ -15,7 +15,7 @@ local _defaults = {
     },
     playersColors = {
         sai = "Red",
-        erik = "Brown",
+        erik = "Teal",
         erreus = "Blue",
         varan = "Green",
         chance = "Yellow",
@@ -63,6 +63,8 @@ local xmlElements = {}
 
 local statusCache = {}
 
+local initiatives = {}
+
 local sound = nil
 
 function onFixedUpdate()
@@ -98,6 +100,7 @@ function onLoad()
         setElements({t = elementsToSend})
     end
     HideHud()
+    requestPlayer({p = "sai", t = "nioufanso"})
 end
 
 function setElements(params)
@@ -651,6 +654,42 @@ function getHeightMultiplier()
         end
     end
     return counter * 50
+end
+
+function requestPlayer(player)
+    UI.setAttribute(_defaults.playersColors[player.p] .. "_box", "active", "true")
+    initiatives[_defaults.playersColors[player.p]] = {t = player.t, i = ""}
+end
+
+function submitRequest(player)
+    -- this activates on the submit button
+    if initiatives[player.color].i ~= "" then
+        UI.setAttribute(player.color .. "_box", "active", "false")
+
+        local playerName = getPlayerByColor(player.color)
+        playerName = playerName:sub(1, 1):upper() .. playerName:sub(2) -- capitalize name
+        printToAll(
+            "[" .. Color[player.color]:toHex(false) .. "]" .. playerName .. ":[-] " .. initiatives[player.color].i,
+            "White"
+        ) -- print initiative in the chat
+
+        local obj = getObjectFromGUID(initiatives[player.color].t)
+        obj.editInput({index = 0, value = playerName .. "\n" .. initiatives[player.color].i})
+    end
+end
+
+function submitChange(player, value, obj)
+    -- this activates while the player is writing on its little box
+    initiatives[player.color].i = value
+end
+
+function getPlayerByColor(color)
+    for k, v in pairs(_defaults.playersColors) do
+        if v == color then
+            return k
+        end
+    end
+    return nil
 end
 
 -- END INITIATIVE HUD
