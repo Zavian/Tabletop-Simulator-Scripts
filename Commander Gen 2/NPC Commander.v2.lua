@@ -527,7 +527,7 @@ end
 function getHP(literal)
     local hp = self.getInputs()[3].value
     if literal then
-        return tonumber(hp)
+        return hp
     end
 
     if string.sub(hp, 1, 1) == "r" then

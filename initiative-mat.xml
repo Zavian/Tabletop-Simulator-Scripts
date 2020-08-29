@@ -1,0 +1,6 @@
+<Defaults>
+    <Button colors="#670007|#382e36|#085d65|#000000" />
+    <Button class="todo" textColor="#e8dec5" />
+    <Button class="done" textColor="#ff7f27" />
+</Defaults>
+<VerticalLayout id = "PlayerList" childAlignment = "UpperCenter" position = "-90 -65 -20"  rotation = "180 180 0" height = "120" width = "100" />

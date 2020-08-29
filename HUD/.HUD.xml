@@ -1,5 +1,5 @@
 <Defaults>
-    <!--   INITIATIVE HUD   -->
+    <!--   #region initiative hud   -->
     <Image height="46" />
     <Image class="closed" width="249" />
     <Image class="opened" width="375" />
@@ -23,9 +23,9 @@
     <Toggle width="21" height="21" rectAlignment="MiddleRight" colors="#FFFFFF50|#FFFFFFFF|#B2B2B2FF|#FFFFFF00" active="true" />
     <Toggle class="conc" tooltipBackgroundColor="black" tooltipTextColor="white" tooltipBorderColor="white" tooltip="The creature is concentrating" tooltipPosition="Above" offsetXY="30 0" rectAlignment="MiddleLeft" />
     <Toggle class="react" tooltipBackgroundColor="black" tooltipTextColor="white" tooltipBorderColor="white" tooltip="The creature used its reaction (resets on new round)" tooltipPosition="Above" offsetXY="92 0" rectAlignment="MiddleLeft" />
+    <!--   #endregion   -->
 
-
-    <!--   BREAKER HUD   -->
+    <!--   #region breaker hud   -->
     <Button class="TopButton" visibility="Black" height="30" width="300" text="▼" colors="#282828FF|#c8329bFF|#ff9b38FF|#00000000" textColor="#f0f0f0ff" />
 
     <Panel class="TopPanel" visibility="Black" color="#282828AA" />
@@ -33,10 +33,11 @@
     <Button class="Heal" tooltip="Heal selected creatures" colors="#2ECC40FF|#2EE443FF|#27A736FF|#00000000" />
     <Button class="Damage" tooltip="Damage selected creatures" colors="#FF4136FF|#FF281CFF|#DB372EFF|#00000000" />
     <Button class="Temp" tooltip="Set Temporary HP on selected creatures" colors="#0074D9ff|#007CE8ff|#006BC9ff|#00000000" />
+    <!--   #endregion   -->
 </Defaults>
 
 
-<!--   INITIATIVE HUD   -->
+<!--   #region initiative hud   -->
 <Button id="toggle" class="InitiativeHud" textColor="#f0f0f0ff" visibility="black" text="_" width="35" height="35" rectAlignment="LowerRight" onClick="ToggleHud" offsetXY="0 255" />
 <Button id="nt" class="InitiativeHud" textColor="#f0f0f0ff" visibility="black" text="Next Turn" width="100" height="35" rectAlignment="LowerRight" onClick="NextTurn" offsetXY="-35 255" />
 <Button id="nr" class="InitiativeHud" textColor="#f0f0f0ff" visibility="black" text="Next Round" width="100" height="35" rectAlignment="LowerRight" onClick="NextRound" offsetXY="-135 255" />
@@ -108,9 +109,11 @@
     <InputField id="pink_initiative" onValueChanged="submitChange" value="" textColor="white" characterValidation="Integer" alignment="MiddleCenter" colors="#000000aa|#000000bb|#000000bc|#ffffff00" placeholder=" " resizeTextForBestFit="true" rectAlignment="MiddleLeft" width="82%" height="48" offsetXY="15 0" />
     <Button fontSize="17" rectAlignment="LowerCenter" text="SUBMIT" width="75%" height="30" colors="#695e3e|#594F30|#574D2F|#000000" textColor="white" onClick="submitRequest" />
 </Panel>
+<!--   #endregion   -->
 
 
-<!--   BREAKER HUD   -->
+
+<!--   #region breaker hud   -->
 <Button id="TopButton" class="TopButton" rectAlignment="UpperLeft" offsetXY="75 5" onClick="UI_SideToggle" />
 <Panel active="false" id="TopPanel" class="TopPanel" width="300" height="110" rectAlignment="UpperLeft" offsetXY="75 0">
     <InputField id="MassField" width="80%" height="40" fontSize="20" rectAlignment="UpperLeft" textAlignment="MiddleCenter" offsetXY="30 -10" onEndEdit="UI_UpdateValue(value)" />
@@ -118,4 +121,5 @@
     <Button id="MassDamage" class="TopPanel Damage" text="-" offsetXY="112 -55" />
     <Button id="MassTemp" class="TopPanel Temp" text="T" offsetXY="196 -55" />
 </Panel>
+<!--   #endregion   -->
 

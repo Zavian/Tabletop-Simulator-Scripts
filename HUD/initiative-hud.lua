@@ -1,3 +1,4 @@
+--#region initiative-hud
 local _defaults = {
     color = {
         ally = "#66ba6b",
@@ -6,20 +7,20 @@ local _defaults = {
         enemy = "#BD5365"
     },
     players = {
-        "Sai",
-        "Erik",
-        "Erreus",
-        "Varan",
-        "Chance",
-        "Raymon"
+        "Zora",
+        "Amber",
+        "Edwin",
+        "Gilkan",
+        "Annabelle",
+        "Kottur"
     },
     playersColors = {
-        sai = "Red",
-        erik = "Teal",
-        erreus = "Blue",
-        varan = "Green",
-        chance = "Yellow",
-        raymon = "Purple"
+        zora = "Red",
+        amber = "Teal",
+        edwin = "Blue",
+        gilkan = "Green",
+        annabelle = "White",
+        kottur = "Purple"
     },
     offsets = {
         nr = "-35 255",
@@ -39,7 +40,8 @@ local _defaults = {
         roundPos = {x = 101.65, y = 4.00, z = -28.57},
         roundOffset = 0.38
     },
-    textColor = "#f0f0f0ff"
+    textColor = "#f0f0f0ff",
+    initiative_mat = nil
 }
 
 -- ITEMS LEGEND:
@@ -79,28 +81,7 @@ function onFixedUpdate()
 end
 
 function onLoad()
-    if debug then
-        elementsToSend = {}
-        local toCreate = math.random(4, 20)
-        local str = {"ally", "neutral", "player", "enemy"}
-        for i = 1, toCreate do
-            local ini = math.random(1, 24)
-            local name = tostring(math.random(50, 1000))
-            local side = str[math.random(1, #str)]
-            local params = {
-                ini = ini,
-                name = name,
-                pawn = self,
-                side = side
-            }
-            --addElement(params)
-            table.insert(elementsToSend, params)
-        end
-        printTable(UI)
-        setElements({t = elementsToSend})
-    end
     HideHud()
-    requestPlayer({p = "sai", t = "nioufanso"})
 end
 
 function setElements(params)
@@ -149,9 +130,6 @@ function BuildElements()
         end
     )
     if elements then
-        if debug then
-            elements[math.random(1, #elements)].name = "Zerrik"
-        end
         for i = 1, #elements do
             local xmlElement = ElementBuilder(elements[i])
             table.insert(xmlElements, xmlElement)
@@ -469,13 +447,21 @@ function notify()
         -- in the initiative counter
         if isPlayer(elements[nextPos].name) then
             local name = string.lower(elements[nextPos].name)
-            broadcastToColor("You're next in initiative! Prepare yourself.", _defaults.playersColors[name], {1, 1, 1})
-            UI.setAttribute(_defaults.playersColors[name], "active", "true")
+            if (Player[_defaults.playersColors[name]].seated) then
+                broadcastToColor(
+                    "You're next in initiative! Prepare yourself.",
+                    _defaults.playersColors[name],
+                    {1, 1, 1}
+                )
+                UI.setAttribute(_defaults.playersColors[name], "active", "true")
+            end
         end
         if isPlayer(elements[myPos].name) then
             local name = string.lower(elements[myPos].name)
-            broadcastToColor("It's your turn!", _defaults.playersColors[name], {1, 1, 1})
-            UI.setAttribute(_defaults.playersColors[name], "active", "false")
+            if (Player[_defaults.playersColors[name]].seated) then
+                broadcastToColor("It's your turn!", _defaults.playersColors[name], {1, 1, 1})
+                UI.setAttribute(_defaults.playersColors[name], "active", "false")
+            end
         end
     end
 end
@@ -656,16 +642,48 @@ function getHeightMultiplier()
     return counter * 50
 end
 
+function setSeated(players)
+    Wait.time(
+        function()
+            local mat = getObjectFromGUID(_defaults.initiative_mat)
+            for i = 1, #players.input do
+                log(Player[_defaults.playersColors[players.input[i]]].seated and "true" or "false", players.input[i])
+                mat.UI.setAttribute(
+                    players.input[i],
+                    "active",
+                    Player[_defaults.playersColors[players.input[i]]].seated and "true" or "false"
+                )
+
+                if debug then
+                    mat.UI.setAttribute(players.input[i], "active", "true")
+                end
+            end
+        end,
+        1
+    )
+end
+
 function requestPlayer(player)
-    UI.setAttribute(_defaults.playersColors[player.p] .. "_box", "active", "true")
-    initiatives[_defaults.playersColors[player.p]] = {t = player.t, i = ""}
+    if not _defaults.initiative_mat then
+        _defaults.initiative_mat = player.call
+    end
+
+    log(Player[_defaults.playersColors[player.p]].seated, player.p .. " seated")
+    if Player[_defaults.playersColors[player.p]].seated then
+        UI.setAttribute(_defaults.playersColors[player.p] .. "_box", "active", "true")
+        initiatives[_defaults.playersColors[player.p]] = {t = player.t, i = ""}
+    end
+
+    if debug then
+        UI.setAttribute(_defaults.playersColors[player.p] .. "_box", "active", "true")
+        initiatives[_defaults.playersColors[player.p]] = {t = player.t, i = ""}
+    end
 end
 
 function submitRequest(player)
     -- this activates on the submit button
     if initiatives[player.color].i ~= "" then
         UI.setAttribute(player.color .. "_box", "active", "false")
-
         local playerName = getPlayerByColor(player.color)
         playerName = playerName:sub(1, 1):upper() .. playerName:sub(2) -- capitalize name
         printToAll(
@@ -673,8 +691,17 @@ function submitRequest(player)
             "White"
         ) -- print initiative in the chat
 
+        local mat = getObjectFromGUID(_defaults.initiative_mat)
+        mat.UI.setAttribute(playerName:lower(), "text", playerName .. "|" .. initiatives[player.color].i)
+        mat.UI.setAttribute(playerName:lower(), "textColor", "#ff7f27") -- setting ui to tell DM that player has written
+        if debug then
+            log(playerName:lower(), "setting class to done, " .. initiatives[player.color].i)
+        end
+
         local obj = getObjectFromGUID(initiatives[player.color].t)
         obj.editInput({index = 0, value = playerName .. "\n" .. initiatives[player.color].i})
+
+        initiatives[player.color].d = true
     end
 end
 
@@ -692,52 +719,4 @@ function getPlayerByColor(color)
     return nil
 end
 
--- END INITIATIVE HUD
-
-function printTable(t)
-    local printTable_cache = {}
-
-    local function sub_printTable(t, indent)
-        if (printTable_cache[tostring(t)]) then
-            print(indent .. "*" .. tostring(t))
-        else
-            printTable_cache[tostring(t)] = true
-            if (type(t) == "table") then
-                for pos, val in pairs(t) do
-                    if (type(val) == "table") then
-                        print(indent .. "[" .. pos .. "] => " .. tostring(t) .. " {")
-                        sub_printTable(val, indent .. string.rep(" ", string.len(pos) + 8))
-                        print(indent .. string.rep(" ", string.len(pos) + 6) .. "}")
-                    elseif (type(val) == "string") then
-                        print(indent .. "[" .. pos .. '] => "' .. val .. '"')
-                    else
-                        print(indent .. "[" .. pos .. "] => " .. tostring(val))
-                    end
-                end
-            else
-                print(indent .. tostring(t))
-            end
-        end
-    end
-
-    if (type(t) == "table") then
-        print(tostring(t) .. " {")
-        sub_printTable(t, "  ")
-        print("}")
-    else
-        sub_printTable(t, "  ")
-    end
-end
-
-function mysplit(inputstr, sep)
-    if sep == nil then
-        sep = "%s"
-    end
-    local t = {}
-    i = 1
-    for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
-        t[i] = str
-        i = i + 1
-    end
-    return t
-end
+--#endregion

@@ -1,4 +1,5 @@
 <Defaults>
+    <!--   #region initiative hud   -->
     <Image height="46" />
     <Image class="closed" width="249" />
     <Image class="opened" width="375" />
@@ -22,11 +23,11 @@
     <Toggle width="21" height="21" rectAlignment="MiddleRight" colors="#FFFFFF50|#FFFFFFFF|#B2B2B2FF|#FFFFFF00" active="true" />
     <Toggle class="conc" tooltipBackgroundColor="black" tooltipTextColor="white" tooltipBorderColor="white" tooltip="The creature is concentrating" tooltipPosition="Above" offsetXY="30 0" rectAlignment="MiddleLeft" />
     <Toggle class="react" tooltipBackgroundColor="black" tooltipTextColor="white" tooltipBorderColor="white" tooltip="The creature used its reaction (resets on new round)" tooltipPosition="Above" offsetXY="92 0" rectAlignment="MiddleLeft" />
-
+    <!--   #endregion   -->
 </Defaults>
 
 
-<!--   INITIATIVE HUD   -->
+<!--   #region initiative hud   -->
 <Button id="toggle" class="InitiativeHud" textColor="#f0f0f0ff" visibility="black" text="_" width="35" height="35" rectAlignment="LowerRight" onClick="ToggleHud" offsetXY="0 255" />
 <Button id="nt" class="InitiativeHud" textColor="#f0f0f0ff" visibility="black" text="Next Turn" width="100" height="35" rectAlignment="LowerRight" onClick="NextTurn" offsetXY="-35 255" />
 <Button id="nr" class="InitiativeHud" textColor="#f0f0f0ff" visibility="black" text="Next Round" width="100" height="35" rectAlignment="LowerRight" onClick="NextRound" offsetXY="-135 255" />
@@ -98,6 +99,5 @@
     <InputField id="pink_initiative" onValueChanged="submitChange" value="" textColor="white" characterValidation="Integer" alignment="MiddleCenter" colors="#000000aa|#000000bb|#000000bc|#ffffff00" placeholder=" " resizeTextForBestFit="true" rectAlignment="MiddleLeft" width="82%" height="48" offsetXY="15 0" />
     <Button fontSize="17" rectAlignment="LowerCenter" text="SUBMIT" width="75%" height="30" colors="#695e3e|#594F30|#574D2F|#000000" textColor="white" onClick="submitRequest" />
 </Panel>
-
-<!--   END INITIATIVE HUD   -->
+<!--   #endregion   -->
 

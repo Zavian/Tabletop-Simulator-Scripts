@@ -1,3 +1,4 @@
+-- #region breaker
 function UI_SideToggle()
     local offset = self.UI.getAttribute("TopButton", "offsetXY")
     local closed = offset == "75 5"
@@ -41,3 +42,4 @@ end
 function UI_UpdateValue(player, value)
     _MassField = value
 end
+-- #endregion

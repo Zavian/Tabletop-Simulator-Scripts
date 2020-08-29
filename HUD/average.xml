@@ -1,0 +1,32 @@
+<Defaults>
+    <!-- #region average -->
+    <Panel class="DMAverage" visibility="Black" width="300" height="100" allowDragging="true" returnToOriginalPositionWhenReleased="false" rectAlignment="Center" offsetXY="0 -100" color="#282828AA" />
+
+    <Text class="White" color="#FFFFFF" />
+    <Text class="Teal" color="#20B09A" />
+    <Text class="Brown" color="#703A16" />
+    <Text class="Blue" color="#1E87FF" />
+    <Text class="Red" color="#DA1917" />
+    <Text class="Purple" color="#9F1FEF" />
+    <Text class="Orange" color="#F3631C" />
+    <Text class="Pink" color="#F46FCD" />
+    <Text class="Yellow" color="#E6E42B" />
+    <Text class="Green" color="#30B22A" />
+    <Text class="Bold" fontStyle="Bold" />
+    <!-- #endregion -->
+</Defaults>
+
+<!-- #region average -->
+<Panel class="DMAverage">
+    <Button width="70%" height="30%" text="AVERAGES" offsetXY="0 -10" rectAlignment="UpperCenter" />
+    <HorizontalLayout width="100%" height="65%" rectAlignment="LowerCenter">
+        <Text class="White Bold" text="13" />
+        <Text class="Teal Bold" text="16" />
+        <Text class="Blue Bold" text="17" />
+        <Text class="Red Bold" text="2" />
+        <Text class="Purple Bold" text="14" />
+        <Text class="Green Bold" text="22" />
+    </HorizontalLayout>
+
+</Panel>
+<!-- #endregion -->

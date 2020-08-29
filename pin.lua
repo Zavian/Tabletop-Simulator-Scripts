@@ -31,9 +31,40 @@ function onLoad(save_state)
             self.UI.setAttribute("bg", "height", "30")
         end
     end
+
+    self.addContextMenuItem("Aquila", aquila)
+    self.addContextMenuItem("Ekehm", ekehm)
+    self.addContextMenuItem("Mourning Lands", ml)
+    self.addContextMenuItem("Oshil", oshil)
+    self.addContextMenuItem("Trisen", trisen)
+    self.addContextMenuItem("Zunirth", zunirth)
 end
 
 function none()
+end
+
+function aquila()
+    self.setColorTint({r = 27 / 255, g = 80 / 255, b = 140 / 255})
+end
+
+function trisen()
+    self.setColorTint({r = 176 / 255, g = 58 / 255, b = 0 / 255})
+end
+
+function oshil()
+    self.setColorTint({r = 155 / 255, g = 21 / 255, b = 19 / 255})
+end
+
+function zunirth()
+    self.setColorTint({r = 138 / 255, g = 185 / 255, b = 14 / 255})
+end
+
+function ml()
+    self.setColorTint({r = 130 / 255, g = 61 / 255, b = 163 / 255})
+end
+
+function ekehm()
+    self.setColorTint({r = 119 / 255, g = 146 / 255, b = 44 / 255})
 end
 
 local lineHeight = 30

@@ -90,12 +90,38 @@ function request_initiative(obj, color, alt)
     if color == "Black" then
         local zone = getObjectFromGUID(_initiativeZone)
         local objs = zone.getObjects()
+        local xml = self.UI.getXmlTable()
+        xml[2].children = {}
+
+        local playerButtons = {}
+        local players = {}
         for i = 1, #objs do
             local name = objs[i].getName()
             if name == "player_token" then
-                Global.call("requestPlayer", {p = objs[i].getDescription(), t = objs[i].getGUID()})
+                local player = objs[i].getDescription()
+                table.insert(players, player)
+                Global.call("requestPlayer", {p = player, t = objs[i].getGUID(), call = self.getGUID()})
+                table.insert(
+                    playerButtons,
+                    {
+                        tag = "Button",
+                        attributes = {
+                            text = player:sub(1, 1):upper() .. player:sub(2),
+                            id = player,
+                            textColor = "#e8dec5",
+                            active = "false"
+                        }
+                    }
+                )
+            -- vertical layout
+            --  player : <green>done
+            --  player : <green>done
+            --  player : <red>waiting
             end
         end
+        xml[2].children = playerButtons
+        self.UI.setXmlTable(xml)
+        Global.call("setSeated", {input = players})
     end
 end
 

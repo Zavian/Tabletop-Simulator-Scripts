@@ -14,8 +14,8 @@ function buttonPress()
                 rot = {347.94, 314.99, 0.35}
             else
                 local vars = JSON.decode(notes)
-                pos = {vars.pos.x, vars.pos.y, vars.pos.z}
-                rot = {vars.rot.x, vars.rot.y, vars.rot.z}
+                pos = {vars.pos[1], vars.pos[2], vars.pos[3]}
+                rot = {vars.rot[1], vars.rot[2], vars.rot[3]}
             end
             obj.setPositionSmooth(pos, false, true)
             obj.setRotationSmooth(rot, false, true)
