@@ -59,4 +59,6 @@
     <Button offsetXY="0 10" rectAlignment="LowerCenter" fontStyle="Bold" fontSize="32" color="#ffffff00" width="530" height="70" id="ConditionType">Condition</Button>
 </Panel>
 
+<Text id="BlackName" scale="3 3 3" fontSize="34" visibility="Black" text="Black Name" color="Black" position="0 -150 -200" rotation="270 270 90" fontStyle="Bold" outline="White" outlineSize="1 -1" />
+
 

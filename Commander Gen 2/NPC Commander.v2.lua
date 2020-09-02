@@ -289,7 +289,9 @@ function onload()
             label = "?",
             tooltip = "The names of monsters can be variegated, remember of these escape characters:" ..
                 "\n- [FF4136]/[-] is for [b][FF4136]r[-][FF851B]a[-][FFDC00]n[-][2ECC40]d[-][0074D9]o[-][B10DC9]m[-] names[/b]" ..
-                    "\n- [FF4136]%[-] is for [b]numbered creatures[/b] (only works for a set of monsters)",
+                    "\n- [FF4136]%[-] is for [b]numbered creatures[/b] (only works for a set of monsters)\n\n" ..
+                        "[AAAAAA]You may put things in parenthesis [FF4136]()[-] and they will be removed and put in a black only visible label, useful for " ..
+                            "reminders that you may need from time to time in combat![-]",
             position = {-3.42, 0.4, -0.63},
             scale = {0.5, 0.5, 0.5},
             width = 290,
@@ -505,6 +507,22 @@ end
 
 function setName(params)
     self.editInput({index = 0, value = params.input})
+end
+
+function findBlackName(name)
+    if debug then
+        log(name, "Finding black name")
+    end
+
+    local pattern = ".+%((.+)%)"
+    local _,
+        _,
+        found = string.find(name, pattern)
+    if found ~= nil then
+        return {name = name:gsub("%(" .. found .. "%)", ""), black = found}
+    end
+
+    return nil
 end
 ------------------------------------------------------
 
@@ -871,7 +889,14 @@ function create_details(nameIdentifier)
         movement = getMovement(),
         side = _side
     }
+    local blackName = findBlackName(details.name)
+    if blackName ~= nil then
+        details.name = blackName.name
+        blackName = blackName.black
+    end
+
     details.maxhp = details.hp
+    details.blackName = blackName
     return details
 end
 

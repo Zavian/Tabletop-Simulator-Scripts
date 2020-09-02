@@ -13,6 +13,8 @@ local _token = nil
 local _myAC = 0
 local _myMod = 0
 
+local _blackName = ""
+
 local _myMovement = ""
 local _mySide = ""
 
@@ -105,7 +107,8 @@ function updateSave(value)
         MOV = _myMovement,
         SIDE = _mySide,
         tCOLOR = _tokenColor,
-        tHP = tempHP
+        tHP = tempHP,
+        blackName = _blackName
     }
     JSON.encode(myData)
     self.script_state = saved_data
@@ -122,6 +125,7 @@ function _restore(data)
     _mySide = data.SIDE
     _tokenColor = data.tCOLOR
     tempHP = data.tHP
+    _blackName = data.blackName
 
     self.editInput({index = 0, value = data.name})
     updateName()
@@ -150,6 +154,7 @@ function _init(params)
     _myMod = _token.atk
     _myMovement = _token.movement
     _mySide = _token.side
+    _blackName = _token.blackName
 
     self.editInput({index = 0, value = _token.name})
 
@@ -378,6 +383,8 @@ function updateName()
         _tokenColor = randomColor()
         self.setColorTint(_tokenColor)
     end
+
+    self.UI.setAttribute("BlackName", "text", _blackName and _blackName or "")
 end
 
 function name(obj, color, input, stillEditing)
