@@ -648,6 +648,20 @@ function toggleIsBoss(params)
         self.editButton({index = 3, tooltip = "false"})
     end
 end
+
+-- numberToCreate -------------------------------------
+function setNumberToCreate(params)
+    self.editInput({index = 5, value = params.input})
+end
+
+function getNumberToCreate()
+    local input = self.getInputs()[6]
+    if input.value == "" then
+        return 1
+    else
+        return tonumber(input.value)
+    end
+end
 ------------------------------------------------------
 
 -- dmg [deprecated] ----------------------------------
@@ -721,20 +735,6 @@ function boss_checkbox()
     end
 end
 
-function getBossCheckbox()
-    local btn = self.getButtons()[4]
-    return btn.tooltip == "true"
-end
-
-function getNumberToCreate()
-    local input = self.getInputs()[6]
-    if input.value == "" then
-        return 1
-    else
-        return tonumber(input.value)
-    end
-end
-
 function create_note(obj, player_clicker_color, alt_click)
     --- create note stuff
     local name = getName(nil, true)
@@ -746,6 +746,7 @@ function create_note(obj, player_clicker_color, alt_click)
     local movement = getMovement()
     local size = getSize()
     local image = getBossCheckbox() and self.getDescription() or nil
+    local numberToCreate = getNumberToCreate()
 
     local str =
         name ..
@@ -766,6 +767,9 @@ function create_note(obj, player_clicker_color, alt_click)
             callback_function = function(obj)
                 obj.setName(name)
                 obj.setDescription(str)
+                if numberToCreate > 1 then
+                    obj.setGMNotes(numberToCreate)
+                end
             end
         }
         bag.takeObject(takeParams)

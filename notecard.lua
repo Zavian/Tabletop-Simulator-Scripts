@@ -47,6 +47,12 @@ function parse()
         else
             npc_commander.call("toggleIsBoss", {input = false})
         end
+
+        if self.getGMNotes() ~= "" then
+            -- this means i have multiple that i want to make
+            local number = tonumber(self.getGMNotes())
+            npc_commander.call("setNumberToCreate", {input = number})
+        end
     end
 end
 
