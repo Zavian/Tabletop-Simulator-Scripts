@@ -34,10 +34,12 @@ end
 
 function onCollisionEnter(info)
     local obj = info.collision_object
-    if obj.interactable then
-        if obj.getGUID() then
-            _last_id = obj.getGUID()
-            self.editButton({index = 1, tooltip = _last_id})
+    if obj then
+        if obj.interactable then
+            if obj.getGUID() then
+                _last_id = obj.getGUID()
+                self.editButton({index = 1, tooltip = _last_id})
+            end
         end
     end
 end
@@ -46,10 +48,23 @@ function add_id(owner, color, alt_click)
     if color == "Black" then
         local desc = self.getDescription()
         if _last_id then
-            self.setDescription(desc .. "\n" .. _last_id)
+            self.setDescription(desc .. _last_id .. "\n")
             log("Added " .. _last_id)
+            self.editButton({index = 1, label = countIDs()})
         end
     end
+end
+
+function countIDs()
+    local desc = self.getDescription()
+    local counter = 0
+    local arr = strsplit(desc, "\n")
+    for i = 1, #arr do
+        if arr[i]:len() == 6 then
+            counter = counter + 1
+        end
+    end
+    return counter
 end
 
 function bundle(owner, color, alt_click)
@@ -63,6 +78,11 @@ function bundle(owner, color, alt_click)
                     processObj(obj)
                     obj.setScale({0.25, 0.25, 0.25})
                     obj.setLock(false)
+                    obj.setFogOfWarReveal(
+                        {
+                            reveal = false
+                        }
+                    )
                     owner.putObject(obj)
                 end
             end

@@ -767,6 +767,13 @@ function UI_UpdateValue(player, value)
 end
 --#endregion
 
+--#region projector
+function toggleProjectorGUI(player, value, btn_id)
+    local color = player.color:lower()
+    self.UI.setAttribute("projector-panel-" .. color, "active", "false")
+end
+--#endregion
+
 function printTable(t)
     local printTable_cache = {}
 

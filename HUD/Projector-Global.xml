@@ -1,0 +1,153 @@
+<Defaults>
+    <!-- #region projector -->
+    <Panel class="projector-panel"
+        childForceExpandHeight = "false" 
+        childForceExpandWidth  = "false" 
+        height = "500" 
+        raycastTarget = "true"
+        rectAlignment = "MiddleCenter"
+        width = "500"
+        color = "#28282850"
+        allowDragging = "true"
+        returnToOriginalPositionWhenReleased = "false" />
+    <Button class="projector-button-close" colors = "#f0f0f0|#c8329bFF|#ff9b38FF|#00000000"
+		color = "rgba(0.94, 0.94, 0.94, 1)"
+		height = "64"
+		image = "projector_close"
+        onClick = "toggleProjectorGUI"
+		offsetXY = "0 0"
+		rectAlignment = "UpperRight"
+		tooltip = "Close the image"
+        width = "72"
+        textColor = "#f0f0f0" />
+    <VerticalLayout class="projector-layout"
+        childAlignment = "MiddleCenter"
+        childForceExpandHeight = "false"
+        childForceExpandWidth = "false"
+        height = "100%"
+        rectAlignment = "MiddleCenter"
+        width = "100%"
+        spacing = "10" />
+
+    <Text class="projector-img-title" 
+        color = "#ffffff"
+        fontSize = "48"
+        fontStyle = "Bold"
+        horizontalOverflow = "Wrap"
+        id = "projector_img_title"
+        outline = "#000000"
+        resizeTextForBestFit = "true"
+        shadow = "rgba(0.10, 0.10, 0.10, 1.0)"
+	    text = "Projector" />
+    <Image class="projector-img" 
+        active = "true"
+        flexibleHeight = "false"
+        flexibleWidth = "false"
+        id = "projector_img"
+        image = "projector_cbh"
+        preserveAspect = "true"
+        raycastTarget  = "false" />
+    <Text class="projector-img-desc" 
+        alignment = "LowerCenter"
+	    color = "#ffffff"
+	    fontSize = "22"
+	    horizontalOverflow = "Wrap"
+	    id = "projector_img_desc"
+	    outline = "#000000"
+	    shadow = "rgba(0.10, 0.10, 0.10, 1.0)"
+	    rectAlignment = "LowerCenter"
+	    resizeTextForBestFit = "false"
+	    text = "Drop an image tile, token, or a notecard onto the projector to load the image and associated text.\n\n Use the power button to toggle the image for all players." />
+    <!-- #endregion projector -->
+</Defaults>
+
+<!-- #region projector hud -->
+<Panel id="projector-panel-green" visibility="Green" active="false" class="projector-panel">
+    <Button class="projector-button-close" />
+    <VerticalLayout class="projector-layout">
+        <Text id="pit-green" class="projector-img-title" />
+        <Image id="pi-green" class="projector-img" />
+        <Text id="pid-green" class="projector-img-desc" />
+    </VerticalLayout>
+</Panel>
+<Panel id="projector-panel-purple" visibility="Purple" active="false" class="projector-panel">
+    <Button class="projector-button-close" />
+    <VerticalLayout class="projector-layout">
+        <Text id="pit-purple" class="projector-img-title" />
+        <Image id="pi-purple" class="projector-img" />
+        <Text id="pid-purple" class="projector-img-desc" />
+    </VerticalLayout>
+</Panel>
+<Panel id="projector-panel-red" visibility="Red" active="false" class="projector-panel">
+    <Button class="projector-button-close" />
+    <VerticalLayout class="projector-layout">
+        <Text id="pit-red" class="projector-img-title" />
+        <Image id="pi-red" class="projector-img" />
+        <Text id="pid-red" class="projector-img-desc" />
+    </VerticalLayout>
+</Panel>
+<Panel id="projector-panel-blue" visibility="Blue" active="false" class="projector-panel">
+    <Button class="projector-button-close" />
+    <VerticalLayout class="projector-layout">
+        <Text id="pit-blue" class="projector-img-title" />
+        <Image id="pi-blue" class="projector-img" />
+        <Text id="pid-blue" class="projector-img-desc" />
+    </VerticalLayout>
+</Panel>
+<Panel id="projector-panel-yellow" visibility="Yellow" active="false" class="projector-panel">
+    <Button class="projector-button-close" />
+    <VerticalLayout class="projector-layout">
+        <Text id="pit-yellow" class="projector-img-title" />
+        <Image id="pi-yellow" class="projector-img" />
+        <Text id="pid-yellow" class="projector-img-desc" />
+    </VerticalLayout>
+</Panel>
+<Panel id="projector-panel-brown" visibility="Brown" active="false" class="projector-panel">
+    <Button class="projector-button-close" />
+    <VerticalLayout class="projector-layout">
+        <Text id="pit-brown" class="projector-img-title" />
+        <Image id="pi-brown" class="projector-img" />
+        <Text id="pid-brown" class="projector-img-desc" />
+    </VerticalLayout>
+</Panel>
+<Panel id="projector-panel-white" visibility="White" active="false" class="projector-panel">
+    <Button class="projector-button-close" />
+    <VerticalLayout class="projector-layout">
+        <Text id="pit-white" class="projector-img-title" />
+        <Image id="pi-white" class="projector-img" />
+        <Text id="pid-white" class="projector-img-desc" />
+    </VerticalLayout>
+</Panel>
+<Panel id="projector-panel-teal" visibility="Teal" active="false" class="projector-panel">
+    <Button class="projector-button-close" />
+    <VerticalLayout class="projector-layout">
+        <Text id="pit-teal" class="projector-img-title" />
+        <Image id="pi-teal" class="projector-img" />
+        <Text id="pid-teal" class="projector-img-desc" />
+    </VerticalLayout>
+</Panel>
+<Panel id="projector-panel-orange" visibility="Orange" active="false" class="projector-panel">
+    <Button class="projector-button-close" />
+    <VerticalLayout class="projector-layout">
+        <Text id="pit-orange" class="projector-img-title" />
+        <Image id="pi-orange" class="projector-img" />
+        <Text id="pid-orange" class="projector-img-desc" />
+    </VerticalLayout>
+</Panel>
+<Panel id="projector-panel-pink" visibility="Pink" active="false" class="projector-panel">
+    <Button class="projector-button-close" />
+    <VerticalLayout class="projector-layout">
+        <Text id="pit-pink" class="projector-img-title" />
+        <Image id="pi-pink" class="projector-img" />
+        <Text id="pid-pink" class="projector-img-desc" />
+    </VerticalLayout>
+</Panel>
+<Panel id="projector-panel-black" visibility="Black" active="false" class="projector-panel" width="250" height="250" rectAlignment="UpperLeft" offsetXY="50 0">
+    <Button class="projector-button-close" />
+    <VerticalLayout class="projector-layout">
+        <Text id="pit-black" class="projector-img-title" />
+        <Image id="pi-black" class="projector-img" />
+        <Text id="pid-black" class="projector-img-desc" />
+    </VerticalLayout>
+</Panel>
+<!-- #endregion -->

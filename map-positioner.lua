@@ -117,6 +117,26 @@ function process_bag(obj)
         process_pieces(taken_objects)
     end
     Wait.condition(waited, waiter)
+
+    if obj.getGMNotes() ~= "" then
+        -- this is about the notes if i have to create a fog of war
+        local notes = obj.getGMNotes()
+        local vars = JSON.decode(notes)
+        if vars["zone"] then
+            local pos = {x = vars["zone"]["pos"][1], y = vars["zone"]["pos"][2], z = vars["zone"]["pos"][3]}
+            local rot = {x = vars["zone"]["rot"][1], y = vars["zone"]["rot"][2], z = vars["zone"]["rot"][3]}
+            local scale = {x = vars["zone"]["scale"][1], y = vars["zone"]["scale"][2], z = vars["zone"]["scale"][3]}
+
+            local spawnParams = {
+                type = "FogOfWar",
+                position = pos,
+                rotation = rot,
+                scale = scale,
+                sound = false
+            }
+            spawnObject(spawnParams)
+        end
+    end
 end
 
 function all_resting(objs)
