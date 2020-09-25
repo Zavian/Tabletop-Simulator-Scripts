@@ -34,7 +34,7 @@ end
 
 function onCollisionEnter(info)
     local id = info.collision_object.getGUID()
-    self.setDescription("Found: " .. id)
+    self.setDescription("Found: " .. id .. "\nMyself: " .. self.guid)
 end
 
 function make_interact(obj, player_clicker_color, alt_click)

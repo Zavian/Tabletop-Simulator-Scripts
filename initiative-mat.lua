@@ -205,7 +205,7 @@ function sendToGlobal(objs)
         element.side = side
         table.insert(elements, element)
     end
-    Global.Call("setElements", {t = elements})
+    Global.Call("setElements", {t = elements, mat = self.guid})
 end
 
 function isToken(name)

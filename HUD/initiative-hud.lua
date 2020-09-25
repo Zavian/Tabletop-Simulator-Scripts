@@ -84,8 +84,18 @@ function onLoad()
     HideHud()
 end
 
+function ReorderMat()
+    if _defaults.initiative_mat then
+        local mat = getObjectFromGUID(_defaults.initiative_mat)
+        mat.call("order_initiative")
+    end
+end
+
 function setElements(params)
     local t = params.t
+    if not _defaults.initiative_mat then
+        _defaults.initiative_mat = params.mat
+    end
     resetTable()
     xmlElements = {}
     elements = {}
@@ -323,11 +333,11 @@ function ShowHud()
     UI.setAttribute("widget", "active", "true")
     UI.setAttribute("nt", "offsetXY", _defaults.offsets.nr)
     UI.setAttribute("toggle", "offsetXY", _defaults.offsets.toggle)
-    UI.setAttribute("nr", "active", "true")
+    UI.setAttribute("reorder", "active", "true")
 
     UI.setAttribute("nt", "textColor", _defaults.textColor)
     UI.setAttribute("toggle", "textColor", _defaults.textColor)
-    UI.setAttribute("nr", "textColor", _defaults.textColor)
+    UI.setAttribute("reorder", "textColor", _defaults.textColor)
 
     textColor = ""
     TogglePlayer(true)
@@ -337,11 +347,11 @@ function HideHud()
     UI.setAttribute("widget", "active", "false")
     UI.setAttribute("nt", "offsetXY", _defaults.insets.nr)
     UI.setAttribute("toggle", "offsetXY", _defaults.insets.toggle)
-    UI.setAttribute("nr", "active", "false")
+    UI.setAttribute("reorder", "active", "false")
 
     UI.setAttribute("nt", "textColor", _defaults.textColor)
     UI.setAttribute("toggle", "textColor", _defaults.textColor)
-    UI.setAttribute("nr", "textColor", _defaults.textColor)
+    UI.setAttribute("reorder", "textColor", _defaults.textColor)
 
     TogglePlayer(false)
 end
@@ -384,14 +394,14 @@ function findPawn(player, request, v)
     local guid = UI.getAttribute(v, "pawn")
     local pawn = getObjectFromGUID(guid)
     pawn.call("toggleVisualize", {input = "true", color = "Black"})
-    Player["Black"].lookAt(
-        {
-            position = pawn.getPosition(),
-            distance = 60,
-            pitch = 60,
-            yaw = 270
-        }
-    )
+    --Player["Black"].lookAt(
+    --    {
+    --        position = pawn.getPosition(),
+    --        distance = 60,
+    --        pitch = 60,
+    --        yaw = 270
+    --    }
+    --)
 end
 
 function seeCache(name, initiative, pawn, thing)

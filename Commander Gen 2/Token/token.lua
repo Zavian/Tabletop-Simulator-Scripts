@@ -62,7 +62,7 @@ function onLoad(save_state)
 
     self.createButton(
         {
-            click_function = "roll_die",
+            click_function = "reset",
             function_owner = self,
             label = "R",
             position = {x = -1.61, y = ypos, z = 1.6},
@@ -72,7 +72,7 @@ function onLoad(save_state)
             font_size = 323,
             color = {1, 0, 0},
             font_color = {1, 1, 1},
-            tooltip = "Roll Die"
+            tooltip = "Reset Visualizer"
         }
     )
 
@@ -178,34 +178,10 @@ function setupUI()
     setOperation()
 end
 
-function roll_die(obj, color)
-    if not restored then
-        if color == _color then
-            if _spawnedDie then
-                _spawnedDie.roll()
-                local rollWatch = function()
-                    return _spawnedDie.resting
-                end
-                local rollEnd = function()
-                    local value = _spawnedDie.getRotationValue()
-                    local modifier = _myMod
-                    self.UI.setAttribute(
-                        "rolled",
-                        "text",
-                        value .. "+" .. modifier .. "=" .. tonumber(value) + tonumber(modifier)
-                    )
-                    Wait.time(
-                        function()
-                            self.UI.setAttribute("rolled", "text", "")
-                        end,
-                        10
-                    )
-                end
-                Wait.condition(rollEnd, rollWatch)
-            end
-        end
+function reset(obj, color)
+    if color == "Black" then
+        toggleVisualize({input = false})
     end
-    toggleVisualize({input = false})
 end
 
 function setOperation()
@@ -506,7 +482,7 @@ function toggleVisualize(params)
     local t = params.input
 
     if t then
-        Player[params.color].pingTable(self.getPosition())
+        --Player[params.color].pingTable(self.getPosition())
         self.UI.setAttribute("visualizeButton", "width", _vSize)
         self.UI.setAttribute("visualizeButton", "height", _vSize)
         self.UI.setAttribute("visualizeButton2", "width", _vSize)
