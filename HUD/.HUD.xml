@@ -35,66 +35,13 @@
     <Button class="Temp" tooltip="Set Temporary HP on selected creatures" colors="#0074D9ff|#007CE8ff|#006BC9ff|#00000000" />
     <!--   #endregion   -->
 
-    <!-- #region projector -->
-    <Panel class="projector-panel"
-        childForceExpandHeight = "false" 
-        childForceExpandWidth  = "false" 
-        height = "500" 
-        raycastTarget = "true"
-        rectAlignment = "MiddleCenter"
-        width = "500"
-        color = "#28282850"
-        allowDragging = "true"
-        returnToOriginalPositionWhenReleased = "false" />
-    <Button class="projector-button-close" colors = "#f0f0f0|#c8329bFF|#ff9b38FF|#00000000"
-		color = "rgba(0.94, 0.94, 0.94, 1)"
-		height = "64"
-		image = "projector_close"
-        onClick = "toggleProjectorGUI"
-		offsetXY = "0 0"
-		rectAlignment = "UpperRight"
-		tooltip = "Close the image"
-        width = "72"
-        textColor = "#f0f0f0" />
-    <VerticalLayout class="projector-layout"
-        childAlignment = "MiddleCenter"
-        childForceExpandHeight = "false"
-        childForceExpandWidth = "false"
-        height = "100%"
-        rectAlignment = "MiddleCenter"
-        width = "100%"
-        spacing = "10" />
-
-    <Text class="projector-img-title" 
-        color = "#ffffff"
-        fontSize = "48"
-        fontStyle = "Bold"
-        horizontalOverflow = "Wrap"
-        id = "projector_img_title"
-        outline = "#000000"
-        resizeTextForBestFit = "true"
-        shadow = "rgba(0.10, 0.10, 0.10, 1.0)"
-	    text = "Projector" />
-    <Image class="projector-img" 
-        active = "true"
-        flexibleHeight = "false"
-        flexibleWidth = "false"
-        id = "projector_img"
-        image = "projector_cbh"
-        preserveAspect = "true"
-        raycastTarget  = "false" />
-    <Text class="projector-img-desc" 
-        alignment = "LowerCenter"
-	    color = "#ffffff"
-	    fontSize = "22"
-	    horizontalOverflow = "Wrap"
-	    id = "projector_img_desc"
-	    outline = "#000000"
-	    shadow = "rgba(0.10, 0.10, 0.10, 1.0)"
-	    rectAlignment = "LowerCenter"
-	    resizeTextForBestFit = "false"
-	    text = "Drop an image tile, token, or a notecard onto the projector to load the image and associated text.\n\n Use the power button to toggle the image for all players." />
-    <!-- #endregion projector -->
+    <!-- #region average-hud -->
+    <Panel class="average_box" width="150" height="120" allowDragging="true" returnToOriginalPositionWhenReleased="false" rectAlignment="Center" offsetXY="0 -100" />
+    <Button class="average_submit" fontSize="14" rectAlignment="LowerCenter" text="NORMAL" width="50%" height="30" colors="#60686c|#A9A9A9|#C0C0C0|#000000" textColor="white" />
+    <Button class="average_submit_fail" fontSize="10" rectAlignment="LowerLeft" text="NAT 1" width="25%" height="30" colors="#A31D1D|#8B3737|#EE2A2A|#000000" textColor="white" onClick="submitAverage(one)" />
+    <Button class="average_submit_crit" fontSize="10" rectAlignment="LowerRight" text="NAT 20" width="25%" height="30" colors="#1DA323|#378B41|#3CEE2A|#000000" textColor="white" onClick="submitAverage(crit)" />
+    <InputField class="average_input" value="" textColor="white" characterValidation="Integer" alignment="MiddleCenter" colors="#000000aa|#000000bb|#000000bc|#ffffff00" placeholder=" " resizeTextForBestFit="true" rectAlignment="MiddleLeft" width="82%" height="48" offsetXY="15 0" />
+    <!-- #endregion average-hud -->
 </Defaults>
 
 
@@ -172,9 +119,6 @@
 </Panel>
 <!--   #endregion   -->
 
-
-
-
 <!--   #region breaker hud   -->
 <Button id="TopButton" class="TopButton" rectAlignment="UpperLeft" offsetXY="75 5" onClick="UI_SideToggle" />
 <Panel active="false" id="TopPanel" class="TopPanel" width="300" height="110" rectAlignment="UpperLeft" offsetXY="75 0">
@@ -185,95 +129,76 @@
 </Panel>
 <!--   #endregion   -->
 
-
-<!-- #region projector hud -->
-<Panel id="projector-panel-green" visibility="Green" active="false" class="projector-panel">
-    <Button class="projector-button-close" />
-    <VerticalLayout class="projector-layout">
-        <Text id="pit-green" class="projector-img-title" />
-        <Image id="pi-green" class="projector-img" />
-        <Text id="pid-green" class="projector-img-desc" />
-    </VerticalLayout>
+<!-- #region average-hud -->
+<Panel class="average_box" active="false" id="white_average_box" visibility="white">
+    <Image height="76" width="150" image="average" />
+    <InputField id="white_average" class="average_input" onValueChanged="updateAverage" />
+    <Button class="average_submit" onClick="submitAverage" />
+    <Button class="average_submit_fail" />
+    <Button class="average_submit_crit" />
 </Panel>
-<Panel id="projector-panel-purple" visibility="Purple" active="false" class="projector-panel">
-    <Button class="projector-button-close" />
-    <VerticalLayout class="projector-layout">
-        <Text id="pit-purple" class="projector-img-title" />
-        <Image id="pi-purple" class="projector-img" />
-        <Text id="pid-purple" class="projector-img-desc" />
-    </VerticalLayout>
+<Panel class="average_box" active="false" id="teal_average_box" visibility="teal">
+    <Image height="76" width="150" image="average" />
+    <InputField id="teal_average" class="average_input" onValueChanged="updateAverage" />
+    <Button class="average_submit" onClick="submitAverage" />
+    <Button class="average_submit_fail" />
+    <Button class="average_submit_crit" />
 </Panel>
-<Panel id="projector-panel-red" visibility="Red" active="false" class="projector-panel">
-    <Button class="projector-button-close" />
-    <VerticalLayout class="projector-layout">
-        <Text id="pit-red" class="projector-img-title" />
-        <Image id="pi-red" class="projector-img" />
-        <Text id="pid-red" class="projector-img-desc" />
-    </VerticalLayout>
+<Panel class="average_box" active="false" id="brown_average_box" visibility="brown">
+    <Image height="76" width="150" image="average" />
+    <InputField id="brown_average" class="average_input" onValueChanged="updateAverage" />
+    <Button class="average_submit" onClick="submitAverage" />
+    <Button class="average_submit_fail" />
+    <Button class="average_submit_crit" />
 </Panel>
-<Panel id="projector-panel-blue" visibility="Blue" active="false" class="projector-panel">
-    <Button class="projector-button-close" />
-    <VerticalLayout class="projector-layout">
-        <Text id="pit-blue" class="projector-img-title" />
-        <Image id="pi-blue" class="projector-img" />
-        <Text id="pid-blue" class="projector-img-desc" />
-    </VerticalLayout>
+<Panel class="average_box" active="false" id="blue_average_box" visibility="blue">
+    <Image height="76" width="150" image="average" />
+    <InputField id="blue_average" class="average_input" onValueChanged="updateAverage" />
+    <Button class="average_submit" onClick="submitAverage" />
+    <Button class="average_submit_fail" />
+    <Button class="average_submit_crit" />
 </Panel>
-<Panel id="projector-panel-yellow" visibility="Yellow" active="false" class="projector-panel">
-    <Button class="projector-button-close" />
-    <VerticalLayout class="projector-layout">
-        <Text id="pit-yellow" class="projector-img-title" />
-        <Image id="pi-yellow" class="projector-img" />
-        <Text id="pid-yellow" class="projector-img-desc" />
-    </VerticalLayout>
+<Panel class="average_box" active="false" id="red_average_box" visibility="red">
+    <Image height="76" width="150" image="average" />
+    <InputField id="red_average" class="average_input" onValueChanged="updateAverage" />
+    <Button class="average_submit" onClick="submitAverage" />
+    <Button class="average_submit_fail" />
+    <Button class="average_submit_crit" />
 </Panel>
-<Panel id="projector-panel-brown" visibility="Brown" active="false" class="projector-panel">
-    <Button class="projector-button-close" />
-    <VerticalLayout class="projector-layout">
-        <Text id="pit-brown" class="projector-img-title" />
-        <Image id="pi-brown" class="projector-img" />
-        <Text id="pid-brown" class="projector-img-desc" />
-    </VerticalLayout>
+<Panel class="average_box" active="false" id="purple_average_box" visibility="purple">
+    <Image height="76" width="150" image="average" />
+    <InputField id="purple_average" class="average_input" onValueChanged="updateAverage" />
+    <Button class="average_submit" onClick="submitAverage" />
+    <Button class="average_submit_fail" />
+    <Button class="average_submit_crit" />
 </Panel>
-<Panel id="projector-panel-white" visibility="White" active="false" class="projector-panel">
-    <Button class="projector-button-close" />
-    <VerticalLayout class="projector-layout">
-        <Text id="pit-white" class="projector-img-title" />
-        <Image id="pi-white" class="projector-img" />
-        <Text id="pid-white" class="projector-img-desc" />
-    </VerticalLayout>
+<Panel class="average_box" active="false" id="orange_average_box" visibility="orange">
+    <Image height="76" width="150" image="average" />
+    <InputField id="orange_average" class="average_input" onValueChanged="updateAverage" />
+    <Button class="average_submit" onClick="submitAverage" />
+    <Button class="average_submit_fail" />
+    <Button class="average_submit_crit" />
 </Panel>
-<Panel id="projector-panel-teal" visibility="Teal" active="false" class="projector-panel">
-    <Button class="projector-button-close" />
-    <VerticalLayout class="projector-layout">
-        <Text id="pit-teal" class="projector-img-title" />
-        <Image id="pi-teal" class="projector-img" />
-        <Text id="pid-teal" class="projector-img-desc" />
-    </VerticalLayout>
+<Panel class="average_box" active="false" id="pink_average_box" visibility="pink">
+    <Image height="76" width="150" image="average" />
+    <InputField id="pink_average" class="average_input" onValueChanged="updateAverage" />
+    <Button class="average_submit" onClick="submitAverage" />
+    <Button class="average_submit_fail" />
+    <Button class="average_submit_crit" />
 </Panel>
-<Panel id="projector-panel-orange" visibility="Orange" active="false" class="projector-panel">
-    <Button class="projector-button-close" />
-    <VerticalLayout class="projector-layout">
-        <Text id="pit-orange" class="projector-img-title" />
-        <Image id="pi-orange" class="projector-img" />
-        <Text id="pid-orange" class="projector-img-desc" />
-    </VerticalLayout>
+<Panel class="average_box" active="false" id="yellow_average_box" visibility="yellow">
+    <Image height="76" width="150" image="average" />
+    <InputField id="yellow_average" class="average_input" onValueChanged="updateAverage" />
+    <Button class="average_submit" onClick="submitAverage" />
+    <Button class="average_submit_fail" />
+    <Button class="average_submit_crit" />
 </Panel>
-<Panel id="projector-panel-pink" visibility="Pink" active="false" class="projector-panel">
-    <Button class="projector-button-close" />
-    <VerticalLayout class="projector-layout">
-        <Text id="pit-pink" class="projector-img-title" />
-        <Image id="pi-pink" class="projector-img" />
-        <Text id="pid-pink" class="projector-img-desc" />
-    </VerticalLayout>
+<Panel class="average_box" active="false" id="green_average_box" visibility="green">
+    <Image height="76" width="150" image="average" />
+    <InputField id="green_average" class="average_input" onValueChanged="updateAverage" />
+    <Button class="average_submit" onClick="submitAverage" />
+    <Button class="average_submit_fail" />
+    <Button class="average_submit_crit" />
 </Panel>
-<Panel id="projector-panel-black" visibility="Black" active="false" class="projector-panel" width="250" height="250" rectAlignment="UpperLeft" offsetXY="50 0">
-    <Button class="projector-button-close" />
-    <VerticalLayout class="projector-layout">
-        <Text id="pit-black" class="projector-img-title" />
-        <Image id="pi-black" class="projector-img" />
-        <Text id="pid-black" class="projector-img-desc" />
-    </VerticalLayout>
-</Panel>
-<!-- #endregion -->
+<!-- #endregion average-hud -->
 
