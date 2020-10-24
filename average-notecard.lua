@@ -180,9 +180,12 @@ function average()
     local buttons = self.getButtons()
     for i = _startIndex + 1, #buttons do
         if buttons[i].font_color ~= Color.Black then
-            log(buttons[i].tooltip .. " " .. buttons[i].label)
-            tot = tot + tonumber(buttons[i].label)
-            numbers = numbers + 1
+            --log(buttons[i].tooltip .. " " .. buttons[i].label)
+            local num = tonumber(buttons[i].label)
+            if (num) then
+                tot = tot + num
+                numbers = numbers + 1
+            end
         end
     end
 
