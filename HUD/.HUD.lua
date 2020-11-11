@@ -11,7 +11,7 @@ local _defaults = {
         "Amber",
         "Edwin",
         "Gilkan",
-        "Annabelle",
+        "Marcus",
         "Kottur"
     },
     playersColors = {
@@ -19,7 +19,7 @@ local _defaults = {
         amber = "Teal",
         edwin = "Blue",
         gilkan = "Green",
-        annabelle = "White",
+        marcus = "White",
         kottur = "Purple"
     },
     offsets = {
