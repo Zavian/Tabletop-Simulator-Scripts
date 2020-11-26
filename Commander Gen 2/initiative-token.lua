@@ -102,7 +102,7 @@ end
 
 function _init(params)
     --initiative.call("_init", {input = {name = name, i = i, pawn = getObjectByID(id).obj.pawn.getGUID(), side = _side}})
-    log(params, "Initiative parameters:")
+    --log(params, "Initiative parameters:")
     myName = params.input.name
     local modifier = params.input.modifier
     local pawn = params.input.pawn

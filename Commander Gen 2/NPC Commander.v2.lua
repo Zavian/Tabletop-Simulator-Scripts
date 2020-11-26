@@ -228,7 +228,7 @@ function onload()
         },
         {
             -- note button							[1]
-            click_function = "create_note",
+            click_function = "create_json_note",
             function_owner = self,
             label = "Make Note",
             position = {1.95, 0.4, -0.24},
@@ -735,6 +735,48 @@ function boss_checkbox()
     end
 end
 
+function create_json_note(obj, player_clicker_color, alt_click)
+    local vars = {
+        name = getName(nil, true),
+        ini = getInitiative(),
+        hp = getHP(true),
+        ac = getAC(),
+        mov = getMovement(),
+        size = getSize(),
+        image = getBossCheckbox() and self.getDescription() or nil,
+        side = _side
+    }
+
+    if (getBag("note") ~= nil) then
+        local numberToCreate = getNumberToCreate()
+        local id = getBag("note")
+        local bag = getObjectFromGUID(id)
+
+        local takeParams = {
+            position = getNewPos(id),
+            rotation = getNewRot(id),
+            callback_function = function(obj)
+                obj.setName(vars.name)
+                obj.setDescription(JSON.encode(vars))
+                if numberToCreate > 1 then
+                    obj.setGMNotes(numberToCreate)
+                end
+            end
+        }
+        bag.takeObject(takeParams)
+    end
+    --local name = getName(nil, true)
+    --local initiative = getInitiative()
+    --local hp = getHP(true)
+    --local ac = getAC()
+    --local movement = getMovement()
+    --local size = getSize()
+    --local image = getBossCheckbox() and self.getDescription() or nil
+    --local numberToCreate = getNumberToCreate()
+    --local side = _side
+end
+
+-- deprecated function, check create_json_note
 function create_note(obj, player_clicker_color, alt_click)
     --- create note stuff
     local name = getName(nil, true)
@@ -777,6 +819,7 @@ function create_note(obj, player_clicker_color, alt_click)
 
     return str
 end
+---------------------------------------
 
 function switch_sides()
     if _side == "enemy" then
@@ -786,6 +829,14 @@ function switch_sides()
     elseif _side == "neutral" then
         _side = "enemy"
     end
+    self.editButton({index = 4, color = _states[_side].color})
+    self.editButton({index = 4, label = _side:gsub("^%l", string.upper)})
+end
+
+function setSide(params)
+    local side = string.lower(params.input)
+
+    _side = side
     self.editButton({index = 4, color = _states[_side].color})
     self.editButton({index = 4, label = _side:gsub("^%l", string.upper)})
 end
