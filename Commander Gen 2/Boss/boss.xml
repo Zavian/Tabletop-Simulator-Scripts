@@ -39,6 +39,8 @@
     <Image class="state" active="false" id="stunned" image="stunned" />
 </HorizontalLayout>
 
+<Button scale="0.4 0.4 0.4" visibility="Black" textColor="#ffffff" color="#00000099" fontSize="16" width="75" height="75" position="-110 25 -270" onclick="UI_RemoveArea">Remove Area</Button>
+
 <Button scale="0.4 0.4 0.4" visibility="Black" color="#FFFFFF99" fontSize="32" width="75" height="75" position="-110 -10 -270" onclick="UI_ConditionMenu">+</Button>
 <Panel scale="0.4 0.4 0.4" visibility="Black" id="ConditionMenu" active="false" width="550" height="425" position="-250 -40 -270" color="#ffffff99">
     <GridLayout id="condSelector" constraint="FixedColumnCount" constraintCount="5" startCorner="UpperRight" childAlignment="UpperRight" spacing="5" padding="10 10 10 10">

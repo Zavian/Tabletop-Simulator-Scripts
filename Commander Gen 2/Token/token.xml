@@ -38,6 +38,8 @@
     <Image class="state" active="false" id="stunned" image="stunned" />
 </HorizontalLayout>
 
+<Button visibility="Black" textColor="#ffffff" color="#00000099" fontSize="16" width="75" height="75" position="-250 -130 -660" onclick="UI_RemoveArea">Remove Area</Button>
+
 <Button visibility="Black" color="#FFFFFF99" fontSize="32" width="75" height="75" position="-250 -210 -660" onclick="UI_ConditionMenu">+</Button>
 <Panel visibility="Black" id="ConditionMenu" active="false" width="550" height="425" position="-600 -250 -660" color="#ffffff99">
     <GridLayout id="condSelector" constraint="FixedColumnCount" constraintCount="5" startCorner="UpperRight" childAlignment="UpperRight" spacing="5" padding="10 10 10 10">
@@ -60,5 +62,3 @@
 </Panel>
 
 <Text id="BlackName" scale="3 3 3" fontSize="34" visibility="Black" text="Black Name" color="Black" position="0 -150 -200" rotation="270 270 90" fontStyle="Bold" outline="White" outlineSize="1 -1" />
-
-

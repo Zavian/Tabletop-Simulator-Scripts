@@ -38,7 +38,7 @@ function onLoad()
 			width = 1200,
 			height = 1200,
 			font_size = 400,
-			color = {0.7984, 0.8693, 0.3922, 1}
+			color = {0.18, 0.8, 0.25, 1}
 		}
 	)
 end
@@ -289,17 +289,12 @@ function InjectMini(obj, color, alt_click)
 
 	local script =
 		'-- This file is compatible with player-manager only, do not use it somewhere else\n\nlocal master = "' ..
-		self.getGUID() ..
-			'local a=nil;local b={blinded="A blinded creature can\'t see and automatically fails any ability check that requires sight. Attack rolls against the creature have advantage, and the creature\'s attack rolls have disadvantage.",charmed="A charmed creature can\'t attack the charmer or target the charmer with harmful abilities or magical effects. The charmer has advantage on any ability check to interact socially with the creature.",concentration="Whenever you take damage while you are concentrating on a spell, you must make a Constitution saving throw to maintain your Concentration. The DC equals 10 or half the damage you take, whichever number is higher. If you take damage from multiple sources, such as an arrow and a dragon’s breath, you make a separate saving throw for each source of damage.",deafened="A deafened creature can\'t hear and automatically fails any ability check that requires hearing.",frightened="A frightened creature has disadvantage on ability checks and attack rolls while the source of its fear is within line of sight. The creature can\'t willingly move closer to the source of its fear.",grappled="A grappled creature\'s speed becomes 0, and it can\'t benefit from any bonus to its speed. The condition ends if the grappler is incapacitated. The condition also ends if an effect removes the grappled creature from the reach of the grappler or grappling effect, such as when a creature is hurled away by the thunderwave spell.",incapacitated="An incapacitated creature can\'t take actions or reactions.",invisible="An invisible creature is impossible to see without the aid of magic or a special sense. For the purpose of hiding, the creature is heavily obscured. The creature\'s location can be detected by any noise it makes or any tracks it leaves. Attack rolls against the creature have disadvantage, and the creature\'s attack rolls have advantage.",on_fire="A creature who is on fire takes 2d6 damage at the start of each of their turns. The creature sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The effect can be ended early with the Extinguish action.",paralyzed="A paralyzed creature is incapacitated and can\'t move or speak. The creature automatically fails Strength and Dexterity saving throws. Attack rolls against the creature have advantage. Any attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature.",petrified="A petrified creature is transformed, along with any nonmagical object it is wearing or carrying, into a solid inanimate substance (usually stone). Its weight increases by a factor of ten, and it ceases aging. The creature is incapacitated, can\'t move or speak, and is unaware of its surroundings. Attack rolls against the creature have advantage.",poisoned="A poisoned creature has disadvantage on attack rolls and ability checks.",restrained="A restrained creature\'s speed becomes 0, and it can\'t benefit from any bonus to its speed. Attack rolls against the creature have advantage, and the creature\'s attack rolls have disadvantage. The creature has disadvantage on Dexterity saving throws.",stunned="A stunned creature is incapacitated, can\'t move, and can speak only falteringly. The creature automatically fails Strength and Dexterity saving throws. Attack rolls against the creature have advantage."}function measureButton()print("kek")end;function _init()self.createButton({click_function="measureButton",function_owner=self,label="M",position={0,0.1,0.4},scale={0.5,0.5,0.5},width=500,height=500,font_size=400,color={0.2598,0.824,0.4087,1},tooltip="Measure Distance"})end;function manage_state(c,d,e)if master~=""then a=getObjectFromGUID(master)end;if c.color=="Black"then self.UI.setAttribute(e,"active","false")else self.UI.setAttribute(e,"active","false")a.call("manage_condition",{c=e})end end;function onCollisionEnter(f)if master~=""then a=getObjectFromGUID(master)end;if a~=nil then local g=f.collision_object;if isCondition(g.getName():gsub(" ","_"))then self.UI.setAttribute(string.lower(g.getName()),"active","true")g.destruct()end end end;function isCondition(h)h=string.lower(h)return b[h]~=nil end'
+		self.getGUID() .. '";'
+	script =
+		script ..
+		'local a=nil;local b=nil;function manage_state(c,d,e)if master~=""then a=getObjectFromGUID(master)end;if c.color=="Black"then self.UI.setAttribute(e,"active","false")else self.UI.setAttribute(e,"active","false")a.call("manage_condition",{c=e})end end;function onCollisionEnter(f)if master~=""then a=getObjectFromGUID(master)end;if a~=nil then local g=f.collision_object;if isCondition(g.getName():gsub(" ","_"))then self.UI.setAttribute(string.lower(g.getName()),"active","true")g.destruct()elseif g.getName()=="Clear Area"then removeArea()elseif isAreaObject(g.getName())then makeJoined(g)end end end;function isCondition(h)h=string.lower(h)local i={"blinded","charmed","concentration","deafened","frightened","grappled","incapacitated","invisible","on_fire","paralyzed","petrified","poisoned","restrained","stunned"}for j=1,#i do if i[j]==h then return true end end;return false end;function makeJoined(g)removeArea()g.jointTo(self,{type="Fixed",collision=false})g.setVar("parent",self)g.setLuaScript(\'function onLoad()(self.getComponent("BoxCollider")or self.getComponent("MeshCollider")).set("enabled",false)Wait.condition(function()(self.getComponent("BoxCollider")or self.getComponent("MeshCollider")).set("enabled",false)end,function()return not self.loading_custom end)end;function onUpdate()if parent~=nil then if not parent.resting then self.setPosition(parent.getPosition())local a=parent.getScale()if a.x<=1 then self.setScale({x=1.70,y=0.01,z=1.70})end end else self.destruct()end end\')g.getComponent("MeshRenderer").set("receiveShadows",false)g.mass=0;g.bounciness=0;g.drag=0;g.use_snap_points=false;g.use_grid=false;g.use_gravity=false;g.auto_raise=false;g.sticky=false;g.interactable=true;Wait.time(function()local k=g.getScale()g.setScale({x=k.x,y=0.01,z=k.z})g.setRotationSmooth({x=0,y=g.getRotation().y,z=0},false,true)b=g end,0.5)end;function removeArea()if b then b.destruct()b=nil end end;function isAreaObject(l)local m={"10\'r","15\'r","20\'r","30\'r","40\'r","10\'cone","15\'cone","30\'cone","60\'cone","10\'c","15\'c","20\'c","30\'c","40\'c"}for j=1,#m do if l==m[j]then return true end end;return false end'
 	object.setLuaScript(script)
 	linked = {object = object, id = id}
-
-	Wait.time(
-		function()
-			object.call("_init")
-		end,
-		1.5
-	)
 
 	--broadcastToColor("Pinging your miniature! Set your stats on the new panel now!", color, {r = 1, g = 1, b = 1})
 
@@ -319,6 +314,27 @@ function InjectMini(obj, color, alt_click)
 	self.UI.show("ConditionMenu")
 
 	Player[color].pingTable(linked.object.getPosition())
+
+	self.createButton(
+		{
+			click_function = "removeArea",
+			function_owner = self,
+			label = "Remove\nArea",
+			position = {0, 0.4, 1.18},
+			rotation = {180, 0, 180},
+			scale = {0.5, 0.5, 0.5},
+			width = 1200,
+			height = 800,
+			font_size = 300,
+			color = {1, 0.25, 0.21, 1},
+			font_color = {1, 1, 1, 1},
+			tooltip = "Remove\nArea"
+		}
+	)
+end
+
+function removeArea()
+	linked.object.call("removeArea", nil)
 end
 
 function setPercentage(mini, currentHP, maxHP)

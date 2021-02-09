@@ -39,7 +39,7 @@ local maxHP = 0
 
 function onLoad(save_state)
     local zpos = -1.7
-    local ypos = 0.2
+    local ypos = 0.1
     local xpos = 0
 
     self.createButton(
@@ -47,7 +47,7 @@ function onLoad(save_state)
             click_function = "destroy_all",
             function_owner = self,
             label = "X",
-            position = {x = 0.9, y = ypos, z = 0.9},
+            position = {x = 0.8, y = ypos, z = 0},
             rotation = {0, 180, 0},
             width = 500,
             height = 500,
@@ -55,7 +55,7 @@ function onLoad(save_state)
             color = {1, 0, 0},
             font_color = {1, 1, 1},
             tooltip = "Destroy Token",
-            scale = {0.5, 0.5, 0.5}
+            scale = {0.3, 0.3, 0.3}
         }
     )
 
@@ -64,7 +64,7 @@ function onLoad(save_state)
             click_function = "reset",
             function_owner = self,
             label = "R",
-            position = {x = -0.9, y = ypos, z = 0.9},
+            position = {x = -0.8, y = ypos, z = 0},
             rotation = {0, 180, 0},
             width = 500,
             height = 500,
@@ -72,7 +72,7 @@ function onLoad(save_state)
             color = {1, 0, 0},
             font_color = {1, 1, 1},
             tooltip = "Reset Visualizer",
-            scale = {0.5, 0.5, 0.5}
+            scale = {0.3, 0.3, 0.3}
         }
     )
 
@@ -82,13 +82,13 @@ function onLoad(save_state)
             function_owner = self,
             label = "Name",
             alignment = 3,
-            position = {x = xpos, y = ypos, z = -1.1},
+            position = {x = xpos, y = ypos, z = -0.5},
             rotation = {0, 180, 0},
             width = 2200,
             height = 475,
             font_size = 380,
             validation = 1,
-            scale = {0.5, 0.5, 0.5}
+            scale = {0.3, 0.3, 0.3}
         }
     )
 
@@ -263,6 +263,7 @@ end
 
 function UIUpdateInput(player, value)
     _UIInput = value
+    updateSave()
 end
 
 function setHP()
@@ -389,9 +390,6 @@ function name(obj, color, input, stillEditing)
         end
         if _spawnedDie then
             _spawnedDie.setName(_tokenName)
-        --if not restored then
-        --    _master.call("updateName", {pawn = self, name = input})
-        --end
         end
     end
 end
@@ -594,24 +592,95 @@ function manage_state(player, request, v)
     end
 end
 
+local areaObj = nil
 function onCollisionEnter(info)
-    --{
-    --    collision_object = objectReference
-    --    contact_points = {
-    --        {x=5, y=0, z=-2, 5, 0, -2},
-    --    }
-    --    relative_velocity = {x=0, y=20, z=0, 0, 20, 0}
-    --}
     local obj = info.collision_object
-    local name = obj.getName()
-    if name ~= "" and name ~= nil then
-        if isCondition((name:gsub(" ", "_"))) then
-            if obj.tag == "Tile" or obj.tag == "GoPiece" then
-                self.UI.setAttribute(string.lower(obj.getName()), "active", "true")
-                obj.destruct()
+    if obj ~= nil then
+        local name = obj.getName()
+        if name ~= "" and name ~= nil then
+            if isCondition((name:gsub(" ", "_"))) then
+                if obj.tag == "Tile" or obj.tag == "GoPiece" then
+                    self.UI.setAttribute(string.lower(obj.getName()), "active", "true")
+                    obj.destruct()
+                end
+            elseif obj.getName() == "Clear Area" then
+                removeArea()
+            elseif isAreaObject(name) then
+                makeJoined(obj)
             end
         end
     end
+end
+
+function makeJoined(obj)
+    removeArea()
+
+    obj.jointTo(
+        self,
+        {
+            type = "Fixed",
+            collision = false
+        }
+    )
+    obj.setVar("parent", self)
+    obj.setLuaScript(
+        'function onLoad()(self.getComponent("BoxCollider")or self.getComponent("MeshCollider")).set("enabled",false)Wait.condition(function()(self.getComponent("BoxCollider")or self.getComponent("MeshCollider")).set("enabled",false)end,function()return not self.loading_custom end)end;function onUpdate()if parent~=nil then if not parent.resting then self.setPosition(parent.getPosition())local a=parent.getScale()if a.x<=1 then self.setScale({x=1.70,y=0.01,z=1.70})end end else self.destruct()end end'
+    )
+    obj.getComponent("MeshRenderer").set("receiveShadows", false)
+    obj.mass = 0
+    obj.bounciness = 0
+    obj.drag = 0
+    obj.use_snap_points = false
+    obj.use_grid = false
+    obj.use_gravity = false
+    obj.auto_raise = false
+    obj.sticky = false
+    obj.interactable = true
+    Wait.time(
+        function()
+            local s = obj.getScale()
+            obj.setScale({x = s.x, y = 0.01, z = s.z})
+            obj.setRotationSmooth({x = 0, y = obj.getRotation().y, z = 0}, false, true)
+            areaObj = obj
+        end,
+        0.5
+    )
+end
+
+function removeArea()
+    if areaObj then
+        areaObj.destruct()
+        areaObj = nil
+    end
+end
+
+function isAreaObject(name)
+    local areas = {
+        "10'r",
+        "15'r",
+        "20'r",
+        "30'r",
+        "40'r",
+        "10'cone",
+        "15'cone",
+        "30'cone",
+        "60'cone",
+        "10'c",
+        "15'c",
+        "20'c",
+        "30'c",
+        "40'c"
+    }
+    for i = 1, #areas do
+        if name == areas[i] then
+            return true
+        end
+    end
+    return false
+end
+
+function UI_RemoveArea(player)
+    removeArea()
 end
 
 function UI_AddCondition(player, request, id)
