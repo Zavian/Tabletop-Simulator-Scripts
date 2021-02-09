@@ -9,31 +9,43 @@ If you need help you can contact me @Zavian#8253 on discord (you can also find m
 
 Well, as a basis the nomenclature of the files makes pretty obvious, so through some logic and stuff like that, you'll be able to figure out most things, however, for an ease of use here's some info. Be aware that most of these things are DnD related, so bare with me with teminology:
 
--   card creator: A module to create a very simple object with two images in two sides and to automatically parse multiple inputs from zavian.github.io/generator/generate.html
--   initiative rectangle: A simple object that stores informations such as positional information of monsters that you spawn through **NPC Commander** as well as initiative stuff.
--   bag-peeker: A simple script to make visible the name of the first object in a TTS bag.
--   bundle-map: A script to put a map and objects of said map in a bag
--   calendar: Abandoned project
--   debug button: It puts stuff in other stuff
--   initiative-box: Abandoned project
--   initiative-hud: UI for managing initiative for a dnd combat
--   ~~npc commander v0: The creator of monsters and NPCs as pawns in the table, this is the central brain of everything in my table~~
--   ~~npc commander: A rework of v0, when I have time I just work on it.~~
--   **NPC Commander 2.0**: New version of the NPC commander, don't use the old one for your own sake. Want to see it in action, check out the workshop page [Here](https://steamcommunity.com/sharedfiles/filedetails/?id=2116098254). This is a private project that is strictly connected to this github project, if you are to use this there is close to no support as it still at a very draft-y state.
--   pin-positioner: A script to position things on a map
--   pin: A script to manage informations on a 3D object
--   player-manager: A UI based on DNDBEYOND HP tracker but for ingame stuff
--   reset-characters: A script to position player's pawns in a specific place
--   rolling-block: Abandoned project
--   token-boss: See **token**
--   token-tracker: Abandoned project
--   token: Also known referenced as pawn, this is a monster/NPC 3D object.
+
+
+- average-button: Button to calculate averages with a given selection of colors. Kind of not working 100% but it does its thing. Related to average-notecard
+- average-notecard: Related to average button, a place where to output its results
+- bag-peeker: Name is self explanatory
+- bundle-map: Bag that bundles a set of models and things into it
+- calendar: Deprecated project
+- card creator: Tool to parse informations from zavian.github.io/generator/generate.html into cards (for player items and the likes)
+- **Commander Gen 2**: New version of the NPC commander, don't use the old one for your own sake. Want to see it in action, check out the workshop page [Here](https://steamcommunity.com/sharedfiles/filedetails/?id=2116098254). This is a private project that is strictly connected to this github project, if you are to use this there is close to no support as it still at a very draft-y state.
+- NPC Commander v0: Deprecated version of commander 2
+- debug-button: Simple tool to repackage things after updating them
+- exploding_dice: Something based on the dice mat to work with exploding dice
+- HUD: Interface to most of the tools for dungeon master and player
+- initiative rectangle: Deprecated
+- initiative-box: Deprecated
+- initiative-mat: Tool to order and manage initiative of monsters and players
+- interactable: Tool to make things interactable (or not) on the fly
+- map-positioner: Tool to unpackage things from bundled maps. Related: bundle-map
+- notecard 2: Tool to parse informations from the NPC Commander
+- notecard: Deprecated. Related: notecard 2
+- pin-positioner: Button to position things on a map and make it easier. Related: pin
+- pin: Tool to have a name underneath a pin or w/e else
+- player_manager: Tool to manage a player's stats such as hp, conditions and the lieks
+- reset-characters: Button to reset miniature positions
+- rolling-block: Deprecated
+- token-boss: Boss token. Related: token
+- token: Token with NPC stats, such as hp, ac, movement and the likes.
+- token-tracker: Deprecated
+
 
 If a file has a .xml version it means that it's both UI and Lua based.
+
+# Who am I?
+
+I'm a developer that has taken under his responsibility to recreate a series of tools to ease DnD into Tabletop Simulator. Don't think of me of anything as I am far from expert on the tool, however the scrips present in this page can be used in all sorts of manners, just be aware that there is close to no documentation, you can still concact me if you need to understand anything from the project.
 
 # What is the purpose of all these scripts?
 
 The things that I'm trying to achieve via these scripts is to reach a decent level of both automation and management of a DnD table, mostly for combat related activities. Many tools are inspired by other external programs such as Roll20, Foundry, FantasyGrounds, etc.
 The end goal is to have a table that is both **stable** (still working on it) and easy to understand with all the features you may be in need for managing a DnD game.
-
-Want to see it in action? I stream the games that I DM and play in every **Friday** and **Saturday** at 7PM CEST on www.twitch.tv/DepressionMansion
