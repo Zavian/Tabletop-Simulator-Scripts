@@ -18,13 +18,25 @@ function onLoad()
             click_function = "add_id",
             function_owner = self,
             label = "+",
-            position = {0, 1.8, 0.4},
+            position = {-0.4, 1.79999995231628, 0.400000005960464},
             scale = {0.5, 0.5, 0.5},
             width = 900,
             height = 800,
             font_size = 500,
             color = {0.2588, 0.8235, 0.4078, 1},
-            tooltip = ""
+            tooltip = "Add item below bag"
+        },
+        {
+            click_function = "create_area",
+            function_owner = self,
+            label = "A",
+            position = {0.4, 1.79999995231628, 0.400000005960464},
+            scale = {0.5, 0.5, 0.5},
+            width = 900,
+            height = 800,
+            font_size = 500,
+            color = {1, 0.2549, 0.2117, 1},
+            tooltip = "Create area to envelop all items\nSet area by right clicking"
         }
     }
     for i = 1, #buttons do
@@ -33,12 +45,14 @@ function onLoad()
 end
 
 function onCollisionEnter(info)
-    local obj = info.collision_object
-    if obj then
-        if obj.interactable then
-            if obj.getGUID() then
-                _last_id = obj.getGUID()
-                self.editButton({index = 1, tooltip = _last_id})
+    if info then
+        local obj = info.collision_object
+        if obj then
+            if obj.interactable then
+                if obj.getGUID() then
+                    _last_id = obj.getGUID()
+                    self.editButton({index = 1, tooltip = _last_id})
+                end
             end
         end
     end
@@ -55,6 +69,48 @@ function add_id(owner, color, alt_click)
     end
 end
 
+local _area = nil
+function create_area(owner, color, alt_click)
+    if color == "Black" then
+        if alt_click then
+            if _area then
+                local objs = _area.getObjects()
+                local found = 0
+                local array = {}
+                for i = 1, #objs do
+                    obj = objs[i]
+                    if obj.interactable and obj ~= self then
+                        table.insert(array, obj.getGUID())
+                        found = found + 1
+                    end
+                end
+                local encoded = JSON.encode(array)
+                self.setGMNotes(encoded)
+                destroyObject(_area)
+                _area = nil
+
+                print("Found " .. found .. " objects.")
+                found = 0
+            end
+        else
+            if _area then
+                destroyObject(_area)
+                _area = nil
+            end
+            positionToZone = self.getPosition()
+            spawnParams = {
+                type = "ScriptingTrigger",
+                position = positionToZone,
+                rotation = {x = 0, y = 90, z = 0},
+                scale = {x = 4, y = 4, z = 4},
+                sound = false,
+                snap_to_grid = true
+            }
+            _area = spawnObject(spawnParams)
+        end
+    end
+end
+
 function countIDs()
     local desc = self.getDescription()
     local counter = 0
@@ -64,13 +120,17 @@ function countIDs()
             counter = counter + 1
         end
     end
+
+    local gm = self.getGMNotes()
+    counter = counter + #JSON.decode(gm)
+
     return counter
 end
 
 function bundle(owner, color, alt_click)
     if color == "Black" then
         if not alt_click then
-            local desc = owner.getDescription()
+            local desc = self.getDescription()
             local ids = strsplit(desc, "\n")
             for i = 1, #ids do
                 local obj = getObjectFromGUID(ids[i])
@@ -83,7 +143,24 @@ function bundle(owner, color, alt_click)
                             reveal = false
                         }
                     )
-                    owner.putObject(obj)
+                    self.putObject(obj)
+                end
+            end
+
+            local gm = self.getGMNotes()
+            local decoded = JSON.decode(gm)
+            for i = 1, #decoded do
+                local obj = getObjectFromGUID(decoded[i])
+                if obj then
+                    processObj(obj)
+                    obj.setScale({0.25, 0.25, 0.25})
+                    obj.setLock(false)
+                    obj.setFogOfWarReveal(
+                        {
+                            reveal = false
+                        }
+                    )
+                    self.putObject(obj)
                 end
             end
         else
