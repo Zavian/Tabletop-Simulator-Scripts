@@ -1,11 +1,35 @@
 local sides = nil
 local rolling = false
 local refDie = nil
-local note = ""
+local crit = nil
 
 function onLoad()
     sides = self.getRotationValues()
+
+    self.addContextMenuItem("Reroll dice", reroll)
+
     toRoll(self)
+end
+
+function selfReroll(params)
+    if self.getLock() then
+        self.setLock(false)
+        self.setColorTint(Color.Green)
+    end
+end
+
+function reroll(player_color)
+    local objs = Player[player_color].getSelectedObjects()
+
+    if #objs > 1 then
+        for i = 1, #objs do
+            callIfCallable(objs[i].call("selfReroll"))
+            --objs[i].call("selfReroll")
+        end
+    elseif self.getLock() then
+        self.setLock(false)
+        self.setColorTint(Color.Green)
+    end
 end
 
 function onDestroy()
@@ -15,7 +39,7 @@ function onDestroy()
 end
 
 function onRandomize()
-    if not rolling then
+    if not rolling and not self.getLock() then
         monitorDie(self)
     end
 end
@@ -29,22 +53,38 @@ function monitorDie(die)
         rolling = false
         die.setLock(true)
         didRoll(die)
-        note = getObjectFromGUID(self.getGMNotes())
 
-        if note.getGMNotes() == "" then
-            note.setGMNotes(die.guid)
-        else
-            note.setGMNotes(note.getGMNotes() .. "," .. die.guid)
+        -- note = getObjectFromGUID(self.getGMNotes())
+
+        -- if note.getGMNotes() == "" then
+        --     note.setGMNotes(die.guid)
+        -- else
+        --     note.setGMNotes(note.getGMNotes() .. "," .. die.guid)
+        -- end
+
+        -- local desc = note.getDescription()
+        -- if desc == "" then
+        --     note.setDescription(die.getValue())
+        -- else
+        --     note.setDescription(desc .. "," .. die.getValue())
+        -- end
+
+        local gm = self.getGMNotes()
+        if gm ~= nil and gm ~= "" then
+            local json = JSON.decode(gm)
+            if json["crit"] then
+                crit = json["crit"]
+            end
         end
 
-        local desc = note.getDescription()
-        if desc == "" then
-            note.setDescription(die.getValue())
-        else
-            note.setDescription(desc .. "," .. die.getValue())
-        end
-
-        if die.getValue() == #sides then
+        if crit then
+            local value = die.getValue()
+            if crit == 0 then
+                explode(die)
+            elseif value >= #sides - crit then
+                explode(die)
+            end
+        elseif die.getValue() == #sides then
             explode(die)
         end
 
@@ -130,4 +170,16 @@ function randomRotation()
     local zr = math.atan2(t1, t0)
     --Return result
     return {math.deg(xr), math.deg(yr), math.deg(zr)}
+end
+
+function callIfCallable(f)
+    return function(...)
+        error,
+            result = pcall(f, ...)
+        if error then -- f exists and is callable
+            print("ok")
+            return result
+        end
+        -- nothing to do, as though not called, or print('error', result)
+    end
 end
