@@ -32,12 +32,31 @@ function onLoad(save_state)
         end
     end
 
-    self.addContextMenuItem("Aquila", aquila)
-    self.addContextMenuItem("Ekehm", ekehm)
-    self.addContextMenuItem("Mourning Lands", ml)
-    self.addContextMenuItem("Oshil", oshil)
-    self.addContextMenuItem("Trisen", trisen)
-    self.addContextMenuItem("Zunirth", zunirth)
+    self.addContextMenuItem("[1A4F8B]Aquila[-]", aquila)
+    self.addContextMenuItem("[76922B]Ekehm[-]", ekehm)
+    self.addContextMenuItem("[813CA3]Mourning Lands[-]", ml)
+    self.addContextMenuItem("[9B1412]Oshil[-]", oshil)
+    self.addContextMenuItem("[B03900]Trisen[-]", trisen)
+    self.addContextMenuItem("[8AB90D]Zunirth[-]", zunirth)
+    self.addContextMenuItem("[39CCCC]Save[-]", save)
+end
+
+function save()
+    local curPos = self.getPosition()
+    local curRot = self.getRotation()
+    local vals = {
+        pos = {
+            tonumber(string.format("%.2f", curPos.x)),
+            tonumber(string.format("%.2f", curPos.y)),
+            tonumber(string.format("%.2f", curPos.z))
+        },
+        rot = {
+            tonumber(string.format("%.2f", curRot.x)),
+            tonumber(string.format("%.2f", curRot.y)),
+            tonumber(string.format("%.2f", curRot.z))
+        }
+    }
+    self.setGMNotes(JSON.encode(vals))
 end
 
 function none()
