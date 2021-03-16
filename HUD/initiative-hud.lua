@@ -4,7 +4,9 @@ local _defaults = {
         ally = "#66ba6b",
         neutral = "#d5d165",
         player = "#7e7dbb",
-        enemy = "#BD5365"
+        enemy = "#BD5365",
+        lair = "#D2D186",
+        epic = "#B38CFF"
     },
     players = {
         "Zora",
@@ -39,6 +41,10 @@ local _defaults = {
         rToken = "0e4e22",
         roundPos = {x = 101.65, y = 4.00, z = -28.57},
         roundOffset = 0.38
+    },
+    static = {
+        "Lair",
+        "Epic Die"
     },
     textColor = "#f0f0f0ff",
     initiative_mat = nil
@@ -405,7 +411,7 @@ function findPawn(player, request, v)
 end
 
 function seeCache(name, initiative, pawn, thing)
-    if not isPlayer(name) then
+    if not isPlayer(name) and not isStatic(name) then
         if statusCache[name .. "." .. initiative .. "." .. pawn] then
             status = statusCache[name .. "." .. initiative .. "." .. pawn][thing]
             return status and "True" or "False"
@@ -479,6 +485,14 @@ end
 function isPlayer(name)
     for i = 1, #_defaults.players do
         if string.lower(name) == string.lower(_defaults.players[i]) then
+            return true
+        end
+    end
+end
+
+function isStatic(name)
+    for i = 1, #_defaults.static do
+        if string.lower(name) == string.lower(_defaults.static[i]) then
             return true
         end
     end

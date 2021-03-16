@@ -1,6 +1,6 @@
 local _difference = 0.754
 local _initiativeZone = "6befe7"
-local _tokenName = {"player_token", "enemy_token", "ally_token", "neutral_token"}
+local _tokenName = {"player_token", "enemy_token", "ally_token", "neutral_token", "epic_token", "lair_token"}
 
 function updateSave()
     saved_data = JSON.encode(ref_buttonData)

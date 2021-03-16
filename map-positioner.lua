@@ -160,7 +160,7 @@ function process_pieces(pieces)
                 end
                 pieces[i].tooltip = false
             end,
-            1
+            1 + (i + 3) / 10
         )
     end
 end

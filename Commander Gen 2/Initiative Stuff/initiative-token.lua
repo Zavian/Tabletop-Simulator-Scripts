@@ -11,7 +11,9 @@ local _states = {
     ["player"] = {color = {0, 0, 0.545098}},
     ["enemy"] = {color = {0.517647, 0, 0.098039}},
     ["ally"] = {color = {0.039216, 0.368627, 0.211765}},
-    ["neutral"] = {color = {0.764706, 0.560784, 0}}
+    ["neutral"] = {color = {0.764706, 0.560784, 0}},
+    ["lair"] = {color = {0.823529, 0.819608, 0.52549}},
+    ["epic"] = {color = {0.701961, 0.54902, 1}}
 }
 
 function click_textbox(obj, color, input, stillEditing)
@@ -110,15 +112,21 @@ function _init(params)
 
     local roll = math.random(1, 20)
     local final = roll + modifier
+    if params.input.static then
+        final = modifier
+    end
+
     if final <= 0 then
         final = 1
     end
     myRoll = final
 
     self.editInput({index = 0, value = myName .. "\n" .. final})
-
     self.setDescription(myName .. "\n" .. final .. "\n" .. roll .. " + " .. modifier .. "\n" .. pawn)
-    setToken({input = pawn})
+
+    if pawn ~= nil then
+        setToken({input = pawn})
+    end
     setSide({side = side})
 
     updateSave(myName .. "\n" .. final)
