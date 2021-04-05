@@ -1,0 +1,12 @@
+{
+    "bracket-pair-colorizer-2.colors": [
+
+        "Gold",
+        "Orchid",
+        "LightSkyBlue"
+    ]
+    "workbench.colorCustomizations": {
+        "editorIndentGuide.activeBackground": "#7E87AB",
+        
+    }
+}

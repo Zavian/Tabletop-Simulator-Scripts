@@ -1,14 +1,24 @@
+ref_customDieSides = {["4"] = 0, ["6"] = 1, ["8"] = 2, ["10"] = 3, ["12"] = 4, ["20"] = 5}
+ref_customDieSides_rev = {4, 6, 8, 10, 12, 20}
+ref_defaultDieSides = {"Die_4", "Die_6", "Die_8", "Die_10", "Die_12", "Die_20"}
+
 local sides = nil
 local rolling = false
 local refDie = nil
 local crit = nil
+local custom_dice = false
 
 function onLoad()
     sides = self.getRotationValues()
+    custom_dice = self.getCustomObject() ~= nil
 
     self.addContextMenuItem("Reroll dice", reroll)
 
     toRoll(self)
+end
+
+function setCustom(params)
+    ref_diceCustom[params.side] = params.url
 end
 
 function selfReroll(params)
@@ -54,21 +64,6 @@ function monitorDie(die)
         die.setLock(true)
         didRoll(die)
 
-        -- note = getObjectFromGUID(self.getGMNotes())
-
-        -- if note.getGMNotes() == "" then
-        --     note.setGMNotes(die.guid)
-        -- else
-        --     note.setGMNotes(note.getGMNotes() .. "," .. die.guid)
-        -- end
-
-        -- local desc = note.getDescription()
-        -- if desc == "" then
-        --     note.setDescription(die.getValue())
-        -- else
-        --     note.setDescription(desc .. "," .. die.getValue())
-        -- end
-
         local gm = self.getGMNotes()
         if gm ~= nil and gm ~= "" then
             local json = JSON.decode(gm)
@@ -96,7 +91,7 @@ end
 function explode(die)
     if #sides ~= 4 then
         local s = ref_customDieSides[tostring(#sides)]
-        explodeWith("Die_" .. ref_customDieSides_rev[s])
+        explodeWith(ref_customDieSides_rev[s])
     end
 end
 
@@ -107,9 +102,13 @@ function explodeWith(dieSides)
 
     local selfScale = self.getScale()
 
+    if not custom_dice then
+        dieSides = "Die" .. dieSides
+    end
+
     spawnObject(
         {
-            type = dieSides,
+            type = custom_dice ~= nil and "Custom_Dice" or dieSides,
             position = spawnPos,
             rotation = randomRotation(),
             scale = {selfScale.x - 0.05, selfScale.y - 0.05, selfScale.z - 0.05},
@@ -117,16 +116,19 @@ function explodeWith(dieSides)
                 obj.setLuaScript(self.getLuaScript())
                 obj.setGMNotes(self.getGMNotes())
                 refDie = obj
+                if custom_dice ~= nil then
+                    obj.setCustomObject(
+                        {
+                            image = ref_diceCustom[dieSides],
+                            type = ref_customDieSides[tostring(dieSides)]
+                        }
+                    )
+                    obj.reload()
+                end
             end
         }
     )
 end
-
-ref_customDieSides = {["4"] = 0, ["6"] = 1, ["8"] = 2, ["10"] = 3, ["12"] = 4, ["20"] = 5}
-
-ref_customDieSides_rev = {4, 6, 8, 10, 12, 20}
-
-ref_defaultDieSides = {"Die_4", "Die_6", "Die_8", "Die_10", "Die_12", "Die_20"}
 
 function toRoll(die)
     die.setColorTint(Color.Green)

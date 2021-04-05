@@ -158,6 +158,7 @@ function order_initiative(obj, color, alt)
             return k1.initiative > k2.initiative
         end
     )
+    --printTable(_initiativeTokens)
 
     local notes = self.getGMNotes()
     local vars = JSON.decode(notes)
@@ -205,6 +206,7 @@ function sendToGlobal(objs)
         element.side = side
         table.insert(elements, element)
     end
+    --printTable(elements)
     Global.Call("setElements", {t = elements, mat = self.guid})
 end
 

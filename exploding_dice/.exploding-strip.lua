@@ -319,7 +319,7 @@ end
 
 function getDie(bag)
     local takeParams = {
-        position = getDiePos(coBossId),
+        position = getDiePos(),
         rotation = randomRotation(),
         callback_function = function(spawned)
             if crit ~= nil then
@@ -327,9 +327,10 @@ function getDie(bag)
                 spawned.setGMNotes(JSON.encode(note))
             end
 
-            --spawned.setGMNotes(note)
             toRoll(spawned)
             scaleDown(spawned)
+
+            -- fancy stuff
             spawned.setLock(true)
             Wait.time(
                 function()
@@ -337,6 +338,7 @@ function getDie(bag)
                 end,
                 0.5
             )
+            -----------------
         end
     }
     bag.takeObject(takeParams)
