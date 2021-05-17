@@ -182,6 +182,7 @@ function setupUI()
 
     self.UI.setAttribute("ac", "text", "AC\n" .. _myAC)
     self.UI.setAttribute("movement", "text", _myMovement)
+    self.UI.setAttribute("BlackRoll", "text", "")
 
     toggleVisualize({input = false})
     setOperation()
@@ -196,9 +197,11 @@ end
 function setOperation()
     self.UI.setAttribute("calculate", "onEndEdit", self.getGUID() .. "/UIUpdateInput(value)")
     self.UI.setAttribute("calculateButton", "onClick", self.getGUID() .. "/UICalculate()")
+    self.UI.setAttribute("calculateButtonHalf", "onClick", self.getGUID() .. "/UICalculate(true)")
 end
 
-function UICalculate()
+function UICalculate(_, halved, _)
+    halved = halved == "true"
     local tmp = false
     local input = _UIInput
     if string.find(input, ":") then -- tmp hp
@@ -211,6 +214,16 @@ function UICalculate()
         tmp = true
     else
         local calc = tonumber(input)
+        if halved then
+            if calc > 0 then
+                calc = math.floor(calc / 2)
+            elseif calc < 0 then
+                calc = math.ceil(calc / 2)
+            end
+            if calc == 0 then
+                calc = -1
+            end
+        end
         HPMod(calc)
     end
     setHP()
@@ -242,8 +255,9 @@ function HPMod(value)
     Wait.time(
         function()
             self.UI.setAttribute("oldValue", "text", "")
+            self.UI.setAttribute("BlackRoll", "text", "")
         end,
-        10
+        7
     )
     return calc
 end
@@ -259,6 +273,40 @@ function GlobalCalculate(params)
     end
     setHP()
     updateSave()
+end
+
+function GlobalRoll(params)
+    local mod = params.input
+    local mode = params.mode
+    local roll = 0
+    if mode == "adv" then
+        local r1,
+            r2
+
+        local seed = math.random() * os.time() -- some random number to make things random
+        math.randomseed(seed) -- gotta set a seed that is always different else the rolls will be always the same
+
+        r1 = math.random(1, 20)
+        r2 = math.random(1, 20)
+        roll = math.max(r1, r2)
+    elseif mode == "dis" then
+        local r1,
+            r2
+
+        local seed = math.random() * os.time() -- some random number to make things random
+        math.randomseed(seed) -- gotta set a seed that is always different else the rolls will be always the same
+
+        r1 = math.random(1, 20)
+        r2 = math.random(1, 20)
+        roll = math.min(r1, r2)
+    else
+        roll = math.random(1, 20)
+    end
+
+    local final = roll + mod
+    final = final > 0 and final or 1
+
+    self.UI.setAttribute("BlackRoll", "text", final)
 end
 
 function UIUpdateInput(player, value)

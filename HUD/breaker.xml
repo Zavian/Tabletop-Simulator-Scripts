@@ -6,18 +6,32 @@
     <Button class="TopPanel" rectAlignment="UpperLeft" onClick="UI_MassCalculate(id)" height="35" width="25%" textAlignment="Middle Center" fontStyle="Bold" fontSize="25" />
     <Button class="Heal" tooltip="Heal selected creatures" colors="#2ECC40FF|#2EE443FF|#27A736FF|#00000000" />
     <Button class="Damage" tooltip="Damage selected creatures" colors="#FF4136FF|#FF281CFF|#DB372EFF|#00000000" />
+    <Button class="Half" tooltip="Half the damage" colors="#ffffffff|#E1E1E1ff|#C3C3C3ff|#000000" />
     <Button class="Temp" tooltip="Set Temporary HP on selected creatures" colors="#0074D9ff|#007CE8ff|#006BC9ff|#00000000" />
+
+    <Button class="Roll" tooltip="Roll random number for selected creatures" colors="#E7A251|#C78B46|#FFB259|#00000000" />
     <!--   #endregion   -->
 </Defaults>
 
 
 <!--   #region breaker hud   -->
 <Button id="TopButton" class="TopButton" rectAlignment="UpperLeft" offsetXY="75 5" onClick="UI_SideToggle" />
-<Panel active="false" id="TopPanel" class="TopPanel" width="300" height="110" rectAlignment="UpperLeft" offsetXY="75 0">
-    <InputField id="MassField" width="80%" height="40" fontSize="20" rectAlignment="UpperLeft" textAlignment="MiddleCenter" offsetXY="30 -10" onEndEdit="UI_UpdateValue(value)" />
+<Panel active="false" id="TopPanel" class="TopPanel" width="300" height="185" rectAlignment="UpperLeft" offsetXY="75 0">
+
+    <!-- mass hp -->
+    <InputField id="MassField" placeholder="Enter number value..." width="80%" height="40" fontSize="20" rectAlignment="UpperLeft" textAlignment="MiddleCenter" offsetXY="30 -10" onEndEdit="UI_UpdateMassHp(value)" />
     <Button id="MassHeal" class="TopPanel Heal" text="+" offsetXY="30 -55" />
+
     <Button id="MassDamage" class="TopPanel Damage" text="-" offsetXY="112 -55" />
+    <Button id="MassDamageHalf" class="TopPanel Half" width="10%" height="25" text="½" fontSize="15" offsetXY="107 -50" />
+
+
     <Button id="MassTemp" class="TopPanel Temp" text="T" offsetXY="196 -55" />
+
+    <!-- mass roll -->
+    <InputField id="MassMod" placeholder="Enter modifier value..." width="80%" height="40" fontSize="20" rectAlignment="UpperLeft" textAlignment="MiddleCenter" offsetXY="30 -100" onEndEdit="UI_UpdateMassMod(value)" />
+    <Button id="MassRoll" width="30%" class="TopPanel Roll" text="Roll" rectAlignment="LowerCenter" offsetXY="0 5" onClick="UI_MassRoll" />
+    <Button id="MassRollAdv" width="25%" class="TopPanel Roll" text="ADV" rectAlignment="LowerCenter" offsetXY="-85 5" onClick="UI_MassRoll" />
+    <Button id="MassRollDis" width="25%" class="TopPanel Roll" text="DIS" rectAlignment="LowerCenter" offsetXY="85 5" onClick="UI_MassRoll" />
 </Panel>
 <!--   #endregion   -->
-

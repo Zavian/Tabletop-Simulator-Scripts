@@ -14,8 +14,11 @@
 </Panel>
 
 
-<InputField id="calculate" visibility="Black" scale="1 1 1" position="-40 -10 -270" height="60" width="80" fontSize="34" color="#FFFFFF99"></InputField>
-<Button id="calculateButton" visibility="Black" scale="1 1 1" position="30 -10 -270" height="60" width="60" fontSize="34" color="#FFFFFF99">C</Button>
+<InputField id="calculate" visibility="Black" scale="1 1 1" position="-40 -50 -270" height="60" width="80" fontSize="34" color="#FFFFFF99"></InputField>
+
+<Button id="calculateButton" visibility="Black" scale="1 1 1" position="30 -50 -270" height="60" width="60" fontSize="34" color="#FFFFFF99">C</Button>
+<Button id="calculateButtonHalf" visibility="Black" scale="1 1 1" position="30 -5 -270" height="30" width="60" fontSize="20" color="#ac0900aa">½</Button>
+
 <Text id="rolled" visibility="Black" scale="1.5 1.5 1.5" position="60 160 -20" width="100" height="100" fontSize="40" color="#FFFFFF" text="" />
 <Button id="hpButton" scale="1 1 1" position="0 30 -300" rotation="270 270 90" height="128" width="128" fontSize="0" color="#FF0000FF" visibility="White|Teal|Brown|Blue|Red|Purple|Orange|Pink|Yellow|Green" />
 
@@ -39,9 +42,9 @@
     <Image class="state" active="false" id="stunned" image="stunned" />
 </HorizontalLayout>
 
-<Button scale="0.4 0.4 0.4" visibility="Black" textColor="#ffffff" color="#00000099" fontSize="16" width="75" height="75" position="-110 25 -270" onclick="UI_RemoveArea">Remove Area</Button>
+<Button scale="0.4 0.4 0.4" visibility="Black" textColor="#ffffff" color="#00000099" fontSize="16" width="75" height="75" position="-110 -30 -270" onclick="UI_RemoveArea">Remove Area</Button>
 
-<Button scale="0.4 0.4 0.4" visibility="Black" color="#FFFFFF99" fontSize="32" width="75" height="75" position="-110 -10 -270" onclick="UI_ConditionMenu">+</Button>
+<Button scale="0.4 0.4 0.4" visibility="Black" color="#FFFFFF99" fontSize="32" width="75" height="75" position="-110 -60 -270" onclick="UI_ConditionMenu">+</Button>
 <Panel scale="0.4 0.4 0.4" visibility="Black" id="ConditionMenu" active="false" width="550" height="425" position="-250 -40 -270" color="#ffffff99">
     <GridLayout id="condSelector" constraint="FixedColumnCount" constraintCount="5" startCorner="UpperRight" childAlignment="UpperRight" spacing="5" padding="10 10 10 10">
         <Button color="#ffffff" id="btn_blinded" class="condition" icon="blinded"></Button>
@@ -63,3 +66,4 @@
 </Panel>
 
 <Text id="BlackName" fontSize="34" visibility="Black" text="Black Name" color="Black" position="0 -40 -50" rotation="270 270 90" fontStyle="Bold" outline="White" outlineSize="1 -1" />
+<Text id="BlackRoll" fontSize="34" visibility="Black" text="99" color="Black" position="0 -40 -100" rotation="270 270 90" fontStyle="Bold" outline="White" outlineSize="1 -1" />
