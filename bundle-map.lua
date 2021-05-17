@@ -1,5 +1,6 @@
 local _map_bag = "6ca58b"
 local _last_id = ""
+local loading = true
 
 function onLoad()
     local buttons = {
@@ -42,16 +43,20 @@ function onLoad()
     for i = 1, #buttons do
         self.createButton(buttons[i])
     end
+
+    loading = false
 end
 
 function onCollisionEnter(info)
-    if info then
-        local obj = info.collision_object
-        if obj then
-            if obj.interactable then
-                if obj.getGUID() then
-                    _last_id = obj.getGUID()
-                    self.editButton({index = 1, tooltip = _last_id})
+    if not loading then
+        if info then
+            local obj = info.collision_object
+            if obj then
+                if obj.interactable then
+                    if obj.getGUID() then
+                        _last_id = obj.getGUID()
+                        self.editButton({index = 1, tooltip = _last_id})
+                    end
                 end
             end
         end
@@ -115,14 +120,18 @@ function countIDs()
     local desc = self.getDescription()
     local counter = 0
     local arr = strsplit(desc, "\n")
-    for i = 1, #arr do
-        if arr[i]:len() == 6 then
-            counter = counter + 1
+    if #arr > 0 then
+        for i = 1, #arr do
+            if arr[i]:len() == 6 then
+                counter = counter + 1
+            end
         end
     end
 
     local gm = self.getGMNotes()
-    counter = counter + #JSON.decode(gm)
+    if gm ~= nil and gm ~= "" then
+        counter = counter + #JSON.decode(gm)
+    end
 
     return counter
 end
@@ -132,35 +141,39 @@ function bundle(owner, color, alt_click)
         if not alt_click then
             local desc = self.getDescription()
             local ids = strsplit(desc, "\n")
-            for i = 1, #ids do
-                local obj = getObjectFromGUID(ids[i])
-                if obj then
-                    processObj(obj)
-                    obj.setScale({0.25, 0.25, 0.25})
-                    obj.setLock(false)
-                    obj.setFogOfWarReveal(
-                        {
-                            reveal = false
-                        }
-                    )
-                    self.putObject(obj)
+            if #ids > 0 then
+                for i = 1, #ids do
+                    local obj = getObjectFromGUID(ids[i])
+                    if obj then
+                        processObj(obj)
+                        obj.setScale({0.25, 0.25, 0.25})
+                        obj.setLock(false)
+                        obj.setFogOfWarReveal(
+                            {
+                                reveal = false
+                            }
+                        )
+                        self.putObject(obj)
+                    end
                 end
             end
 
             local gm = self.getGMNotes()
-            local decoded = JSON.decode(gm)
-            for i = 1, #decoded do
-                local obj = getObjectFromGUID(decoded[i])
-                if obj then
-                    processObj(obj)
-                    obj.setScale({0.25, 0.25, 0.25})
-                    obj.setLock(false)
-                    obj.setFogOfWarReveal(
-                        {
-                            reveal = false
-                        }
-                    )
-                    self.putObject(obj)
+            if gm ~= nil and gm ~= "" then
+                local decoded = JSON.decode(gm)
+                for i = 1, #decoded do
+                    local obj = getObjectFromGUID(decoded[i])
+                    if obj then
+                        processObj(obj)
+                        obj.setScale({0.25, 0.25, 0.25})
+                        obj.setLock(false)
+                        obj.setFogOfWarReveal(
+                            {
+                                reveal = false
+                            }
+                        )
+                        self.putObject(obj)
+                    end
                 end
             end
         else

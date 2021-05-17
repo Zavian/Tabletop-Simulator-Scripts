@@ -1,4 +1,9 @@
 --Runs when the scripted button inside the button is clicked
+
+local original_pos = {}
+local original_rot = {}
+local first = true
+
 function buttonPress()
     if lockout == false then
         local notes = self.getGMNotes()
@@ -27,30 +32,48 @@ function buttonPress()
         end
         local spacing = j.spacing and j.spacing or 1.7
 
-        if tokens then
-            for i = 1, #tokens do
-                --local token_info = tokens[i]
-                local obj = getObjectFromGUID(tokens[i])
-                local pos = point
-                local rotation = {0, 90.00, 0}
+        if first then
+            original_pos = {}
+            original_rot = {}
 
-                obj.setRotationSmooth(rotation, false, true)
-                obj.setPositionSmooth(pos, false, false)
+            if tokens then
+                for i = 1, #tokens do
+                    --local token_info = tokens[i]
+                    local obj = getObjectFromGUID(tokens[i])
+                    original_pos[tokens[i]] = obj.getPosition()
+                    original_pos[tokens[i]][2] = original_pos[tokens[i]][2] + 2
 
-                point.z = point.z - spacing
-                if i % 3 == 0 then
-                    point.z = j.startingPoint.z and j.startingPoint.z or self.getPosition().z
-                    point.x = point.x + spacing
+                    original_rot[tokens[i]] = obj.getRotation()
+
+                    local pos = point
+                    local rotation = {0, 90.00, 0}
+
+                    obj.setRotationSmooth(rotation, false, true)
+                    obj.setPositionSmooth(pos, false, false)
+
+                    point.z = point.z - spacing
+                    if i % 3 == 0 then
+                        point.z = j.startingPoint.z and j.startingPoint.z or self.getPosition().z
+                        point.x = point.x + spacing
+                    end
                 end
-            end
 
-            if coin then
-                local obj = getObjectFromGUID(coin)
-                obj.setRotationSmooth({0, 90.0, 0}, false, true)
-                obj.setPositionSmooth(coinPos, false, false)
+                if coin then
+                    local obj = getObjectFromGUID(coin)
+                    obj.setRotationSmooth({0, 90.0, 0}, false, true)
+                    obj.setPositionSmooth(coinPos, false, false)
+                end
+            else
+                log("I do need some tokens from the resetter thinking")
             end
+            first = false
         else
-            log("I do need some tokens from the resetter thinking")
+            first = true
+            for i = 1, #tokens do
+                local obj = getObjectFromGUID(tokens[i])
+                obj.setPositionSmooth(original_pos[tokens[i]], false, false)
+                obj.setRotationSmooth(original_rot[tokens[i]], false, true)
+            end
         end
     end
 end

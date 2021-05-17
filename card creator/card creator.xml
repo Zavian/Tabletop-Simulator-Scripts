@@ -1,4 +1,4 @@
 <Defaults>
 </Defaults>
 
-<InputField lineType="MultiLineNewLine" position="-400 0 -60" width="400" height="300" id="text" placeholder="-w url1 url2\nthe colors are: u r e l (green, blue, purple, orange)" />
+<InputField lineType="MultiLineNewLine" position="-425 0 -60" colors="#181a1bCC|#2D3133CC|#4D5457CC|#000000" textColor="#ffffff" width="475" height="350" id="text" fontSize="13" placeholder="-w url1 url2\nthe colors are: u r e l (green, blue, purple, orange)" />
