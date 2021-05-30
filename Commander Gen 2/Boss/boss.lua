@@ -461,7 +461,7 @@ function randomColor()
             {r = 152, g = 251, b = 152},
             {r = 143, g = 188, b = 143}
         }
-        color = ally[math.random(0, #ally)]
+        color = ally[math.random(1, #ally)]
     elseif _mySide == "enemy" then
         local enemy = {
             {r = 128, g = 0, b = 0},
@@ -479,7 +479,7 @@ function randomColor()
             {r = 255, g = 160, b = 122},
             {r = 255, g = 69, b = 0}
         }
-        color = enemy[math.random(0, #enemy)]
+        color = enemy[math.random(1, #enemy)]
     elseif _mySide == "neutral" then
         local neutral = {
             {r = 255, g = 215, b = 0},
@@ -490,7 +490,7 @@ function randomColor()
             {r = 240, g = 230, b = 140},
             {r = 255, g = 255, b = 0}
         }
-        color = neutral[math.random(0, #neutral)]
+        color = neutral[math.random(1, #neutral)]
     end
 
     return {r = color.r / 255, g = color.g / 255, b = color.b / 255}
