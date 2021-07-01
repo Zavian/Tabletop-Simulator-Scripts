@@ -1,0 +1,4 @@
+<Defaults>
+</Defaults>
+
+<InputField lineType="MultiLineNewLine" position="-425 0 -60" colors="#181a1bCC|#2D3133CC|#4D5457CC|#000000" textColor="#ffffff" width="475" height="350" id="text" fontSize="16" placeholder="{ data goes boom }" />
