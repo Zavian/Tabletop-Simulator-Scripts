@@ -209,6 +209,20 @@ function onload()
             alignment = 3,
             validation = 2,
             tab = 2
+        },
+        {
+            -- jsonImport input                     [6]
+            input_function = "none",
+            function_owner = self,
+            label = "JSON IMPORT",
+            position = {2.48, 0.4, 1.12},
+            scale = {0.5, 0.5, 0.5},
+            color = {0.4941, 0.4941, 0.4941, 1},
+            width = 2730,
+            height = 425,
+            font_size = 320,
+            tooltip = "Import JSON stuff",
+            alignment = 2
         }
     }
     local buttons = {
@@ -343,6 +357,19 @@ function onload()
             font_size = 470,
             color = {0.2823, 0.4039, 0.7686, 1},
             tooltip = "Randomize\nPlease don't use this as an encounter builder",
+            alignment = 2
+        },
+        {
+            click_function = "parseJson",
+            function_owner = self,
+            label = "P",
+            tooltip = "Parse JSON",
+            position = {4.13, 0.400000005960464, 1.12},
+            scale = {0.5, 0.5, 0.5},
+            width = 640,
+            height = 460,
+            font_size = 270,
+            color = {0.3764, 0.3764, 0.3764, 1},
             alignment = 2
         }
     }
@@ -633,6 +660,7 @@ function getBossCheckbox()
     local btn = self.getButtons()[4]
     return btn.tooltip == "true"
 end
+
 function toggleIsBoss(params)
     local btn = self.getButtons()[4]
     local color = {
@@ -661,6 +689,13 @@ function getNumberToCreate()
     else
         return tonumber(input.value)
     end
+end
+------------------------------------------------------
+
+-- jsonImport ----------------------------------------
+function getJsonImport()
+    local input = self.getInputs()[7]
+    return input.value
 end
 ------------------------------------------------------
 
@@ -761,6 +796,7 @@ function create_json_note(obj, player_clicker_color, alt_click)
                 if numberToCreate > 1 then
                     obj.setGMNotes(numberToCreate)
                 end
+                obj.setColorTint(_states[vars.side].color)
             end
         }
         bag.takeObject(takeParams)
@@ -818,6 +854,57 @@ function create_note(obj, player_clicker_color, alt_click)
     end
 
     return str
+end
+
+function parseJson()
+    -- local stuff = mysplit(mysplit(self.getDescription(), "\n")[1], "|")
+    -- local npc_commander = getObjectFromGUID(commander)
+    -- npc_commander.call("setName", {input = stuff[1]})
+    -- npc_commander.call("setINI", {input = stuff[2]})
+    -- npc_commander.call("setHP", {input = stuff[3]})
+    -- npc_commander.call("setAC", {input = stuff[4]})
+    -- npc_commander.call("setATK", {input = stuff[5]})
+    -- npc_commander.call("setDMG", {input = stuff[6]})
+
+    -- if stuff[7] then
+    --     npc_commander.call("setMovement", {input = stuff[7]})
+    -- end
+
+    -- if stuff[8] then
+    --     npc_commander.call("setSize", {input = stuff[8]})
+    -- end
+
+    -- local second_line = mysplit(self.getDescription(), "\n")[2]
+    -- if second_line ~= nil and second_line ~= "" then
+    --     -- this means it is a boss
+    --     npc_commander.setDescription(second_line)
+    --     npc_commander.call("toggleIsBoss", {input = true})
+    -- else
+    --     npc_commander.call("toggleIsBoss", {input = false})
+    -- end
+
+    -- if self.getGMNotes() ~= "" then
+    --     -- this means i have multiple that i want to make
+    --     local number = tonumber(self.getGMNotes())
+    --     npc_commander.call("setNumberToCreate", {input = number})
+    -- end
+
+    local json = getJsonImport()
+    local data = JSON.decode(json)
+
+    setName({input = data.name})
+    setINI(({input = data.ini}))
+    setHP(({input = data.hp}))
+    setAC(({input = data.ac}))
+    setMovement(({input = data.mov}))
+    setSize({input = data.size})
+    setSide({input = data.side})
+    if data.image then
+        toggleIsBoss({input = true})
+        self.setDescription(data.image)
+    else
+        toggleIsBoss({input = false})
+    end
 end
 ---------------------------------------
 
