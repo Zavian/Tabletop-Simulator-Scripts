@@ -18,7 +18,6 @@ function mysplit(inputstr, sep)
     return t
 end
 
-
 --Runs when the scripted button inside the button is clicked
 function buttonPress()
     if lockout == false then
@@ -37,18 +36,17 @@ function buttonPress()
             local str = lines[i]
             local firstChar = string.sub(lines[i], 1, 1)
             if firstChar == "h" then
-                -- there's no color detailed
-                local sp = mysplit(str, " ")
-                take_card(sp[1] .. "|" .. sp[2])
-
                 --if not readingBack then
                 --    card = str
                 --    readingBack = true
-                --else 
+                --else
                 --    card = card .. "|" .. str
                 --    readingBack = false
                 --    take_card(card)
                 --end
+                -- there's no color detailed
+                local sp = mysplit(str, " ")
+                take_card(sp[1] .. "|" .. sp[2])
             elseif firstChar == "-" then
                 --color
                 local sp = mysplit(str, " ")
@@ -60,10 +58,14 @@ function buttonPress()
         end
 
         local waiter = function()
-            if #objs == 0 then return false end
-            for i=1,#objs do
+            if #objs == 0 then
+                return false
+            end
+            for i = 1, #objs do
                 local res = objs[i].o.resting
-                if res == false then return false end
+                if res == false then
+                    return false
+                end
             end
             return true
         end
@@ -83,12 +85,12 @@ end
 function take_card(c, hasColor, isHex)
     local returner = {}
 
-    local splitted = mysplit(c,"|")
-    
-    if hasColor then 
+    local splitted = mysplit(c, "|")
+
+    if hasColor then
         if not isHex then
             local colo = splitted[3]:gsub("-", "")
-            returner.color = colorTranslate(colo)         
+            returner.color = colorTranslate(colo)
         else
             log(splitted[3] .. "LUL")
             local colo = hexToRgb(splitted[3])
@@ -122,11 +124,11 @@ function setCards()
             objs[i].o.setColorTint(objs[i].color)
         end
 
-        if makeSmall() then objs[i].o.setScale({1.76, 1.00, 1.76}) end
-
+        if makeSmall() then
+            objs[i].o.setScale({1.76, 1.00, 1.76})
+        end
 
         objs[i].o.reload()
-        
     end
 
     objs = {}
@@ -148,7 +150,9 @@ function colorTranslate(color)
         r = "Purple"
     elseif color == "l" then
         r = {r = 0.768627, g = 0.403922, b = 0.035294}
-    else r = "White" end
+    else
+        r = "White"
+    end
 
     return r
 end
@@ -166,7 +170,16 @@ function onload()
         }
     )
     self.createButton(
-        {click_function = "changeSmall", function_owner = self, label = " ", position = {-1.5, 0.45, 1.5}, width = 400, height = 400, color = {0.856, 0.1, 0.094, 1}, tooltip = "big"}
+        {
+            click_function = "changeSmall",
+            function_owner = self,
+            label = " ",
+            position = {-1.5, 0.45, 1.5},
+            width = 400,
+            height = 400,
+            color = {0.856, 0.1, 0.094, 1},
+            tooltip = "big"
+        }
     )
     lockout = false
 
@@ -219,6 +232,13 @@ end
 
 function hexToRgb(hex)
     hex = hex:gsub("#", "")
-    if #hex < 8 then hex = hex.. "ff" end
-    return color(tonumber("0x".. hex:sub(1,2), 16) / 255, tonumber("0x".. hex:sub(3,4), 16) / 255, tonumber("0x".. hex:sub(5,6), 16) / 255, tonumber("0x".. hex:sub(7,8), 16) / 255)
+    if #hex < 8 then
+        hex = hex .. "ff"
+    end
+    return color(
+        tonumber("0x" .. hex:sub(1, 2), 16) / 255,
+        tonumber("0x" .. hex:sub(3, 4), 16) / 255,
+        tonumber("0x" .. hex:sub(5, 6), 16) / 255,
+        tonumber("0x" .. hex:sub(7, 8), 16) / 255
+    )
 end

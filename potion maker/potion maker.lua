@@ -82,7 +82,7 @@ function onCollisionEnter(info)
     local guid = info.collision_object.guid
     if info.collision_object.interactable then
         self.setDescription(guid)
-        info.collision_object.guid.highlightOn(Color.Yellow, 1)
+        info.collision_object.highlightOn(Color.Yellow, 1)
     else
         self.setDescription("")
     end
