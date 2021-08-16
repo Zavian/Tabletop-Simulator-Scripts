@@ -797,6 +797,7 @@ function create_json_note(obj, player_clicker_color, alt_click)
                     obj.setGMNotes(numberToCreate)
                 end
                 obj.setColorTint(_states[vars.side].color)
+                obj.call("setData")
             end
         }
         bag.takeObject(takeParams)
