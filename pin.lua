@@ -39,6 +39,16 @@ function onLoad(save_state)
     self.addContextMenuItem("[B03900]Trisen[-]", trisen)
     self.addContextMenuItem("[8AB90D]Zunirth[-]", zunirth)
     self.addContextMenuItem("[39CCCC]Save[-]", save)
+    self.addContextMenuItem("[1E6D6D]Reposition[-]", repos)
+end
+
+local _reposPos = {129.35, 4, -29.81}
+function repos(player_color)
+    if (player_color == "Black") then
+        self.setPositionSmooth(_reposPos, false, false)
+        self.setRotation({0, 270, 0})
+        self.setLock(false)
+    end
 end
 
 function save()

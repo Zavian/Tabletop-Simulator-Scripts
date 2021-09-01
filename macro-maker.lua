@@ -17,6 +17,16 @@ end
 function none()
 end
 
+function onCollisionEnter(info)
+    if info.collision_object.interactable then
+        local id = info.collision_object.getGUID()
+        local gm = self.getGMNotes()
+        local macro = JSON.decode(gm)
+        macro.obj = id
+        self.setGMNotes(JSON.encode(macro))
+    end
+end
+
 function onHover(player_color)
     if player_color == "Black" then
         local gm = self.getGMNotes()
