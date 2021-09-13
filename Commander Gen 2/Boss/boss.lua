@@ -6,6 +6,7 @@ local _tokenName = ""
 local _tokenColor = nil
 local _spawnedDie = nil
 local _color = "Black"
+local _bossSize = 1.0
 
 local _vSize = "128"
 
@@ -101,7 +102,8 @@ end
 function _starter(params)
     self.setCustomObject(
         {
-            image = params.image
+            image = params.image,
+            image_scalar = params.boss_size
         }
     )
     self.reload()
@@ -122,6 +124,7 @@ function _init(params)
     _myMovement = _token.movement
     _mySide = _token.side
     _blackName = _token.blackName
+    _bossSize = _token.bossSize
 
     self.editInput({index = 0, value = _token.name})
 

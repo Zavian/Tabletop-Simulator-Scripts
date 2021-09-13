@@ -1,9 +1,9 @@
 _side = "enemy"
 local _states = {
     ["player"] = {color = {0, 0, 0.545098}, state = 1},
-    ["enemy"] = {color = {0.517647, 0, 0.098039}, state = 2},
-    ["ally"] = {color = {0.039216, 0.368627, 0.211765}, state = 3},
-    ["neutral"] = {color = {0.764706, 0.560784, 0}, state = 4}
+    ["enemy"] = {color = {0.517647, 0, 0.098039}, bright = {0.94902, 0.184314, 0.32549}, state = 2},
+    ["ally"] = {color = {0.039216, 0.368627, 0.211765}, bright = {0.352941, 0.823529, 0.603922}, state = 3},
+    ["neutral"] = {color = {0.764706, 0.560784, 0}, bright = {0.933333, 0.741176, 0.219608}, state = 4}
 }
 
 local names = {
@@ -223,6 +223,22 @@ function onload()
             font_size = 320,
             tooltip = "Import JSON stuff",
             alignment = 2
+        },
+        {
+            -- boss token size bossSize              [7]
+            input_function = "none",
+            function_owner = self,
+            label = "Boss Size",
+            position = {3.48, 0.4, -1.08},
+            scale = {0.5, 0.5, 0.5},
+            width = 1830,
+            height = 425,
+            font_size = 300,
+            color = {0.4941, 0.4941, 0.4941, 1},
+            tooltip = "Boss Size",
+            alignment = 3,
+            value = "Boss token size",
+            validation = 3
         }
     }
     local buttons = {
@@ -336,7 +352,7 @@ function onload()
             click_function = "clear",
             function_owner = self,
             label = "↺",
-            position = {3.3, 0.400000005960464, -1.13},
+            position = {-4, 0.400000005960464, -1.13},
             scale = {0.5, 0.5, 0.5},
             width = 490,
             height = 490,
@@ -350,7 +366,7 @@ function onload()
             click_function = "randomize",
             function_owner = self,
             label = "↝",
-            position = {3.8, 0.400000005960464, -1.13},
+            position = {-3.5, 0.400000005960464, -1.13},
             scale = {0.5, 0.5, 0.5},
             width = 490,
             height = 490,
@@ -779,7 +795,8 @@ function create_json_note(obj, player_clicker_color, alt_click)
         mov = getMovement(),
         size = getSize(),
         image = getBossCheckbox() and self.getDescription() or nil,
-        side = _side
+        side = _side,
+        boss_size = getBossSize()
     }
 
     if (getBag("note") ~= nil) then
@@ -796,7 +813,7 @@ function create_json_note(obj, player_clicker_color, alt_click)
                 if numberToCreate > 1 then
                     obj.setGMNotes(numberToCreate)
                 end
-                obj.setColorTint(_states[vars.side].color)
+                obj.setColorTint(_states[vars.side].bright)
                 obj.call("setData")
             end
         }
@@ -813,6 +830,20 @@ function create_json_note(obj, player_clicker_color, alt_click)
     --local side = _side
 end
 
+-- boss size -----------------------------------------
+function getBossSize()
+    local input = self.getInputs()[8]
+    if input.value == "" or input.value == nil then
+        return 1.0
+    end
+    return input.value
+end
+
+function setBossSize(params)
+    self.editInput({index = 7, value = params.input})
+end
+------------------------------------------------------
+
 -- deprecated function, check create_json_note
 function create_note(obj, player_clicker_color, alt_click)
     --- create note stuff
@@ -825,6 +856,7 @@ function create_note(obj, player_clicker_color, alt_click)
     local movement = getMovement()
     local size = getSize()
     local image = getBossCheckbox() and self.getDescription() or nil
+    --local boss_size = getBossSize()
     local numberToCreate = getNumberToCreate()
 
     local str =
@@ -967,7 +999,7 @@ function boss_coroutine()
                 local sID = spawned.getGUID()
                 spawned.use_hands = true
 
-                spawned.call("_starter", {image = image})
+                spawned.call("_starter", {image = image, boss_size = getBossSize()})
 
                 -- gotta wait else the game freaks out
                 -- if you don't save the guid the game gets confused
@@ -1030,7 +1062,8 @@ function create_details(nameIdentifier)
         initiative = getInitiative(),
         ini_tracker = nil,
         movement = getMovement(),
-        side = _side
+        side = _side,
+        bossSize = getBossSize()
     }
     local blackName = findBlackName(details.name)
     if blackName ~= nil then
