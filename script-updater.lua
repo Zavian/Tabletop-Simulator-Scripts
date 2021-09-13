@@ -50,7 +50,7 @@ function onLoad()
 
     self.createButton(
         {
-            click_function = "get_github",
+            click_function = "get_online_code",
             function_owner = self,
             label = "Download\nOnline",
             position = {-1.2, zloc, 0},
@@ -71,7 +71,7 @@ function onCollisionEnter(info)
         if obj.getGUID() then
             self.setDescription(obj.getGUID())
 
-            print("I have found a new object! Check its ID: " .. self.getDescription())
+            printc("I have found a new object! Check its ID: " .. self.getDescription())
             obj.highlightOn(Color.Teal, 1)
         end
     end
@@ -79,13 +79,13 @@ end
 
 local _storedScript = ""
 local _oldObj = nil
-function get_code()
+function get_code(obj, player_clicker_color)
     local desc = self.getDescription()
     local obj = getObject()
     if obj then
         _storedScript = obj.getLuaScript()
         local name = obj.getName() ~= "" and obj.getName() or obj.getGUID()
-        print("I got " .. name .. "'s code. You can paste it somewhere now.")
+        printc("I got " .. name .. "'s code. You can paste it somewhere now.", player_clicker_color)
 
         if _oldObj then
             _oldObj.highlightOff(Color.Teal)
@@ -100,7 +100,7 @@ local _objectList = nil
 local _waitingForConfirmation = false
 function create_area(owner, color, alt_click)
     if _storedScript == "" then
-        print("Can't do this if you don't have a script!")
+        printc("Can't do this if you don't have a script!", color)
         return
     end
     if not alt_click then
@@ -161,9 +161,9 @@ function create_area(owner, color, alt_click)
     end
 end
 
-function set_singular_code()
+function set_singular_code(owner, color, alt_click)
     if _storedScript == "" then
-        print("Can't do this if you don't have a script!")
+        printc("Can't do this if you don't have a script!", color)
         return
     end
     if not _waitingForConfirmation then
@@ -171,47 +171,68 @@ function set_singular_code()
         if obj and obj ~= _oldObj and obj ~= self then
             setCode(obj)
         else
-            print("You gotta select an object that is not me or the old object!")
+            printc("You gotta select an object that is not me or the old object!", color)
             return
         end
         reset()
     else
-        print("Use the other button and right click it!")
+        printc("Use the other button and right click it!", color)
     end
 end
 
-function get_github()
+function get_online_code(obj, player_clicker_color, alt_click)
     local name = self.getName()
     if not validDomain(name) then
-        print("Invalid link.")
+        printc("Invalid link.", player_clicker_color, Color.Red)
         return
     end
+
+    if name:find("hastebin", 1, true) then
+        name = hastebinParser(name)
+    end
+
     WebRequest.get(
         name,
         function(request)
             if request.is_error then
-                broadcastToAll(request.error)
+                printc(request.error, player_clicker_color, Color.Red)
             else
                 _storedScript = request.text
-                print("[4eb1ff]Code found! You can now paste it somewhere.[-]")
+                printc("[4eb1ff]Code found! You can now paste it somewhere.[-]", player_clicker_color, Color.White)
             end
         end
     )
 end
 
+function hastebinParser(url)
+    local rawPattern = "^.+/raw/.+$"
+
+    if not url:find(rawPattern) then
+        local pageNamePattern = "^.+/(.+)%..+$"
+        local _,
+            _,
+            pageName = url:find(pageNamePattern)
+        url = "https://hastebin.com/raw/" .. pageName
+    end
+
+    return url
+end
+
 function validDomain(name)
     local domains = {
         "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/",
-        "https://hastebin.com/raw/",
+        "https://hastebin.com/",
         "https://pastebin.com/raw/"
     }
 
+    local valid = false
+
     for i = 1, #domains do
         if name:find(domains[i], 1, true) then
-            return true
+            valid = true
         end
     end
-    return false
+    return valid
 end
 
 function getValidDomains()
@@ -232,6 +253,17 @@ function resetHighlight(objs)
     for i = 1, #objs do
         objs[i].highlightOff(Color.Red)
     end
+end
+
+function printc(text, playerColor, color)
+    if not color then
+        color = Color.White
+    end
+    if not playerColor then
+        playerColor = "Black"
+    end
+
+    printToColor(text, playerColor, color)
 end
 
 function reset()
