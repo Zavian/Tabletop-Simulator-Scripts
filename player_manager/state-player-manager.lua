@@ -16,13 +16,6 @@ function manage_state(player, request, v)
 end
 
 function onCollisionEnter(info)
-    --{
-    --    collision_object = objectReference
-    --    contact_points = {
-    --        {x=5, y=0, z=-2, 5, 0, -2},
-    --    }
-    --    relative_velocity = {x=0, y=20, z=0, 0, 20, 0}
-    --}
     if master ~= "" then
         set = getObjectFromGUID(master)
     end
@@ -108,6 +101,94 @@ function removeArea()
     end
 end
 
+-- credits: https://steamcommunity.com/sharedfiles/filedetails/?id=2454472719
+
+function onPickUp(pcolor)
+    destabilize()
+    createMoveToken(pcolor, self)
+end
+
+function onDrop(dcolor)
+    stabilize()
+    destroyMoveToken()
+end
+
+function stabilize()
+    local rb = self.getComponent("Rigidbody")
+    rb.set("freezeRotation", true)
+end
+
+function destroyMoveToken()
+    if string.match(tostring(myMoveToken), "Custom") then
+        destroyObject(myMoveToken)
+    end
+end
+
+function createMoveToken(mcolor, mtoken)
+    destroyMoveToken()
+    tokenRot = Player[mcolor].getPointerRotation()
+    movetokenparams = {
+        image = "http://cloud-3.steamusercontent.com/ugc/1021697601906583980/C63D67188FAD8B02F1B58E17C7B1DB304B7ECBE3/",
+        thickness = 0.1,
+        type = 2
+    }
+    startloc = mtoken.getPosition()
+    local hitList =
+        Physics.cast(
+        {
+            origin = mtoken.getBounds().center,
+            direction = {0, -1, 0},
+            type = 1,
+            max_distance = 10,
+            debug = false
+        }
+    )
+    for _, hitTable in ipairs(hitList) do
+        -- Find the first object directly below the mini
+        if hitTable ~= nil and hitTable.point ~= nil and hitTable.hit_object ~= mtoken then
+            startloc = hitTable.point
+            break
+        end
+    end
+    tokenScale = {
+        x = Grid.sizeX / 2.2,
+        y = 0.1,
+        z = Grid.sizeX / 2.2
+    }
+    spawnparams = {
+        type = "Custom_Tile",
+        position = startloc,
+        rotation = {x = 0, y = tokenRot, z = 0},
+        scale = tokenScale,
+        sound = false
+    }
+
+    local moveToken = spawnObject(spawnparams)
+    moveToken.setLock(true)
+    moveToken.setCustomObject(movetokenparams)
+    mtoken.setVar("myMoveToken", moveToken)
+    moveToken.setVar("measuredObject", mtoken)
+    moveToken.setVar("myPlayer", mcolor)
+    moveToken.setVar("className", "MeasurementToken_Move")
+    moveToken.interactable = false
+    moveButtonParams = {
+        click_function = "onLoad",
+        function_owner = self,
+        label = "00",
+        position = {x = 0, y = 0.1, z = 0},
+        width = 0,
+        height = 0,
+        font_size = 600
+    }
+
+    moveButton = moveToken.createButton(moveButtonParams)
+    luaScript =
+        "function onUpdate()self.interactable=false;local a=self.getPosition()if measuredObject==nil or measuredObject.held_by_color==nil then destroyObject(self)return end;local b=measuredObject.getPosition()local c=measuredObject.held_by_color;b.y=b.y-Player[myPlayer].lift_height*5;mdiff=a-b;if c then mDistance=math.abs(mdiff.x)zDistance=math.abs(mdiff.z)if zDistance>mDistance then mDistance=zDistance end;mDistance=mDistance*5.0/Grid.sizeX;mDistance=math.floor((mDistance+2.5)/5.0)*5;self.editButton({index=0,label=tostring(mDistance)})end end"
+    moveToken.setLuaScript(luaScript)
+end
+
+-- end credits
+
 function isAreaObject(name)
     local areas = {
         "10'r",
@@ -131,4 +212,14 @@ function isAreaObject(name)
         end
     end
     return false
+end
+
+function stabilize()
+    local rb = self.getComponent("Rigidbody")
+    rb.set("freezeRotation", true)
+end
+
+function destabilize()
+    local rb = self.getComponent("Rigidbody")
+    rb.set("freezeRotation", false)
 end
