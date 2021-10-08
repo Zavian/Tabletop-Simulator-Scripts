@@ -93,6 +93,8 @@ function onLoad(save_state)
         }
     )
 
+    self.addContextMenuItem("[b][3D9970]Visible[-][/b]", toggleVisibilityMenu, false)
+
     myData = JSON.decode(save_state)
     if myData ~= nil then
         _restore(myData)
@@ -135,6 +137,50 @@ function _init(params)
 
     self.setScale({_token.size, _token.size, _token.size})
     updateSave()
+end
+
+local _visible = true
+function toggleVisibilityMenu(player_color)
+    if player_color ~= "Black" then
+        return
+    end
+
+    local temp = not _visible
+
+    local objs = Player["Black"].getSelectedObjects()
+    for i = 1, #objs do
+        local gm = objs[i].getGMNotes()
+        if gm == "monster_token" or gm == "boss_token" then
+            if objs[i] == self then
+                toggleTokenVisibility({visible = temp})
+            else
+                objs[i].call("toggleTokenVisibility", {visible = temp})
+            end
+        end
+    end
+end
+
+function toggleTokenVisibility(params)
+    _visible = params.visible
+    if _visible then
+        self.setInvisibleTo({})
+        self.highlightOn(Color.Green, 1)
+    else
+        self.setInvisibleTo(hideFromPlayersArray())
+        self.highlightOn({221, 221, 221}, 1) -- silver color
+    end
+
+    -- need to hide these else the players will still see them
+    -- because xml is fun
+    self.UI.setAttribute("hpButton", "active", _visible)
+    self.UI.setAttribute("states", "visibility", _visible and "" or "Black")
+
+    local visibilityString = _visible and "[3D9970]Visible[-]" or "[FF4136]Invisible[-]"
+    local menuString = "[b]" .. visibilityString .. "[/b]"
+    -- need to do this since for some reason I can't edit context menues
+    -- berserk, u can do better smh
+    self.clearContextMenu()
+    self.addContextMenuItem(menuString, toggleVisibilityMenu, false)
 end
 
 -- credits: https://steamcommunity.com/sharedfiles/filedetails/?id=2454472719
