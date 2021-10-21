@@ -171,7 +171,14 @@ function set_singular_code(owner, color, alt_click)
         if obj and obj ~= _oldObj and obj ~= self then
             setCode(obj)
         else
-            printc("You gotta select an object that is not me or the old object!", color)
+            if obj == self then
+                local gm = self.getGMNotes()
+                if gm == "debug" then
+                    setCode(obj)
+                end
+            else
+                printc("You gotta select an object that is not me or the old object!", color)
+            end
             return
         end
         reset()
@@ -198,7 +205,15 @@ function get_online_code(obj, player_clicker_color, alt_click)
                 printc(request.error, player_clicker_color, Color.Red)
             else
                 _storedScript = request.text
-                printc("[4eb1ff]Code found! You can now paste it somewhere.[-]", player_clicker_color, Color.White)
+                if _storedScript == '{"message":"Document not found."}' then
+                    printc(
+                        "[FF4136]The code doesn't seem to be existing...\nRequest url: " .. name .. "[-]",
+                        player_clicker_color,
+                        Color.White
+                    )
+                else
+                    printc("[4eb1ff]Code found! You can now paste it somewhere.[-]", player_clicker_color, Color.White)
+                end
             end
         end
     )
@@ -207,6 +222,12 @@ end
 function hastebinParser(url)
     local rawPattern = "^.+/raw/.+$"
 
+    log(url)
+
+    if not url:find(".lua") then
+        url = url .. ".lua"
+    end
+
     if not url:find(rawPattern) then
         local pageNamePattern = "^.+/(.+)%..+$"
         local _,
@@ -214,6 +235,8 @@ function hastebinParser(url)
             pageName = url:find(pageNamePattern)
         url = "https://hastebin.com/raw/" .. pageName
     end
+
+    log(url)
 
     return url
 end
@@ -233,9 +256,6 @@ function validDomain(name)
         end
     end
     return valid
-end
-
-function getValidDomains()
 end
 
 function setCode(obj)
