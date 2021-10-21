@@ -1,0 +1,2 @@
+### Deprecated stuff folder
+Even though all this stuff has not been used for a very long time as they have been replaced by a much better version of themselves, this is kept here for the sake of keeping working code in the github itself.
