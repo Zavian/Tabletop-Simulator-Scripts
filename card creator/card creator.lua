@@ -92,11 +92,11 @@ function take_card(c, hasColor, isHex)
             local colo = splitted[3]:gsub("-", "")
             returner.color = colorTranslate(colo)
         else
-            log(splitted[3] .. "LUL")
             local colo = hexToRgb(splitted[3])
-            log(colo)
             returner.color = colo
         end
+    else
+        returner.color {r = 0, g = 0, b = 0}
     end
     returner.card = {splitted[1], splitted[2]}
     takeParams = {
@@ -151,7 +151,7 @@ function colorTranslate(color)
     elseif color == "l" then
         r = {r = 0.768627, g = 0.403922, b = 0.035294}
     else
-        r = "White"
+        r = {r = 0, g = 0, b = 0}
     end
 
     return r
