@@ -1,0 +1,181 @@
+<Defaults>
+    <!-- #region epic-reminder -->
+    <Image class="close-reminder" raycastTarget="true" offsetXY="-85 0" height="50%" preserveAspect="true" image="reminder-open" onClick="UIEpicReminderClose" />
+    <Image class="open-reminder" raycastTarget="true" offsetXY="50 0" height="50%" preserveAspect="true" image="reminder-closed" onClick="UIEpicReminderOpen" />
+    <Image class="reminder-glow" preserveAspect="true" raycastTarget="false" image="reminder-glow" />
+    <Panel class="Epic_Reminder" width="162" height="617" rectAlignment="MiddleRight" allowDragging="false" />
+    <Button class="Epic_Boon" tooltipPosition="Left" tooltipBackgroundColor="Black" tooltipBorderColor="#A52CFA" colors="#C573FF|#B349FD|#8931C6|Black" />
+    <!-- #endregion-->
+</Defaults>
+<!-- #region epic-reminder -->
+<Image class="reminder-glow" id="Epic_Glow" color="#A52CFA" active="false" width="162" height="617" rectAlignment="MiddleRight" allowDragging="false" preserveAspect="true" />
+<Panel active="false" visibility="White" class="Epic_Reminder" id="White_Epic_Reminder">
+    <Panel id="White_Closed_Reminder" active="true">
+        <Image class="open-reminder" color="#A52CFA" />
+    </Panel>
+    <Panel id="White_Opened_Reminder" active="false">
+        <VerticalLayout padding="5 5 5 5" offsetXY="0 0" height="240" width="140" id="White_Epic_Boons">
+            <Button active="false" class="Epic_Boon" id="White_Epic_Boon_1" />
+            <Button active="false" class="Epic_Boon" id="White_Epic_Boon_2" />
+            <Button active="false" class="Epic_Boon" id="White_Epic_Boon_3" />
+            <Button active="false" class="Epic_Boon" id="White_Epic_Boon_4" />
+            <Button active="false" class="Epic_Boon" id="White_Epic_Boon_5" />
+            <Button active="false" class="Epic_Boon" id="White_Epic_Boon_6" />
+        </VerticalLayout>
+        <Image class="close-reminder" color="#A52CFA" />
+    </Panel>
+</Panel>
+
+<Panel active="false" visibility="Teal" class="Epic_Reminder" id="Teal_Epic_Reminder">
+    <Panel id="Teal_Closed_Reminder" active="true">
+        <Image class="open-reminder" color="#A52CFA" />
+    </Panel>
+    <Panel id="Teal_Opened_Reminder" active="false">
+        <VerticalLayout padding="5 5 5 5" offsetXY="0 0" height="240" width="140" id="Teal_Epic_Boons">
+            <Button active="false" class="Epic_Boon" id="Teal_Epic_Boon_1" />
+            <Button active="false" class="Epic_Boon" id="Teal_Epic_Boon_2" />
+            <Button active="false" class="Epic_Boon" id="Teal_Epic_Boon_3" />
+            <Button active="false" class="Epic_Boon" id="Teal_Epic_Boon_4" />
+            <Button active="false" class="Epic_Boon" id="Teal_Epic_Boon_5" />
+            <Button active="false" class="Epic_Boon" id="Teal_Epic_Boon_6" />
+        </VerticalLayout>
+        <Image class="close-reminder" color="#A52CFA" />
+    </Panel>
+</Panel>
+
+<Panel active="false" visibility="Brown" class="Epic_Reminder" id="Brown_Epic_Reminder">
+    <Panel id="Brown_Closed_Reminder" active="true">
+        <Image class="open-reminder" color="#A52CFA" />
+    </Panel>
+    <Panel id="Brown_Opened_Reminder" active="false">
+        <VerticalLayout padding="5 5 5 5" offsetXY="0 0" height="240" width="140" id="Brown_Epic_Boons">
+            <Button active="false" class="Epic_Boon" id="Brown_Epic_Boon_1" />
+            <Button active="false" class="Epic_Boon" id="Brown_Epic_Boon_2" />
+            <Button active="false" class="Epic_Boon" id="Brown_Epic_Boon_3" />
+            <Button active="false" class="Epic_Boon" id="Brown_Epic_Boon_4" />
+            <Button active="false" class="Epic_Boon" id="Brown_Epic_Boon_5" />
+            <Button active="false" class="Epic_Boon" id="Brown_Epic_Boon_6" />
+        </VerticalLayout>
+        <Image class="close-reminder" color="#A52CFA" />
+    </Panel>
+</Panel>
+
+<Panel active="false" visibility="Blue" class="Epic_Reminder" id="Blue_Epic_Reminder">
+    <Panel id="Blue_Closed_Reminder" active="true">
+        <Image class="open-reminder" color="#A52CFA" />
+    </Panel>
+    <Panel id="Blue_Opened_Reminder" active="false">
+        <VerticalLayout padding="5 5 5 5" offsetXY="0 0" height="240" width="140" id="Blue_Epic_Boons">
+            <Button active="false" class="Epic_Boon" id="Blue_Epic_Boon_1" />
+            <Button active="false" class="Epic_Boon" id="Blue_Epic_Boon_2" />
+            <Button active="false" class="Epic_Boon" id="Blue_Epic_Boon_3" />
+            <Button active="false" class="Epic_Boon" id="Blue_Epic_Boon_4" />
+            <Button active="false" class="Epic_Boon" id="Blue_Epic_Boon_5" />
+            <Button active="false" class="Epic_Boon" id="Blue_Epic_Boon_6" />
+        </VerticalLayout>
+        <Image class="close-reminder" color="#A52CFA" />
+    </Panel>
+</Panel>
+
+<Panel active="false" visibility="Red" class="Epic_Reminder" id="Red_Epic_Reminder">
+    <Panel id="Red_Closed_Reminder" active="true">
+        <Image class="open-reminder" color="#A52CFA" />
+    </Panel>
+    <Panel id="Red_Opened_Reminder" active="false">
+        <VerticalLayout padding="5 5 5 5" offsetXY="0 0" height="240" width="140" id="Red_Epic_Boons">
+            <Button active="false" class="Epic_Boon" id="Red_Epic_Boon_1" />
+            <Button active="false" class="Epic_Boon" id="Red_Epic_Boon_2" />
+            <Button active="false" class="Epic_Boon" id="Red_Epic_Boon_3" />
+            <Button active="false" class="Epic_Boon" id="Red_Epic_Boon_4" />
+            <Button active="false" class="Epic_Boon" id="Red_Epic_Boon_5" />
+            <Button active="false" class="Epic_Boon" id="Red_Epic_Boon_6" />
+        </VerticalLayout>
+        <Image class="close-reminder" color="#A52CFA" />
+    </Panel>
+</Panel>
+
+<Panel active="false" visibility="Purple" class="Epic_Reminder" id="Purple_Epic_Reminder">
+    <Panel id="Purple_Closed_Reminder" active="true">
+        <Image class="open-reminder" color="#A52CFA" />
+    </Panel>
+    <Panel id="Purple_Opened_Reminder" active="false">
+        <VerticalLayout padding="5 5 5 5" offsetXY="0 0" height="240" width="140" id="Purple_Epic_Boons">
+            <Button active="false" class="Epic_Boon" id="Purple_Epic_Boon_1" />
+            <Button active="false" class="Epic_Boon" id="Purple_Epic_Boon_2" />
+            <Button active="false" class="Epic_Boon" id="Purple_Epic_Boon_3" />
+            <Button active="false" class="Epic_Boon" id="Purple_Epic_Boon_4" />
+            <Button active="false" class="Epic_Boon" id="Purple_Epic_Boon_5" />
+            <Button active="false" class="Epic_Boon" id="Purple_Epic_Boon_6" />
+        </VerticalLayout>
+        <Image class="close-reminder" color="#A52CFA" />
+    </Panel>
+</Panel>
+
+<Panel active="false" visibility="Orange" class="Epic_Reminder" id="Orange_Epic_Reminder">
+    <Panel id="Orange_Closed_Reminder" active="true">
+        <Image class="open-reminder" color="#A52CFA" />
+    </Panel>
+    <Panel id="Orange_Opened_Reminder" active="false">
+        <VerticalLayout padding="5 5 5 5" offsetXY="0 0" height="240" width="140" id="Orange_Epic_Boons">
+            <Button active="false" class="Epic_Boon" id="Orange_Epic_Boon_1" />
+            <Button active="false" class="Epic_Boon" id="Orange_Epic_Boon_2" />
+            <Button active="false" class="Epic_Boon" id="Orange_Epic_Boon_3" />
+            <Button active="false" class="Epic_Boon" id="Orange_Epic_Boon_4" />
+            <Button active="false" class="Epic_Boon" id="Orange_Epic_Boon_5" />
+            <Button active="false" class="Epic_Boon" id="Orange_Epic_Boon_6" />
+        </VerticalLayout>
+        <Image class="close-reminder" color="#A52CFA" />
+    </Panel>
+</Panel>
+
+<Panel active="false" visibility="Pink" class="Epic_Reminder" id="Pink_Epic_Reminder">
+    <Panel id="Pink_Closed_Reminder" active="true">
+        <Image class="open-reminder" color="#A52CFA" />
+    </Panel>
+    <Panel id="Pink_Opened_Reminder" active="false">
+        <VerticalLayout padding="5 5 5 5" offsetXY="0 0" height="240" width="140" id="Pink_Epic_Boons">
+            <Button active="false" class="Epic_Boon" id="Pink_Epic_Boon_1" />
+            <Button active="false" class="Epic_Boon" id="Pink_Epic_Boon_2" />
+            <Button active="false" class="Epic_Boon" id="Pink_Epic_Boon_3" />
+            <Button active="false" class="Epic_Boon" id="Pink_Epic_Boon_4" />
+            <Button active="false" class="Epic_Boon" id="Pink_Epic_Boon_5" />
+            <Button active="false" class="Epic_Boon" id="Pink_Epic_Boon_6" />
+        </VerticalLayout>
+        <Image class="close-reminder" color="#A52CFA" />
+    </Panel>
+</Panel>
+
+<Panel active="false" visibility="Yellow" class="Epic_Reminder" id="Yellow_Epic_Reminder">
+    <Panel id="Yellow_Closed_Reminder" active="true">
+        <Image class="open-reminder" color="#A52CFA" />
+    </Panel>
+    <Panel id="Yellow_Opened_Reminder" active="false">
+        <VerticalLayout padding="5 5 5 5" offsetXY="0 0" height="240" width="140" id="Yellow_Epic_Boons">
+            <Button active="false" class="Epic_Boon" id="Yellow_Epic_Boon_1" />
+            <Button active="false" class="Epic_Boon" id="Yellow_Epic_Boon_2" />
+            <Button active="false" class="Epic_Boon" id="Yellow_Epic_Boon_3" />
+            <Button active="false" class="Epic_Boon" id="Yellow_Epic_Boon_4" />
+            <Button active="false" class="Epic_Boon" id="Yellow_Epic_Boon_5" />
+            <Button active="false" class="Epic_Boon" id="Yellow_Epic_Boon_6" />
+        </VerticalLayout>
+        <Image class="close-reminder" color="#A52CFA" />
+    </Panel>
+</Panel>
+
+<Panel active="false" visibility="Green" class="Epic_Reminder" id="Green_Epic_Reminder">
+    <Panel id="Green_Closed_Reminder" active="true">
+        <Image class="open-reminder" color="#A52CFA" />
+    </Panel>
+    <Panel id="Green_Opened_Reminder" active="false">
+        <VerticalLayout padding="5 5 5 5" offsetXY="0 0" height="240" width="140" id="Green_Epic_Boons">
+            <Button active="false" class="Epic_Boon" id="Green_Epic_Boon_1" />
+            <Button active="false" class="Epic_Boon" id="Green_Epic_Boon_2" />
+            <Button active="false" class="Epic_Boon" id="Green_Epic_Boon_3" />
+            <Button active="false" class="Epic_Boon" id="Green_Epic_Boon_4" />
+            <Button active="false" class="Epic_Boon" id="Green_Epic_Boon_5" />
+            <Button active="false" class="Epic_Boon" id="Green_Epic_Boon_6" />
+        </VerticalLayout>
+        <Image class="close-reminder" color="#A52CFA" />
+    </Panel>
+</Panel>
+<!-- #endregion-->

@@ -310,6 +310,7 @@ function ToggleHud()
         roundToken.setPositionSmooth(_defaults.timeToken.roundPos)
         turnToken.setPositionSmooth(_defaults.timeToken.turnPos)
         statusCache = {}
+        resetEpicBoons()
     else
         ShowHud()
     end

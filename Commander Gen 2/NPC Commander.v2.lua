@@ -6,6 +6,12 @@ local _states = {
     ["neutral"] = {color = {0.764706, 0.560784, 0}, bright = {0.933333, 0.741176, 0.219608}, state = 4}
 }
 
+local _extraParams = {
+    epic = false,
+    lair = false,
+    epicBoons = nil
+}
+
 local names = {
     "Kyle",
     "Preston",
@@ -964,7 +970,8 @@ end
 -- coroutine based variables
 local coInitiativeId,
     coBossId,
-    coTokenId
+    coTokenId,
+    coBoonsId
 
 function create_npc(obj, player_clicker_color, alt_click)
     -- go and move to NPCs or to Boss
@@ -972,6 +979,7 @@ function create_npc(obj, player_clicker_color, alt_click)
     local notes = self.getGMNotes()
     local vars = JSON.decode(notes)
 
+    coBoonsId = vars.boons
     coInitiativeId = vars.initiative
     if getBossCheckbox() then
         coBossId = vars["boss"]
@@ -1012,6 +1020,7 @@ function boss_coroutine()
                         me.setPositionSmooth(getDestination(), false, false)
 
                         create_initiative(details)
+                        create_epics()
                     end,
                     0.5
                 )
@@ -1042,6 +1051,7 @@ function token_coroutine()
                         spawned.setPositionSmooth(getDestination(), false, false)
 
                         create_initiative(details)
+                        create_epics()
                     end,
                     0.5
                 )
@@ -1109,7 +1119,121 @@ function create_initiative(details)
         end
     }
     ini.takeObject(takeParams)
+
+    if _extraParams.lair then
+        takeParams.callback_function = function(spawned)
+            Wait.time(
+                function()
+                    spawned.call(
+                        "_init",
+                        {
+                            input = {
+                                name = "Lair",
+                                modifier = 20,
+                                pawn = "",
+                                side = "lair",
+                                static = true
+                            }
+                        }
+                    )
+                end,
+                1
+            )
+        end
+        takeParams.position.y = takeParams.position.y + 1.5
+        ini.takeObject(takeParams)
+    end
+
+    if _extraParams.epic then
+        takeParams.callback_function = function(spawned)
+            Wait.time(
+                function()
+                    spawned.call(
+                        "_init",
+                        {
+                            input = {
+                                name = "Epic",
+                                modifier = 999,
+                                pawn = "",
+                                side = "epic",
+                                static = true
+                            }
+                        }
+                    )
+                end,
+                1
+            )
+        end
+        takeParams.position.y = takeParams.position.y + 1.5
+        ini.takeObject(takeParams)
+    end
 end
+
+function create_epics()
+    if _extraParams.epicBoons == nil then
+        return
+    end
+    if coBoonsId == nil then
+        printToColor(
+            "It seems you have some boons in the data but you didn't setup the boon bag.\nTo use this feature you must have a 'boons' variable in the commander.",
+            "Black",
+            Color.Red
+        )
+        return
+    end
+
+    local boonBag = getObjectFromGUID(coBoonsId)
+    local takeParams = {
+        position = getNewPos(coBoonsId),
+        rotation = getNewRot(coBoonsId)
+    }
+    for i = #_extraParams.epicBoons, 1, -1 do
+        local boon = _extraParams.epicBoons[i]
+        takeParams.callback_function = function(spawned)
+            Wait.time(
+                function()
+                    if type(boon) == "string" then
+                        spawned.setDescription(boon)
+                    else
+                        spawned.setDescription(boon[1])
+                        spawned.setName(boon[2])
+                    end
+                    spawned.setColorTint({0, 0.454902, 0.85098})
+                    spawned.call("setData")
+                end,
+                1
+            )
+        end
+        boonBag.takeObject(takeParams)
+        takeParams.position.y = takeParams.position.y + 1.5
+    end
+end
+
+-- set _extraParams --------------------------
+function setExtraParams(params)
+    printToColor("Found extra params!", "Black", Color.Blue)
+    if params.epic ~= nil then
+        _extraParams.epic = params.epic
+        printToColor("    epic: [0074D9]" .. params.epic .. "[-]", "Black", Color.White)
+    else
+        _extraParams.epic = false
+    end
+    if params.lair ~= nil then
+        _extraParams.lair = params.lair
+        printToColor("    lair: [0074D9]" .. params.lair .. "[-]", "Black", Color.White)
+    else
+        _extraParams.lair = false
+    end
+    if params.epicBoons ~= nil then
+        _extraParams.epicBoons = params.epicBoons
+        printToColor("    epicBoons: [0074D9]" .. #params.epicBoons .. "[-]", "Black", Color.White)
+    else
+        _extraParams.epicBoons = nil
+    end
+
+    log(_extraParams)
+end
+----------------------------------------------
 
 -- utils -------------------------------------
 function mysplit(inputstr, sep)
