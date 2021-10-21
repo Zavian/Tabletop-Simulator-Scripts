@@ -1,0 +1,7 @@
+<Defaults>
+    <Text class="title" fontSize="25" alignment="MiddleCenter" />
+    <Text class="description" fontSize="14" alignment="UpperLeft" />
+
+</Defaults>
+<Text id="title" class="title" rotation="180 180 0" position="0 -110 -10" width="400" height="50">Title</Text>
+<Text id="description" class="description" rotation="180 180 0" position="0 30 -10" width="400" height="220">Description</Text>
