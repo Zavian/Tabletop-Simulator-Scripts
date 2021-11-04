@@ -9,7 +9,8 @@ local _states = {
 local _extraParams = {
     epic = false,
     lair = false,
-    epicBoons = nil
+    epicBoons = nil,
+    done = false
 }
 
 local names = {
@@ -1152,8 +1153,8 @@ function create_initiative(details)
                         "_init",
                         {
                             input = {
-                                name = "Epic",
-                                modifier = 999,
+                                name = "Epic Die",
+                                modifier = 50,
                                 pawn = "",
                                 side = "epic",
                                 static = true
@@ -1211,6 +1212,13 @@ end
 
 -- set _extraParams --------------------------
 function setExtraParams(params)
+    if params == nil then
+        _extraParams.epic = false
+        _extraParams.lair = false
+        _extraParams.epicBoons = nil
+        return
+    end
+
     printToColor("Found extra params!", "Black", Color.Blue)
     if params.epic ~= nil then
         _extraParams.epic = params.epic

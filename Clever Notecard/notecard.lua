@@ -71,6 +71,8 @@ function parse()
 
         if vars.extra then
             npc_commander.call("setExtraParams", vars.extra)
+        else
+            npc_commander.call("setExtraParams", nil)
         end
 
         if self.getGMNotes() ~= "" then
