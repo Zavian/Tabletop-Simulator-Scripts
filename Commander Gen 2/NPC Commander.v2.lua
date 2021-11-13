@@ -1222,13 +1222,13 @@ function setExtraParams(params)
     printToColor("Found extra params!", "Black", Color.Blue)
     if params.epic ~= nil then
         _extraParams.epic = params.epic
-        printToColor("    epic: [0074D9]" .. params.epic .. "[-]", "Black", Color.White)
+        printToColor("    epic: [0074D9]" .. tostring(params.epic) .. "[-]", "Black", Color.White)
     else
         _extraParams.epic = false
     end
     if params.lair ~= nil then
         _extraParams.lair = params.lair
-        printToColor("    lair: [0074D9]" .. params.lair .. "[-]", "Black", Color.White)
+        printToColor("    lair: [0074D9]" .. tostring(params.lair) .. "[-]", "Black", Color.White)
     else
         _extraParams.lair = false
     end
