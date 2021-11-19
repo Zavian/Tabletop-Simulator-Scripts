@@ -138,6 +138,7 @@ end
 function calculate(obj, player_clicker_color, alt_click)
     local green = "2ECC40"
     local red = "AAAAAAaa"
+    local rolledString = self.getButtons()[2].label
 
     self.setDescription("")
     local log = ""
@@ -159,13 +160,24 @@ function calculate(obj, player_clicker_color, alt_click)
     log =
         log ..
         string.format("\n[%s][b]Total: %s + %s = %s[/b][-]", green, result, _dice.modifier, result + _dice.modifier)
+
+    local inCombat = Global.call("isInCombat")
+    log(inCombat)
+    log(type(inCombat))
+    if inCombat then
+        -- monitoring purposes
+        printToColor(
+            string.format("Rolling %s: %s+%s", rolledString, result, _dice.modifier),
+            "Black",
+            {0.666, 0.666, 0.666, 1}
+        )
+    end
     result = result + _dice.modifier
     self.setDescription(log)
     self.editButton({index = 0, label = result})
 end
 
 function calcSet(set)
-    log(set)
     local result = 0
     local rolls = {}
     for i = 1, set.dice do
@@ -175,7 +187,6 @@ function calcSet(set)
         local roll2 = math.random(1, set.sides)
 
         local roll = math.max(roll1, roll2)
-        log(roll)
         table.insert(rolls, {roll = roll, scrap = math.min(roll1, roll2)})
         result = result + roll
     end

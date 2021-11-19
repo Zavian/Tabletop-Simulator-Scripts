@@ -735,6 +735,10 @@ function submitChange(player, value, obj)
     initiatives[player.color].i = value
 end
 
+function isInCombat()
+    return self.UI.getAttribute("widget", "active") == "true"
+end
+
 function getPlayerByColor(color)
     for k, v in pairs(_defaults.playersColors) do
         if v == color then

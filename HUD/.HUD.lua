@@ -310,6 +310,7 @@ function ToggleHud()
         roundToken.setPositionSmooth(_defaults.timeToken.roundPos)
         turnToken.setPositionSmooth(_defaults.timeToken.turnPos)
         statusCache = {}
+        resetEpicBoons()
     else
         ShowHud()
     end
@@ -360,7 +361,6 @@ function HideHud()
     UI.setAttribute("reorder", "textColor", _defaults.textColor)
 
     TogglePlayer(false)
-    resetEpicBoons()
 end
 
 function TogglePlayer(toggle)
@@ -733,6 +733,10 @@ end
 function submitChange(player, value, obj)
     -- this activates while the player is writing on its little box
     initiatives[player.color].i = value
+end
+
+function isInCombat()
+    return self.UI.getAttribute("widget", "active") == "true"
 end
 
 function getPlayerByColor(color)
