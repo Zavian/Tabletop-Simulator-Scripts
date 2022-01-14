@@ -179,6 +179,20 @@ function order_initiative(obj, color, alt)
     end
 
     sendToGlobal(_initiativeTokens)
+    if color == "Black" then
+        sendPlayers(self.getGMNotes())
+    end
+end
+
+function sendPlayers(playerTable)
+    local json = JSON.decode(playerTable)
+    if json.players then
+        local sender = {}
+        for i = 1, #json.players do
+            table.insert(sender, json.players[i])
+        end
+        Global.call("setupPlayerColors", {players = sender})
+    end
 end
 
 function sendToGlobal(objs)

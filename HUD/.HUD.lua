@@ -62,8 +62,6 @@ local _defaults = {
 --  id .. x = Toggle, aka Concentration used
 --  id .. y = image, aka overlaY for the item to be active
 
-local debug = false
-
 local activated = ""
 local id = 1
 local elements = {}
@@ -97,10 +95,49 @@ function ReorderMat()
     end
 end
 
+function setMat(matGUID)
+    if(debug) then
+        print("setMat: " .. matGUID)
+    end
+    _defaults.initiative_mat = matGUID
+end
+
+
+-- /execute Global.call("setupPlayerColors", {players = {{"Zora", "Red"}, {"Amber", "Teal"}, {"Edwin", "Blue"}, {"Gilkan", "Green"}, {"Marcus", "White"}, {"Kottur", "Purple"}}})
+function setupPlayerColors(params)
+    local capitalize = function(str)
+        return (str:gsub("^%l", string.upper))
+    end
+
+    local players = params.players
+    if players then
+        _defaults.players = {}
+        _defaults.playersColors = {}
+        -- {
+        --     "players": [
+        --         ["Gilkan", "Red"],
+        --         ["Banana", "Orange"]
+        --     ]
+        -- }
+        for i = 1, #players do
+            local name = capitalize(players[i][1])
+            local color = capitalize(players[i][2])
+            if name and color then
+                table.insert(_defaults.players, name)
+                _defaults.playersColors[string.lower(name)] = color
+            end
+        end
+        if debug then
+            printTable(_defaults.playersColors)
+            printTable(_defaults.players)
+        end
+    end
+end
+
 function setElements(params)
     local t = params.t
     if not _defaults.initiative_mat then
-        _defaults.initiative_mat = params.mat
+        setMat(params.mat)
     end
     resetTable()
     xmlElements = {}
@@ -690,7 +727,7 @@ end
 
 function requestPlayer(player)
     if not _defaults.initiative_mat then
-        _defaults.initiative_mat = player.call
+        setMat(player.call) 
     end
 
     log(Player[_defaults.playersColors[player.p]].seated, player.p .. " seated")
@@ -994,6 +1031,7 @@ end
 
 --#endregion
 
+local debug = false
 function printTable(t)
     local printTable_cache = {}
 

@@ -62,8 +62,6 @@ local _defaults = {
 --  id .. x = Toggle, aka Concentration used
 --  id .. y = image, aka overlaY for the item to be active
 
-local debug = false
-
 local activated = ""
 local id = 1
 local elements = {}
@@ -97,10 +95,49 @@ function ReorderMat()
     end
 end
 
+function setMat(matGUID)
+    _defaults.initiative_mat = matGUID
+    local mat = getObjectFromGUID(_defaults.initiative_mat)
+    if mat.getGMNotes() ~= "" then
+        setupPlayerColors(mat.getGMNotes())
+    end
+end
+
+function setupPlayerColors(playerTable)
+    local capitalize = function(str)
+        return (str:gsub("^%l", string.upper))
+    end
+
+    local json = JSON.decode(playerTable)
+    if json.players then
+        _defaults.players = {}
+        _defaults.playersColors = {}
+        -- {
+        --     "players": [
+        --         ["Gilkan", "Red"],
+        --         ["Banana", "Orange"]
+        --     ]
+        -- }
+        for i = 1, #json.players do
+            local name = capitalize(json.players[i][1])
+            local color = capitalize(json.players[i][2])
+            if name and color then
+                table.insert(_defaults.players, name)
+                _defaults.playersColors[string.lower(name)] = color
+            end
+        end
+
+        if debug then
+            printTable(_defaults.playersColors)
+            printTable(_defaults.players)
+        end
+    end
+end
+
 function setElements(params)
     local t = params.t
     if not _defaults.initiative_mat then
-        _defaults.initiative_mat = params.mat
+        setMat(params.mat)
     end
     resetTable()
     xmlElements = {}
@@ -690,7 +727,7 @@ end
 
 function requestPlayer(player)
     if not _defaults.initiative_mat then
-        _defaults.initiative_mat = player.call
+        setMat(player.call) 
     end
 
     log(Player[_defaults.playersColors[player.p]].seated, player.p .. " seated")

@@ -459,9 +459,21 @@ function getNewPos(id)
     if notes ~= nil then
         local var = JSON.decode(notes)
         if var then
+            -- new parsing system
+            -- eventually will need to DEPRECATE the old system
+            -- TODO: create translation system
             local varianceX = var.varx and var.varx or 0
             local varianceY = var.vary and var.vary or 0
             local varianceZ = var.varz and var.varz or 0
+
+            if var.newPos then
+                pos = var.newPos
+                pos.x = var.newPos[1] + math.random(-varianceX, varianceX)
+                pos.y = var.newPos[2] + math.random(-varianceY, varianceY) 
+                pos.z = var.newPos[3] + math.random(-varianceZ, varianceZ)
+                return pos
+            end
+
             if var.diffx then
                 pos.x = pos.x + var.diffx + math.random(-varianceX, varianceX)
             end
