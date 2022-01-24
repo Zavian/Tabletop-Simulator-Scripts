@@ -1,3 +1,54 @@
+--[[StartXML
+<Defaults>
+    <Button class="heal" colors="#2ECC40|#55DF65|#43A34E|gray" TextColor="white" textAlignment="MiddleCenter" FontSize="25" />
+    <Button class="damage" colors="#FF4136|#FB8881|#C93931|gray" TextColor="black" textAlignment="MiddleCenter" FontSize="25" />
+    <InputField textAlignment="MiddleCenter" FontSize="30" placeholder=" " />
+    <Button class="condition" width="150" height="150" iconWidth="85" iconColor="White" onclick="UI_AddCondition(id)" onmouseenter="UI_ShowCondition(id)" onmouseexit="UI_DefaultCondition()" />
+    <Button class="shape" width="150" height="150" iconWidth="85" iconColor="White" onclick="UI_AddCondition(id)" onmouseenter="UI_ShowCondition(id)" onmouseexit="UI_DefaultCondition()" fontSize="25" fontStyle="Bold" textColor="#353c45" />
+</Defaults>
+
+
+<Panel position="440 0 -50" width="650" height="300" rotation="0 0 0" color="#FFFFFF50" id="main">
+    <Button width="230" height="75" position="-200 80 0" class="heal" text="HEAL" id="healButton" />
+    <InputField width="230" height="75" position="-200 0 0" id="hpVariance" text="" />
+    <Button width="230" height="75" position="-200 -80 0" class="damage" text="DAMAGE" id="damageButton" />
+
+    <Text text="CURRENT" width="105" height="75" FontSize="20" color="#E4E4E4" position="-10 55 0" />
+    <InputField width="105" height="75" position="-20 0 0" id="currentHP" colors="#FFFFFF20|#E4E4E4|#FFFFFF|gray" text="" />
+
+    <Text text="/" width="10" height="75" FontSize="32" position="50 0 0" color="#E4E4E4" />
+
+    <Text text="MAX" width="105" height="75" FontSize="20" color="#E4E4E4" position="110 55 0" />
+    <InputField width="105" height="75" position="110 0 0" id="maxHP" colors="#FFFFFF20|#E4E4E4|#FFFFFF|gray" text="" />
+
+    <Text text="HIT POINTS" FontSize="25" FontStyle="Bold" position="50 -80 0" />
+
+    <Text text="TEMP" width="105" height="75" FontSize="20" color="#E4E4E4" position="230 55 0" />
+    <InputField width="105" height="75" position="230 0 0" id="tempHP" colors="#FFFFFF20|#E4E4E4|#FFFFFF|gray" text="" placeholder="--" />
+</Panel>
+
+<Panel id="ConditionMenu" width="550" height="425" position="-310 0 -50" color="#FFFFFF50" scale=".75 .75 .75">
+    <GridLayout id="condSelector" constraint="FixedColumnCount" constraintCount="5" startCorner="UpperRight" childAlignment="UpperRight" spacing="5" padding="10 10 10 10">
+        <Button color="#ffffff" id="btn_blinded" class="condition" icon="blinded"></Button>
+        <Button color="#ffffff" id="btn_charmed" class="condition" icon="charmed"></Button>
+        <Button color="#ffffff" id="btn_concentration" class="condition" icon="concentration"></Button>
+        <Button color="#ffffff" id="btn_deafened" class="condition" icon="deafened"></Button>
+        <Button color="#ffffff" id="btn_frightened" class="condition" icon="frightened"></Button>
+        <Button color="#ffffff" id="btn_grappled" class="condition" icon="grappled"></Button>
+        <Button color="#ffffff" id="btn_incapacitated" class="condition" icon="incapacitated"></Button>
+        <Button color="#ffffff" id="btn_invisible" class="condition" icon="invisible"></Button>
+        <Button color="#ffffff" id="btn_on_fire" class="condition" icon="on fire"></Button>
+        <Button color="#ffffff" id="btn_paralyzed" class="condition" icon="paralyzed"></Button>
+        <Button color="#ffffff" id="btn_petrified" class="condition" icon="petrified"></Button>
+        <Button color="#ffffff" id="btn_poisoned" class="condition" icon="poisoned"></Button>
+        <Button color="#ffffff" id="btn_restrained" class="condition" icon="restrained"></Button>
+        <Button color="#ffffff" id="btn_stunned" class="condition" icon="stunned"></Button>
+    </GridLayout>
+    <Button offsetXY="0 10" rectAlignment="LowerCenter" fontStyle="Bold" fontSize="32" color="#ffffff00" width="530" height="70" id="ConditionType">Condition</Button>
+</Panel>
+StopXML--xml]]
+
+
 local linked = nil
 
 local elements = {
@@ -14,19 +65,27 @@ local elements = {
     }
 }
 
+function loadXML()
+    local script = self.getLuaScript()
+    local xml = script:sub(script:find("StartXML")+8, script:find("StopXML")-1)
+    self.UI.setXml(xml)
+
+    Wait.frames(function()
+        local guid = self.getGUID()
+        self.UI.setAttribute(elements.heal, "onClick", guid .. "/UIHealButton_Click()")
+        self.UI.setAttribute(elements.damage, "onClick", guid .. "/UIDamageButton_Click()")
+        self.UI.setAttribute(elements.varhp, "onEndEdit", guid .. "/VarHPEndEdit(value)")
+        self.UI.setAttribute(elements.hp, "onEndEdit", guid .. "/CurrentHPEndEdit(value)")
+        self.UI.setAttribute(elements.maxhp, "onEndEdit", guid .. "/MaxHPEndEdit(value)")
+        self.UI.setAttribute(elements.temphp, "onEndEdit", guid .. "/TempHPEndEdit(value)")
+
+        self.UI.hide("main")
+        self.UI.hide("ConditionMenu")
+    end, 20)
+end
+
 function onLoad()
-    local guid = self.getGUID()
-
-    self.UI.setAttribute(elements.heal, "onClick", guid .. "/UIHealButton_Click()")
-    self.UI.setAttribute(elements.damage, "onClick", guid .. "/UIDamageButton_Click()")
-    self.UI.setAttribute(elements.varhp, "onEndEdit", guid .. "/VarHPEndEdit(value)")
-    self.UI.setAttribute(elements.hp, "onEndEdit", guid .. "/CurrentHPEndEdit(value)")
-    self.UI.setAttribute(elements.maxhp, "onEndEdit", guid .. "/MaxHPEndEdit(value)")
-    self.UI.setAttribute(elements.temphp, "onEndEdit", guid .. "/TempHPEndEdit(value)")
-
-    self.UI.hide("main")
-    self.UI.hide("ConditionMenu")
-
+    loadXML()
     self.createButton(
         {
             click_function = "InjectMini",
@@ -49,7 +108,7 @@ function UIHealButton_Click(player, value, id)
     local m = tonumber(self.UI.getAttribute(elements.maxhp, "text"))
 
     if v == nil or c == nil or m == nil then
-        broadcastToColor("You have to fill in the numbers, you wanker!", player.color, {r = 1, g = 1, b = 1})
+        broadcastToColor("You have to fill in the numbers!", player.color, {r = 1, g = 1, b = 1})
         return
     end
     local newhp = c + v
@@ -71,7 +130,7 @@ function UIDamageButton_Click(player, value, id)
     local c = tonumber(self.UI.getAttribute(elements.hp, "text"))
 
     if v == nil or c == nil then
-        broadcastToColor("You have to fill in the numbers, you wanker!", player.color, {r = 1, g = 1, b = 1})
+        broadcastToColor("You have to fill in the numbers!", player.color, {r = 1, g = 1, b = 1})
         return
     end
 
