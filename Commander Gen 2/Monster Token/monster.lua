@@ -412,9 +412,8 @@ function updateSave(value)
         tCOLOR = _tokenColor,
         tHP = tempHP,
         blackName = _blackName
-    }
-    JSON.encode(myData)
-    self.script_state = saved_data
+    }    
+    self.script_state = JSON.encode(myData)
 end
 
 function _restore(data)
@@ -439,7 +438,7 @@ end
 
 function onSave()
     if initialized then
-        return JSON.encode(myData)
+        return self.script_state
     end
 end
 
