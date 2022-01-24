@@ -1,3 +1,19 @@
+--[[StartXML
+<Defaults>
+    <Button colors="#670007|#382e36|#085d65|#000000" />
+    <Button class="todo" textColor="#e8dec5" />
+    <Button class="done" textColor="#ff7f27" />
+</Defaults>
+<VerticalLayout id="PlayerList" childAlignment="UpperCenter" position="-90 -65 -20"  rotation="180 180 0" height="120" width="100" />
+StopXML--xml]]
+
+
+function loadXML()
+    local script = self.getLuaScript()
+    local xml = script:sub(script:find("StartXML")+8, script:find("StopXML")-1)
+    self.UI.setXml(xml)
+end
+
 local _difference = 0.754
 local _initiativeZone = "6befe7"
 local _tokenName = {"player_token", "enemy_token", "ally_token", "neutral_token", "epic_token", "lair_token"}
@@ -11,6 +27,7 @@ function updateSave()
 end
 
 function onload(saved_data)
+    loadXML()
     self.interactable = true
     self.createButton(
         {
