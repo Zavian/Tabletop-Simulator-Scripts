@@ -185,13 +185,18 @@ function order_initiative(obj, color, alt)
         pos = {x = vars["initial_pos"][1], y = vars["initial_pos"][2], z = vars["initial_pos"][3]}
     end
 
+    local coordinate = "x"
+    if vars["go_by"] then
+        coordinate = vars["go_by"]
+    end
+
     for i = 0, #_initiativeTokens do
         local t = _initiativeTokens[i]
         pos.y = math.random(3.1, 5)
         if t then
             t.token.setPositionSmooth(pos, false, false)
-            t.token.setRotationSmooth({0, 90, 0}, false, true)
-            pos.x = pos.x + _difference
+            t.token.setRotationSmooth(self.getRotation(), false, true)
+            pos[coordinate] = pos[coordinate] + _difference
         end
     end
 
