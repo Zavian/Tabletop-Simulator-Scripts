@@ -1,7 +1,26 @@
+--[[StartXML
+<Defaults>
+    <Text class="title" fontSize="25" alignment="MiddleCenter" />
+    <Text class="description" fontSize="14" alignment="UpperLeft" />
+
+</Defaults>
+<Text id="title" class="title" rotation="180 180 0" position="0 -110 -10" width="400" height="50">Title</Text>
+<Text id="description" class="description" rotation="180 180 0" position="0 30 -10" width="400" height="220">Description</Text>
+StopXML--xml]]
+
+
+function loadXML()
+    local script = self.getLuaScript()
+    local xml = script:sub(script:find("StartXML")+8, script:find("StopXML")-1)
+    self.UI.setXml(xml)
+    Wait.frames(function() setData() end, 20)
+end
+
 local commander = "878b50"
 
 function onload()
-    setData()
+    loadXML()
+    
     local data = {
         click_function = "parse",
         function_owner = self,
@@ -15,6 +34,18 @@ function onload()
         font_color = {1, 1, 1, 1},
         tooltip = "Parse"
     }
+
+    self.addContextMenuItem("Set Commander", function(player, mouse)
+        if player.admin then
+            local guid = self.getName()
+            local obj = getObjectFromGUID(guid)
+            if not obj then
+                broadcastToColor("You must write the NPC Commander ID as the name of the notecard.", "Black", Color.White)
+            else
+                self.memo = guid
+            end
+        end
+    end, false)
     self.createButton(data)
 end
 
@@ -30,7 +61,7 @@ end
 function parse()
     if self.getDescription() ~= "" and self.getName() ~= "" then
         local vars = JSON.decode(self.getDescription())
-        local npc_commander = getObjectFromGUID(commander)
+        local npc_commander = getObjectFromGUID(self.memo or commander)
 
         if vars.name then
             npc_commander.call("setName", {input = vars.name})

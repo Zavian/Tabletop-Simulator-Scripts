@@ -1,0 +1,17 @@
+<Defaults>
+    <Panel color="#282828AA" />
+
+    <Panel class="npc_commander" rectAlignment="MiddleLeft" color="#FFE162" />
+    <Text class="npc_commander" color="#FFE162" />
+
+    <Panel class="initiative_mat" rectAlignment="MiddleLeft" color="#9ACFFD" />
+    <Text class="initiative_mat" color="#9ACFFD" />
+
+    <Panel class="player" rectAlignment="MiddleLeft" color="#EEEEEE" />
+    <Text class="player" color="#EEEEEE" />
+
+    <Button rectAlignment="UpperLeft" width="200" height="38" colors="#282828|#c8329b|#ff9b38|#dddddd" textColor="White" />
+    <Text fontSize="11" alignment="UpperLeft" rectAlignment="UpperLeft" />
+    <Text class="title" fontSize="18" fontStyle="Bold" />
+    <InputField rectAlignment="UpperLeft" onValueChanged="UI_UpdateInput" />
+</Defaults>
