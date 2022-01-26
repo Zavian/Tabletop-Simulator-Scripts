@@ -35,8 +35,8 @@ function onload()
         tooltip = "Parse"
     }
 
-    self.addContextMenuItem("Set Commander", function(player, mouse)
-        if player.admin then
+    self.addContextMenuItem("Set Commander", function(player)
+        if Player[player].admin then
             local guid = self.getName()
             local obj = getObjectFromGUID(guid)
             if not obj then

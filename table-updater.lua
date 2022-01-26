@@ -30,7 +30,7 @@ end
 
 
 -- Global variables --------------------- DO NOT TOUCH --------------------------
-local magic_word = " mr developer "
+local magic_word = "mr developer"
 local _require_restart = false
 
 -- Github urls for the various scripts -- DO NOT TOUCH --------------------------
@@ -125,6 +125,8 @@ local _data = {
 }
 
 -- event functions --------------------------------------------------------------
+function none() end
+
 function onLoad(saved_data)
     loadXML()
 
@@ -167,6 +169,8 @@ function onChat(message, player)
             _debug("onChat contains magic word")
             local command = message:replace(magic_word, ""):trim()
             local args = {}
+
+
             for word in command:gmatch("%S+") do
                 table.insert(args, word)
             end
@@ -189,8 +193,38 @@ function onChat(message, player)
                 else
                     broadcastNotice("Debugging is now off.")
                 end
-            end
+            elseif command == "add" then
+                if #args == 2 then 
+                    broadcastError("You must specify a component and a GUID.") 
+                    return 
+                end
+                local component = args[2]
+                local guid = args[3]
+                if not exists(guid) then
+                    broadcastError("The GUID you specified does not exist.")
+                    return
+                end
 
+                local possible_components = {
+                    "npc_commander",
+                    "monster",
+                    "boss",
+                    "initiative_token",
+                    "note",
+                    "initiative_mat"
+                }
+
+                if not tableContains(possible_components, component) then
+                    broadcastError("The component you specified is not valid.")
+                    return
+                end
+
+                _data.components[component] = {
+                    version = "",
+                    guid = guid
+                }
+                broadcastNotice("Added " .. component .. " with GUID " .. guid .. ".")
+            end
         end
     end
 end
@@ -306,7 +340,7 @@ function negatePos(position)
     return x .. " " .. y
 end
 
-function createInput(placeholder, position, id, width, height, linetype, text)
+function createInput(placeholder, position, id, width, height, linetype, text, readonly)
     position = negatePos(position)
     return {
         tag = "InputField",
@@ -319,12 +353,13 @@ function createInput(placeholder, position, id, width, height, linetype, text)
             placeholder = placeholder,
             lineType = linetype,
             text = text or "",
-            value = text or ""
+            value = text or "",
+            readOnly = readonly or false
         }
     }
 end
 
-function createText(text, position, class, width)    
+function createText(text, position, class, width, alignment)    
     position = negatePos(position)
     return {
         tag = "Text",
@@ -333,13 +368,16 @@ function createText(text, position, class, width)
             rotation = "0 0 0",
             text = text,
             class = class,
-            width = width or "100%"
+            width = width or "100%",
+            alignment = alignment or "UpperLeft"
         }
     }
 end
 
-function createButton(text, position, width, height, click_function, id)
+function createButton(text, position, width, height, click_function, id, color)
     position = negatePos(position)
+    if not color then color = "#282828|#c8329b|#ff9b38|#dddddd"
+    else color = color .. "|#c8329b|#ff9b38|#dddddd" end
     return {
         tag = "Button",
         attributes = {
@@ -348,7 +386,8 @@ function createButton(text, position, width, height, click_function, id)
             text = text,
             width = width,
             height = height,
-            onClick = click_function
+            onClick = click_function,
+            colors = color
         }
     }
 end
@@ -457,6 +496,17 @@ function createFinish()
     setUI(xml)
 end
 
+function extractObject(bag)
+    local newPos = bag.getPosition()
+    newPos.y = newPos.y + 3
+    return bag.takeObject({
+        position = newPos,
+        callback_function = function(spawned)
+            spawned.setLock(true)
+        end
+    })
+end
+
 -- UI functions -----------------------------------------------------------------
 function UI_UpdateInput(player, value, id)
     self.UI.setAttribute(id, "value", value)
@@ -490,25 +540,165 @@ function UI_NewTable(player, mouse)
 end
 
 function UI_UpdateTable(player, mouse)
-    
-
     emptyUI()
-    setPanel(500, 77*(len(_data.components)))
+    setPanel(503, 495)
 
     local xml, panel = getPanel()
-    panel.children = {}
 
-    local i = 0
-    for component, t in pairs(_data.components) do
-        table.insert(panel.children, createButton(
-            "Update " .. component, 
-            "33 " .. (19 + i*77), 
-            434, 38, 
-            "UI_UpdateComponent(" .. t.guid .. ")"
-        ))
-        i = i + 1
+    local components = {
+        "npc_commander",
+        "monster",
+        "boss",
+        "initiative_token",
+        "initiative_mat",
+        "note"
+    }
+    --NPC Commander
+    --Monster Token
+    --Boss Token
+    --Initiative Token
+    --Notes
+    panel.children = {
+        createText("NPC Commander", "18 15", "title player", 156, "UpperRight"),
+        createInput(" ", "186 15", "npc_commander_guid", 103, 30, nil, getComponentGUID("npc_commander"), true),
+        createText("Monster Token", "18 45", "title player", 156, "UpperRight"),
+        createInput(" ", "186 45", "monster_token_guid", 103, 30, nil, getComponentGUID("monster"), true),
+        createText("Boss Token", "18 74", "title player", 156, "UpperRight"),
+        createInput(" ", "186 74", "boss_token_guid", 103, 30, nil, getComponentGUID("boss"), true),
+        createText("Initiative Token", "18 103", "title player", 156, "UpperRight"),
+        createInput(" ", "186 103", "initiative_token_guid", 103, 30, nil, getComponentGUID("initiative_token"), true),
+        createText("Initiative Mat", "18 132", "title player", 156, "UpperRight"),
+        createInput(" ", "186 132", "initiative_mat_guid", 103, 30, nil, getComponentGUID("initiative_mat"), true),
+        createText("Notes", "18 163", "title player", 156, "UpperRight"),
+        createInput(" ", "186 163", "note_guid", 103, 30, nil, getComponentGUID("note"), true),
+    }
+
+    for i,component in ipairs(components) do
+        local guid = getComponentGUID(component)
+        local pos = "292 " .. ((i-1)*29 + 15)
+        if guid then
+            local obj = getObjectFromGUID(guid)
+            if obj then
+                local isInBag = isInfiniteBag(obj)
+                table.insert(panel.children, createButton(
+                    isInBag and "In Bag" or "Not In Bag",
+                    pos,
+                    90,
+                    30,
+                    "none",
+                    "",
+                    isInBag and "#0074D9" or "#2ECC40"
+                ))
+            else
+                table.insert(panel.children, createButton(
+                    "Error",
+                    pos,
+                    90,
+                    30,
+                    "none",
+                    "",
+                    "#FF4136"
+                ))
+            end
+        else 
+            table.insert(panel.children, createButton(
+                "Not Found",
+                pos,
+                90,
+                30,
+                "none",
+                ""
+            ))
+        end
     end
+
+    table.insert(panel.children, createText(
+        "Players",
+        "18 190",
+        "title player",
+        nil,
+        nil
+    ))
+
+    for i, player in ipairs(_data.players) do
+        table.insert(panel.children, createButton(
+            player.name,
+            18 + (78*(i-1)) .. " 217",
+            75,
+            50,
+            "none",
+            player.manager_guid,
+            player.color
+        ))
+    end
+
+    table.insert(panel.children, createButton(
+        "Update",
+        "292 442",
+        200,
+        38,
+        "UI_UpdateAll",
+        nil,
+        "#2ECC40"
+    ))
+
+    table.insert(panel.children, createButton(
+        "Cancel",
+        "146 442",
+        135,
+        38,
+        "UI_CancelUpdate"
+    ))
+
     setUI(xml)
+end
+
+function UI_CancelUpdate()
+    loadXML()
+end
+
+function UI_UpdateAll()
+    broadcastNotice("Updating all components...")
+    for component, t in pairs(_data.components) do
+        _debug("updating " .. component .. " " .. t.guid)
+        if t then
+            if t.guid then
+                local obj = getObjectFromGUID(t.guid)
+                if obj then
+                    if isInfiniteBag(obj) then
+                        local o = extractObject(obj)
+                        Wait.time(function()
+                            if component == "boss" then
+                                component = {"monster", "boss"}
+                            end
+                            updateObj(
+                                o, component,
+                                function(updated)
+                                    obj.reset()
+                                    updated.setLock(false)
+                                    if type(component) == "table" then
+                                        setComponentGUID(component[2], obj.guid)
+                                    else setComponentGUID(component, obj.guid) end
+                                end
+                            )                    
+                        end, 1)
+                    else
+                        updateObj(obj, component, nil) 
+                    end
+                else broadcastError("Object not found: " .. t.guid .. " (" .. component ")") end
+            end
+        end
+    end
+    broadcastNotice("All components updated")
+    broadcastNotice("Updating players...")
+    printTable(_data.players)
+    for i, player in ipairs(_data.players) do
+        local obj = getObjectFromGUID(player.manager_guid)
+        if obj then
+            updateObj(obj, "player_manager", nil)
+        end
+    end
+    broadcastNotice("Players updated")
 end
 
 function UI_UpdateComponent(player, component)
@@ -1127,6 +1317,16 @@ function split(inputstr, sep)
         i = i + 1
     end
     return t
+end
+
+-- function to check if table contains key
+function tableContains(table, element)
+    for _, value in pairs(table) do
+        if value == element then
+            return true
+        end
+    end
+    return false
 end
 
 function removeEmpty(array)
