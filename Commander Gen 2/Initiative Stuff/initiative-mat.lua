@@ -190,13 +190,18 @@ function order_initiative(obj, color, alt)
         coordinate = vars["go_by"]
     end
 
+    local make_negative = nil
+    if vars["make_negative"] then
+        make_negative = vars["make_negative"] == true and -1 or 1
+    end
+
     for i = 0, #_initiativeTokens do
         local t = _initiativeTokens[i]
         pos.y = math.random(3.1, 5)
         if t then
             t.token.setPositionSmooth(pos, false, false)
             t.token.setRotationSmooth(self.getRotation(), false, true)
-            pos[coordinate] = pos[coordinate] + _difference
+            pos[coordinate] = pos[coordinate] + (_difference * make_negative)
         end
     end
 

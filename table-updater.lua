@@ -1,4 +1,29 @@
+--[[StartXML
+<Defaults>
+    <Panel color="#282828AA" />
 
+    <Panel class="npc_commander" rectAlignment="MiddleLeft" color="#FFE162" />
+    <Text class="npc_commander" color="#FFE162" />
+
+    <Panel class="initiative_mat" rectAlignment="MiddleLeft" color="#9ACFFD" />
+    <Text class="initiative_mat" color="#9ACFFD" />
+
+    <Panel class="player" rectAlignment="MiddleLeft" color="#EEEEEE" />
+    <Text class="player" color="#EEEEEE" />
+
+    <Button rectAlignment="UpperLeft" width="200" height="38" colors="#282828|#c8329b|#ff9b38|#dddddd" textColor="White" />
+    <Text fontSize="11" alignment="UpperLeft" rectAlignment="UpperLeft" />
+    <Text class="title" fontSize="18" fontStyle="Bold" />
+    <InputField rectAlignment="UpperLeft" onValueChanged="UI_UpdateInput" />
+</Defaults>
+StopXML--xml]]
+
+
+function loadXML()
+    local script = self.getLuaScript()
+    local xml = script:sub(script:find("StartXML")+8, script:find("StopXML")-1)
+    self.UI.setXml(xml)
+end
 
 
 -- TODO: Implement saving and loading of variables such as GUIDs and player data etc.
@@ -16,17 +41,12 @@ local _URLs = {
     monster = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/Commander%20Gen%202/Monster%20Token/monster.lua",
     initiative_mat = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/Commander%20Gen%202/Initiative%20Stuff/initiative-mat.lua",
     player_manager = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/player_manager/.player-manager.lua",
-    initiative_token = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/9ef1586aa51064d1090a6c1e2ddbbda5fa65aabf/Commander%20Gen%202/Initiative%20Stuff/initiative-token.lua",
-    note = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/c58310c81c1a4b08bbd8483360b789a01861b07b/Clever%20Notecard/notecard.lua"
+    initiative_token = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/Commander%20Gen%202/Initiative%20Stuff/initiative-token.lua",
+    note = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/Clever%20Notecard/notecard.lua"
 }
 
 -- variable to store versions downloaded from github -----------------------------
 local _versions = {
-    _self = "0",
-    npc_commander = "0",
-    monster = "0",
-    initiative_mat = "0",
-    player_manager = "0"
 }
 
 local colors = {
@@ -101,17 +121,21 @@ local colors = {
 --]]
 
 local _data = {
-    debug = true
+    debug = false
 }
 
 -- event functions --------------------------------------------------------------
 function onLoad(saved_data)
+    loadXML()
+
     if saved_data ~= "" then
         log("Found saved data.")
         _data = JSON.decode(saved_data)
         _debug(_data)
     end
-    checkForUpdates()
+
+    processVersions()
+
     self.createButton({
        click_function = 'start',
        function_owner = self,
@@ -171,8 +195,19 @@ function onChat(message, player)
     end
 end
 
-function start()    
-    processVersions()
+function start()        
+    if not _data.debug then
+        if needsUpdate("_self") then
+            updateObj(
+                self,
+                _URLs._self,
+                function()
+                    broadcastNotice("Updated self to latest version.")
+                    self.reload()
+                end
+            )
+        end
+    end
     startUI()
 end
 
@@ -181,21 +216,23 @@ function processVersions()
     WebRequest.get(
         _URLs._v,
         function(request)
-            print(request.response_code)
+            log("Versions check: " .. request.response_code)
             if request.is_error then
                 broadcastError(link .. "\n" .. request.error)
             else
                 local versions = request.text
                 _debug("processVersions versions found")
-                _debug(versions)
-                local lines = strsplit(versions, "\n")
+                local lines = split(versions, "\n")
                 lines = removeEmpty(lines)
                 for i, line in ipairs(lines) do
-                    local splitLine = strsplit(line, " ")
+                    local splitLine = split(line, " ")
                     if splitLine[1] and splitLine[2] then
+                        _debug(string.format("processVersions %s %s", splitLine[1], splitLine[2]))
                         _versions[splitLine[1]] = splitLine[2]
                     end
                 end
+                printTable(_versions)
+                checkForUpdates()
             end
         end
     )
@@ -217,9 +254,11 @@ end
 
 function checkForUpdates()
     _debug("checkForUpdates")
-    for component, version in pairs(_versions) do
+    for component, version in pairs(_versions) do        
         if needsUpdate(component) then
             broadcastNotice(component .. " needs an update.")
+        else
+            _debug(component .. " is up to date with version " .. version .. "(saved version: " .. _data.components[component].version .. ").")
         end
     end
 end
@@ -238,8 +277,7 @@ local _defaultWidth = 500
 function startUI()
     _debug("startUI")
     
-    local _, p = getPanel()
-    if p ~= nil then return end
+    local xml = self.UI.getXmlTable()
 
     local panel = {
         tag = "Panel",
@@ -248,14 +286,13 @@ function startUI()
             position = "0 150 -10",
             rotation = "180 180 0",
             width = _defaultWidth,
-            height = _defaultHeight
+            height = _defaultHeight,
         },
         children = {
             createButton("New Table", "34 38", "200", "38", "UI_NewTable", nil),
-            createButton("Update Table", "274 38", "200", "38", "UI_UpdateTable", nil),
+            createButton("Update Table", "274 38", "200", "38", "UI_UpdateTable", nil)
         }
     }
-    local xml = self.UI.getXmlTable()
     xml = table.insert(xml, panel)
     self.UI.setXmlTable(xml)
 end
@@ -287,7 +324,7 @@ function createInput(placeholder, position, id, width, height, linetype, text)
     }
 end
 
-function createText(text, position, class)    
+function createText(text, position, class, width)    
     position = negatePos(position)
     return {
         tag = "Text",
@@ -295,7 +332,8 @@ function createText(text, position, class)
             offsetXY = position,
             rotation = "0 0 0",
             text = text,
-            class = class
+            class = class,
+            width = width or "100%"
         }
     }
 end
@@ -370,9 +408,62 @@ function setPanel(width, height)
     self.UI.setAttribute("main", "offsetXY", offsetX .. " " .. offsetY)
 end
 
+local _player_index = nil
+function createPlayerPage()
+    if _player_index > #_data.players then
+        broadcastNotice("No more players to create.")
+        createFinish()
+        return
+    end
+
+    local player = _data.players[_player_index]
+
+    emptyUI()
+    setPanel(429, 103)
+
+    local xml, panel = getPanel()
+    panel.children = {
+        createColorBand("player", 103),
+        createText(
+            string.format("Character Mini - %s - %d/%d", player.name, _player_index, #_data.players), 
+            "22 3",
+            "title player"
+        ),
+        createInput("Character mini GUID...", "22 27", "playerMiniGUID", 199, 30),
+        createInput("Character manager GUID...", "224 27", "playerManagerGUID", 199, 30),
+        createButton("Confirm", "22 58", 401, 38, "UI_ConfirmPlayerTokens", nil)
+    }
+    setUI(xml)
+end
+
+function createFinish()
+    emptyUI()
+    setPanel(500, 189)
+
+    local xml, panel = getPanel()
+    panel.children = {
+        createText(
+            "Setup process completed, however there are a few things that you’ll need to do:\n" ..
+            "- Link all of the player minis to make sure that they are ready for play.\n" ..
+            "- Check the initiative mat and select one player token with the GIZMO tool:\n" ..
+            "- > Move it up and down the initiative count. If it moves something that isn’t the X coordinate or it goes towards below 0 then add the following variables to the GM notres of the mat: “go_by” should be either “x” or “z”, “make_negative” should be either true or false.\n" ..
+            "- Save the table and restart it. There should be no errors.",
+            "10 5",
+            "player",
+            500 - 10
+        ),
+        createButton("Close", "150 130", 200, 38, "UI_Close", nil)
+    }
+    setUI(xml)
+end
+
 -- UI functions -----------------------------------------------------------------
 function UI_UpdateInput(player, value, id)
     self.UI.setAttribute(id, "value", value)
+end
+
+function UI_Close()
+    loadXML()
 end
 
 
@@ -399,7 +490,39 @@ function UI_NewTable(player, mouse)
 end
 
 function UI_UpdateTable(player, mouse)
+    
 
+    emptyUI()
+    setPanel(500, 77*(len(_data.components)))
+
+    local xml, panel = getPanel()
+    panel.children = {}
+
+    local i = 0
+    for component, t in pairs(_data.components) do
+        table.insert(panel.children, createButton(
+            "Update " .. component, 
+            "33 " .. (19 + i*77), 
+            434, 38, 
+            "UI_UpdateComponent(" .. t.guid .. ")"
+        ))
+        i = i + 1
+    end
+    setUI(xml)
+end
+
+function UI_UpdateComponent(player, component)
+    local url = _URLs[component]
+    if url == nil then
+        broadcastNotice("Component " .. component .. " not found.")
+        return
+    end    
+    if _data.components[component] == nil then
+        broadcastNotice("Component " .. component .. " not found.")
+        return
+    end
+
+    _debug("updating " .. component)
 end
 
 function UI_ConfirmPlayers(player, mouse)
@@ -461,21 +584,7 @@ function UI_ConfirmCommanderGUID(player, mouse)
         broadcastError("Invalid GUID. Please try again.")
         return
     end
-    
-    --local script = getLink(_URLs["npc_commander"])
-    --Wait.time(
-    --    function()
-    --        updateObj(
-    --            getObjectFromGUID(input),
-    --            "npc_commander",
-    --            script,
-    --            function()
-    --                setComponentGUID("npc_commander", input)
-    --                broadcastNotice("NPC Commander GUID has been set and it has been updated.")
-    --            end
-    --        )
-    --    end
-    --, 3)
+
     updateObj(
         getObjectFromGUID(input),
         "npc_commander",
@@ -488,127 +597,70 @@ function UI_ConfirmCommanderGUID(player, mouse)
     
 
     emptyUI()
-    setPanel(456, 298)
+    setPanel(456, 366)
 
     local xml, panel = getPanel()
     panel.children = {
-        createColorBand("npc_commander", 298),
+        createColorBand("npc_commander", 366),
         createText("NPC Commander", "22 3", "title npc_commander"),
         -----------------------------------------------------------
         createText("Monster tokens are the monsters that do not have an image (generic monsters)", "22 24", "npc_commander"),
         createInput("Monster token GUID...", "22 44", "monsterTokenGUIDInput", 210, 30),
         createInput("Monster bag GUID...", "235 44", "monsterBagGUIDInput", 210, 30),
+        createButton("Confirm GUIDs", "22 72", 424, 23, "UI_ConfirmGenericToken(monster)", "confirmMonsterTokensBtn"),
         -----------------------------------------------------------
-        createText("Boss tokens are the monsters that have an image (such as bosses)", "22 79", "npc_commander"),
-        createInput("Boss token GUID...", "22 99", "bossTokenGUIDInput", 210, 30),
-        createInput("Boss bag GUID...", "235 99", "bossBagGUIDInput", 210, 30),
+        createText("Boss tokens are the monsters that have an image (such as bosses)", "22 95", "npc_commander"),
+        createInput("Boss token GUID...", "22 115", "bossTokenGUIDInput", 210, 30),
+        createInput("Boss bag GUID...", "235 115", "bossBagGUIDInput", 210, 30),
+        createButton("Confirm GUIDs", "22 143", 424, 23, "UI_ConfirmGenericToken(boss)", "confirmBossTokensBtn"),
         -----------------------------------------------------------
-        createText("Initiative tokens are the items that allow to track initiative in combat", "22 134", "npc_commander"),
-        createInput("Initiative token GUID...", "22 154", "initiativeTokenGUIDInput", 210, 30),
-        createInput("Initiative bag GUID...", "235 154", "initiativeBagGUIDInput", 210, 30),
+        createText("Initiative tokens are the items that allow to track initiative in combat", "22 166", "npc_commander"),
+        createInput("Initiative token GUID...", "22 186", "initiative_tokenTokenGUIDInput", 210, 30),
+        createInput("Initiative bag GUID...", "235 186", "initiative_tokenBagGUIDInput", 210, 30),
+        createButton("Confirm GUIDs", "22 214", 424, 23, "UI_ConfirmGenericToken(initiative_token)", "confirmInitiativeTokensBtn"),
         -----------------------------------------------------------
-        createText("Notes are used to store monster information (optional element)", "22 189", "npc_commander"),
-        createInput("Parsing note GUID...", "22 209", "noteTokenGUIDInput", 210, 30),
-        createInput("Parsing note bag GUID...", "235 209", "noteBagGUIDInput", 210, 30),
+        createText("Notes are used to store monster information (optional element)", "22 242", "npc_commander"),
+        createInput("Parsing note GUID...", "22 262", "noteTokenGUIDInput", 210, 30),
+        createInput("Parsing note bag GUID...", "235 262", "noteBagGUIDInput", 210, 30),
+        createButton("Confirm GUIDs", "22 290", 424, 23, "UI_ConfirmGenericToken(note)", "confirmNoteTokensBtn"),
         -----------------------------------------------------------
-        createButton("Confirm", "131 250", 195, 38, "UI_ConfirmTokens", nil)
+        createButton("Continue", "131 318", 195, 38, "UI_ConfirmTokens", nil)
     }
     setUI(xml)
 end
 
-function UI_ConfirmTokens(player, mouse)
-    local input = readInputs({
-        "monsterTokenGUIDInput", "monsterBagGUIDInput", 
-        "bossTokenGUIDInput", "bossBagGUIDInput", 
-        "initiativeTokenGUIDInput", "initiativeBagGUIDInput", 
-        "noteTokenGUIDInput", "noteBagGUIDInput"
-    })
-    
-    -- processing monsterTokenGUIDInput and monsterBagGUIDInput
-    local monsterTokenGUID = input["monsterTokenGUIDInput"]:trim()
-    local monsterBagGUID = input["monsterBagGUIDInput"]:trim()
-    if not validInput(monsterTokenGUID) or not validInput(monsterBagGUID) then
-        broadcastError("Invalid monster token input. Please try again.")
+function UI_ConfirmGenericToken(player, t, id)
+    _debug("UI_ConfirmGenericToken " .. t .. " " .. id)
+    local tokenInput = t .. "TokenGUIDInput"
+    local bagInput = t .. "BagGUIDInput"
+    local input = readInputs({tokenInput, bagInput})
+    if not validInput(input[tokenInput]) or not validInput(input[bagInput]) then
+        broadcastError("Invalid input. Please try again.")
         return
     end
-    if not exists(monsterTokenGUID) or not exists(monsterBagGUID) then
-        broadcastError("Invalid monster token GUID. Please try again.")
+    if not exists(input[tokenInput]) or not exists(input[bagInput]) then
+        broadcastError("Invalid GUID. Please try again.")
         return
     end
 
-    updateObj(
-        getObjectFromGUID(monsterTokenGUID), 
-        "monster", 
-        function()
-            placeInBag(monsterTokenGUID, monsterBagGUID)
-            setComponentGUID("monster", monsterBagGUID) 
-        end
-    )    
-    
 
-    -- processing bossTokenGUIDInput and bossBagGUIDInput
-    local bossTokenGUID = input["bossTokenGUIDInput"]:trim()
-    local bossBagGUID = input["bossBagGUIDInput"]:trim()
-    if not validInput(bossTokenGUID) or not validInput(bossBagGUID) then
-        broadcastError("Invalid boss token input. Please try again.")
-        return
-    end
-    if not exists(bossTokenGUID) or not exists(bossBagGUID) then
-        broadcastError("Invalid boss token GUID. Please try again.")
-        return
-    end
+    local component = t
+    if t == "boss" then component = {"monster", "boss"} end
     updateObj(
-        getObjectFromGUID(bossTokenGUID), 
-        {"monster", "boss"}, 
+        getObjectFromGUID(input[tokenInput]),
+        component,
         function()
-            placeInBag(bossTokenGUID, bossBagGUID)
-            setComponentGUID("boss", bossBagGUID) 
-        end
-    )        
-
-    -- processing initiativeTokenGUIDInput and initiativeBagGUIDInput
-    local initiativeTokenGUID = input["initiativeTokenGUIDInput"]:trim()
-    local initiativeBagGUID = input["initiativeBagGUIDInput"]:trim()
-    if not validInput(initiativeTokenGUID) or not validInput(initiativeBagGUID) then
-        broadcastError("Invalid initiative token input. Please try again.")
-        return
-    end
-    if not exists(initiativeTokenGUID) or not exists(initiativeBagGUID) then
-        broadcastError("Invalid initiative token GUID. Please try again.")
-        return
-    end
-    updateObj(
-        getObjectFromGUID(initiativeTokenGUID), 
-        "initiative_token", 
-        function()
-            placeInBag(initiativeTokenGUID, initiativeBagGUID)
-            setComponentGUID("initiative_token", initiativeBagGUID) 
+            setComponentGUID(t, input[bagInput])
+            placeInBag(input[tokenInput], input[bagInput], _data.debug)
+            self.UI.setAttribute(id, "textColor", "Green")
+            broadcastNotice(capitalize(t) .. " has been setup.")
         end
     )
+
     
+end
 
-    -- processing noteTokenGUIDInput and noteBagGUIDInput
-    -- this set of inputs are optional
-    local noteTokenGUID = input["noteTokenGUIDInput"]:trim()
-    local noteBagGUID = input["noteBagGUIDInput"]:trim()
-    if validInput(noteTokenGUID) and validInput(noteBagGUID) then
-        if not exists(noteTokenGUID) or not exists(noteBagGUID) then
-            broadcastError("Invalid note token GUID. Please try again.")
-            return
-        end
-        updateObj(
-            getObjectFromGUID(noteTokenGUID), 
-            "note", 
-            function()
-                placeInBag(noteTokenGUID, noteBagGUID)
-                setComponentGUID("note", noteBagGUID) 
-            end
-        )
-        
-    end
-
-    broadcastNotice("Tokens have been setup.")
-
+function UI_ConfirmTokens(player, mouse)
     emptyUI()
     setPanel(500, 181)
 
@@ -643,17 +695,19 @@ function UI_ConfirmInitiativeMat(player, mouse)
 
 
     emptyUI()
-    setPanel(375, 181)
+    setPanel(331, 246)
 
 
     local xml, panel = getPanel()
     panel.children = {
-        createColorBand("initiative_mat", 181),
+        createColorBand("initiative_mat", 246),
         createText("Initiative Mat", "22 3", "title initiative_mat"),
-        createText("When pressing the zone button a new scripting zone will be created. Select it with the GIZMO tool (F8) and make it as big as the initiative mat, then click the button again", "22 25", "initiative_mat"),
+        createText("When pressing the zone button a new scripting zone will be created. Select it with the GIZMO tool (F8) and make it as big as the initiative mat, then click the button again", "22 25", "initiative_mat", 331-22),
         createButton("Setup Initiative Zone", "22 71", 301, 27, "UI_SetupInitiativeZone", "iniZoneBtn"),
-        createButton("Setup Player Initiative Tokens", "22 100", 301, 27, "UI_SetupPlayerInitiativeTokens", nil),
-        createButton("Confirm", "68 135", 195, 38, "UI_ConfirmInitiativeMat2", nil)
+        createText("Place the spawned token in the first place of initiative\nAfterwards press the button again", "22 101", "initiative_mat"),
+        createButton("Setup Position 0", "22 133", 301, 27, "UI_SetupPositionZero", "iniPosZeroBtn"),
+        createButton("Setup Player Initiative Tokens", "22 164", 301, 27, "UI_SetupPlayerInitiativeTokens", nil),
+        createButton("Confirm", "68 200", 195, 38, "UI_ConfirmInitiativeMat2", nil)
     }
     setUI(xml)
 end
@@ -664,8 +718,6 @@ function UI_SetupInitiativeZone(player, mouse)
     if not secondPress then
         self.UI.setAttribute("iniZoneBtn", "text", "Confirm Initiative Zone")
         self.UI.setAttribute("iniZoneBtn", "textColor", "Blue")
-        
-
         
         local positionToZone = iniMat.getPosition()
         spawnParams = {
@@ -696,13 +748,110 @@ function UI_SetupInitiativeZone(player, mouse)
         updateObj(
             iniMat, 
             "initiative_mat", 
-            function()
+            function(o)
                 broadcastNotice("Initiative zone has been setup.")
-                -- TODO: Add way to make starting zone
-                local gm = { zone = area.guid }
-                iniMat.setGMNotes(JSON.encode_pretty(gm))
+
+                local gm = ""
+                local encoded = ""
+                local currentGM = o.getGMNotes()
+                if currentGM == "" then
+                    gm = { zone = area.guid }
+                    encoded = JSON.encode_pretty(gm)
+                else
+                    gm = JSON.decode(currentGM)
+                    gm.zone = area.guid
+                    encoded = JSON.encode_pretty(gm)
+                end
+
+                _debug(gm)
+                _debug(encoded)
+
+                Wait.time(function()
+                    o.setGMNotes(encoded)
+                end, 1)
             end
         )
+    end
+end
+
+function UI_SetupPositionZero(player, mouse)
+    local iniMat = getObjectFromGUID(getComponentGUID("initiative_mat"))
+    local secondPress = self.UI.getAttribute("iniPosZeroBtn", "text"):contains("Confirm")
+    if not secondPress then
+        self.UI.setAttribute("iniPosZeroBtn", "text", "Confirm Position Zero")
+        
+
+        local iniTokenBag = getObjectFromGUID(getComponentGUID("initiative_token"))
+        local newPos = iniMat.getPosition()
+        newPos.y = newPos.y + 5
+
+        local iniMatRotation = iniMat.getRotation()
+        
+        iniTokenBag.takeObject({
+            position = newPos,
+            rotation = iniMatRotation,
+            callback_function = function(spawned)
+                Wait.frames(
+                    function() 
+                        spawned.call(
+                            "_init",
+                            {
+                                input = {
+                                    name = "Place me as\nfirst initiative",
+                                    modifier = i,
+                                    pawn = "",
+                                    side = "player",
+                                    static = true
+                                }
+                            }
+                        )
+                        spawned.use_snap_points = true
+                        self.UI.setAttribute("iniPosZeroBtn", "tooltip", spawned.guid)
+                        self.UI.setAttribute("iniPosZeroBtn", "textColor", "Blue")
+                    end
+                )
+                
+            end
+        })
+
+        broadcastNotice("Place the spawned token in the first place of initiative then press the button again.")
+    else
+        local token = getObjectFromGUID(self.UI.getAttribute("iniPosZeroBtn", "tooltip"))
+        if not token then
+            broadcastError("Initiative token not found. Don't delete the one I spawn.")
+            self.UI.setAttribute("iniPosZeroBtn", "text", "Setup Position Zero")
+            self.UI.setAttribute("iniPosZeroBtn", "textColor", "White")
+            return
+        end
+
+        self.UI.setAttribute("iniPosZeroBtn", "text", "Setup Position Zero")
+        self.UI.setAttribute("iniPosZeroBtn", "textColor", "Green")
+
+        local pos = token.getPosition()
+        local gm = ""
+        local encoded = ""
+        local currentGM = iniMat.getGMNotes()
+        local initialPos = {
+            tonumber(string.format("%.2f", pos.x)),  
+            tonumber(string.format("%.2f", pos.y)),  
+            tonumber(string.format("%.2f", pos.z))
+        }
+        if currentGM == "" then
+            gm = { initial_pos = initialPos
+            }
+            encoded = JSON.encode_pretty(gm)
+        else
+            gm = JSON.decode(currentGM)
+            gm.initial_pos = initialPos
+            encoded = JSON.encode_pretty(gm)
+        end
+
+        _debug(gm)
+        _debug(encoded)
+        iniMat.setGMNotes(encoded)
+
+
+        token.destruct()
     end
 end
 
@@ -711,7 +860,7 @@ function UI_SetupPlayerInitiativeTokens(player, mouse)
     local iniMatPosition = iniMat.getPosition()
     local iniMatRotation = iniMat.getRotation()
     
-    local iniTokenBag = getObjectFromGUID(_data.components.initiative.guid)
+    local iniTokenBag = getObjectFromGUID(_data.components.initiative_token.guid)
     for i, player in ipairs(_data.players) do
         local newPos = {x = iniMatPosition.x, y = iniMatPosition.y + 1 + i, z = iniMatPosition.z}
         Wait.time(function()
@@ -744,10 +893,47 @@ function UI_SetupPlayerInitiativeTokens(player, mouse)
     end    
 end
 
-
 function UI_ConfirmInitiativeMat2(player, mouse)
-    -- TODO: Implement rest of the form
+    if _data.players == nil then
+        broadcastError("No players found. You should add players first.")
+        return
+    end
+    if _player_index == nil then _player_index = 1 end
+
+    createPlayerPage()
 end
+
+
+function UI_ConfirmPlayerTokens(player, mouse)
+    local input = readInputs({ "playerMiniGUID", "playerManagerGUID"})
+    local mini = input["playerMiniGUID"]
+    local manager = input["playerManagerGUID"]
+
+    if not exists(mini) or not exists(manager) then
+        broadcastError("Invalid input. You should enter a valid GUID.")
+        return
+    end
+
+    _data.players[_player_index].mini_guid = mini
+    _data.players[_player_index].manager_guid = manager
+
+    updateObj(
+        getObjectFromGUID(manager),
+        "player_manager",
+        function(o)
+            o.setName(_data.players[_player_index].name)
+            o.setDescription(mini)
+        end
+    )
+
+    Wait.time(function()
+        broadcastNotice("Player " .. _data.players[_player_index].name .. " added.")
+        _player_index = _player_index + 1
+        createPlayerPage()
+    end, 1)
+
+end
+
 
 
 -- set and get functions --------------------------------------------------------
@@ -800,11 +986,11 @@ function broadcastRestart(prepend)
     else
         -- if last character isn't '.' then add one
         if prepend:sub(-1) ~= "." then prepend = prepend .. "." end
-        prepend = prepend .. "\n" 
+        prepend = prepend .. " "
     end
     if not _require_restart then
         _require_restart = true
-        broadcastNotice(prepend .. "After finishing your work a restart of the table is required.\nRemember to save!")
+        broadcastNotice(prepend .. "After finishing your work a restart of the table is required. [FF4136]Remember to save![-]")
     end
 end
 
@@ -815,13 +1001,16 @@ function _debug(msg)
 end
 
 function needsUpdate(component)
-    if _data[component] then
-        local version = _data[component].version
+    if _data.components[component] then
+        local version = _data.components[component].version
         if version and _versions[component] then
             if version ~= _versions[component] then
+                _debug(string.format("%s needs update from %s to %s", component, version, _versions[component]))
                 return true
             end
         end
+    else
+        return true
     end
 end
 
@@ -868,7 +1057,6 @@ end
 --end
 
 function updateObj(obj, component, callback_function)
-    log(type(component))
     if type(component) ~= "table" then
         _debug("updateObj " .. obj.guid .. " " .. component)
     else
@@ -899,20 +1087,24 @@ function updateObj(obj, component, callback_function)
             else
                 local script = request.text
                 obj.setLuaScript(script)
-                obj.reload()
+                if obj ~= self then obj = obj.reload() end
+                if type(component) == "table" then
+                    setComponentGUID(component[2], obj.guid)
+                else setComponentGUID(component, obj.guid) end
+                
                 
                 Wait.frames(function() 
-    
-    
                     if component == "player_manager" or component == "initiative_mat" then 
-                        broadcastRestart("Please link the mini.") 
+                        broadcastRestart(component == "player_manager" and "Please link the mini." or nil) 
                     end
 
                     if not _data.debug then
-                        setVersion(component, _versions[component])
+                        if type(component) == "table" then
+                            setVersion(component[1], _versions[component[1]])
+                        else setVersion(component, _versions[component]) end
                     end
-                    if callback_function then callback_function() end
-                end,20)
+                    if callback_function then callback_function(obj) end
+                end,30)
             end
         end
     )
@@ -1001,14 +1193,26 @@ function addPlayer(name, color)
     table.insert(_data.players, player)
 end
 
-function placeInBag(objID, bagID)
+function placeInBag(objID, bagID, duplicate)
+    _debug("placeInBag " .. objID .. " " .. bagID)
+
     local obj = getObjectFromGUID(objID)
     local bag = getObjectFromGUID(bagID)
     if not obj then return end
     if not bag then return end
 
     bag.reset()
-    Wait.frames(function() bag.putObject(obj) end, 15)
+    Wait.frames(function()
+        if duplicate then
+           local clonePos = bag.getPosition()
+           clonePos.y = clonePos.y + 5
+           obj.clone({
+               position = clonePos
+           }) 
+        else
+            bag.putObject(obj)
+        end
+    end, 15)
 
 end
 
@@ -1045,4 +1249,12 @@ function printTable(t)
     else
         sub_printTable(t, "  ")
     end
+end
+
+function len(t)
+    local count = 0
+    for k, v in pairs(t) do
+        count = count + 1
+    end
+    return count
 end
