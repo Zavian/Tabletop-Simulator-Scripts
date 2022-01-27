@@ -238,7 +238,9 @@ function start()
                 function()
                     broadcastNotice("Updated self to latest version.")
                     self.memo = _versions["_self"]
-                    self.reload()
+                    Wait.time(function()
+                        self.reload()
+                    end, 0.3)
                 end
             )
         end
@@ -1191,9 +1193,11 @@ end
 
 function needsUpdate(component)
     if component == "_self" then
-        if self.memo then
+        if self.memo ~= nil then
             if self.memo ~= _versions[component] then
                 return true
+            else
+                return false
             end
         end
     end
@@ -1205,6 +1209,8 @@ function needsUpdate(component)
             if version ~= _versions[component] then
                 _debug(string.format("%s needs update from %s to %s", component, version, _versions[component]))
                 return true
+            else
+                return false
             end
         end
     else
