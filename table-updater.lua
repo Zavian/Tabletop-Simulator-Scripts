@@ -49,18 +49,13 @@ local _URLs = {
 local _versions = {
 }
 
-local colors = {
-    npc_commander = {
-        hex = "#ffe162", 
-        rgb = {r = 1, g = 0.882, b = 0.384}
-    },
-    initiative_mat = {
-        hex = "#9acffd" , 
-        rgb = {r = 0.603, g = 0.811, b = 0.992}
-    },
+local _colors = {
+    "Green", "Purple", "Red", "Blue", "Yellow", "Brown", "White", "Teal", "Orange", "Pink"
 }
 
+
 --[[
+    Green, Purple, Red, Blue, Yellow, Brown, White, Teal, Orange, Pink
     What needs to be stored:
         - Each component with the following things:
             - Version
@@ -90,31 +85,37 @@ local colors = {
                 version = "1.0.0",
                 guid = "dd88ii"
             }
-        },
+        },        
         players = {
-            {
-                color = "Red",
+            red = {
                 name = "Zora",
-                manager_guid = "aa88ii",
-                mini_guid = "bb99ii"
+                manager_guid = "aa88oo",
+                mini_guid = "bb99oo"
             },
-            {
-                color = "Blue",
-                name = "Amber",
-                manager_guid = "aa88ii",
-                mini_guid = "bb99ii"
+            blue = {
+                name = "Frank",
+                manager_guid = "aa88oo",
+                mini_guid = "bb99oo"
             },
-            {
-                color = "Green",
-                name = "Paulo",
-                manager_guid = "aa88ii",
-                mini_guid = "bb99ii"
+            yellow = nil,
+            green = {
+                name = "Zavian",
+                manager_guid = "aa88oo",
+                mini_guid = "bb99oo"
             },
-            {
-                color = "Yellow",
-                name = "Gilkan",
-                manager_guid = "aa88ii",
-                mini_guid = "bb99ii"
+            teal = nil,
+            purple = nil,
+            brown = {
+                name = "Laura",
+                manager_guid = "aa88oo",
+                mini_guid = "bb99oo"
+            },
+            white = nil,
+            orange = nil,
+            pink = {
+                name = "Deborah",
+                manager_guid = "aa88oo",
+                mini_guid = "bb99oo"
             }
         }
     }
@@ -178,14 +179,6 @@ function onChat(message, player)
             if command == "update" then
                 broadcastNotice("Updating...")
                 updateAll()
-            elseif command == "bump" then                
-                if args[2] then
-                    broadcastNotice("Bumping " .. args[2] .. " to latest version...")
-                    bump(args[2])
-                else
-                    broadcastNotice("Bumping all to latest version...")
-                    bump()
-                end
             elseif command == "debug" then
                 _data.debug = not _data.debug
                 if _data.debug then
@@ -193,12 +186,28 @@ function onChat(message, player)
                 else
                     broadcastNotice("Debugging is now off.")
                 end
-            elseif command == "add" then
+            elseif command == "help" then
+                print("Commands:")
+                print("\t[b]update[/b] - Updates all components and players.")
+                print("\t[b]component[/b] - Sets up a component.")
+                print("\t[b]player[/b] - Sets up a player.")
+                print("\t[b]debug[/b] - Toggles debug mode.")
+                print("\t[b]data[/b] - Prints the _data table.")
+            elseif command == "data" then
+                print("Printing _data table")
+                printTable(_data)
+            elseif command == "component" then
+                if #args == 1 then
+                    print("[7FDBFF][i]Adds a component[/i].[-] [3D9970]Arguments: <[b]component name[/b]> <[b]component guid[/b]>[-].")
+                    return
+                end
+
                 if #args == 2 then 
                     broadcastError("You must specify a component and a GUID.") 
                     return 
                 end
                 local component = args[2]
+
                 local guid = args[3]
                 if not exists(guid) then
                     broadcastError("The GUID you specified does not exist.")
@@ -224,6 +233,57 @@ function onChat(message, player)
                     guid = guid
                 }
                 broadcastNotice("Added " .. component .. " with GUID " .. guid .. ".")
+            elseif command == "player" then
+                if #args == 1 then 
+                    print("[7FDBFF][i]Adds a player[/i].[-] [3D9970]Arguments: <[b]color[/b]> <[b]name[/b]> <[b]manager_guid[/b]> <[b]mini_guid[/b]>[-].")
+                    return
+                end
+
+                if args[2] == nil then
+                    broadcastError("You must specify a player color.")
+                    return
+                end
+                local color = capitalize(args[2])
+
+                if not validColor(color) then
+                    broadcastError("The color you specified is not valid.")
+                    return
+                end
+
+                if args[3] == nil then
+                    broadcastError("You must specify a character name.")
+                    return
+                end
+                local name = args[3]
+
+
+                if args[4] == nil then
+                    broadcastError("You must specify a manager GUID.")
+                    return
+                end
+                local manager_guid = args[4]
+                if not exists(manager_guid) then
+                    broadcastError("The manager GUID you specified does not exist.")
+                    return
+                end
+
+                if args[5] == nil then
+                    broadcastError("You must specify a mini GUID.")
+                    return
+                end
+                local mini_guid = args[5]
+                if not exists(mini_guid) then
+                    broadcastError("The mini GUID you specified does not exist.")
+                    return
+                end
+
+
+                _data.players[color] = {
+                    name = name,
+                    manager_guid = manager_guid,
+                    mini_guid = mini_guid
+                }
+                broadcastNotice("Added " .. color .. " player with name " .. name .. " and manager GUID " .. manager_guid .. " and mini GUID " .. mini_guid .. ".")
             end
         end
     end
@@ -334,13 +394,20 @@ function updateAll()
     end
     broadcastNotice("All components updated")
     broadcastNotice("Updating players...")
-    for i, player in ipairs(_data.players) do
-        local obj = getObjectFromGUID(player.manager_guid)
-        if obj then
-            updateObj(obj, "player_manager", nil)
-        end
+
+    local i = 0.5
+    for color, player in pairs(_data.players) do
+        Wait.time(function()
+            local obj = getObjectFromGUID(player.manager_guid)
+            if obj then
+                updateObj(obj, "player_manager", nil)
+            end
+        end, i)
+        i = i + 0.5
     end
-    broadcastNotice("Players updated")
+    Wait.time(function()
+        broadcastNotice("Players updated")
+    end, i+0.2)
 end
 
 -- UI mod functions -------------------------------------------------------------
@@ -486,33 +553,90 @@ function setPanel(width, height)
     self.UI.setAttribute("main", "offsetXY", offsetX .. " " .. offsetY)
 end
 
-local _player_index = nil
+local _color_index = 0
+local _current_player_index = 0
 function createPlayerPage()
-    if _player_index > #_data.players then
+    local index = getNextPlayerIndex(_color_index)
+    if _color_index > #_colors then
         broadcastNotice("No more players to create.")
+        _color_index = 0
+        _current_player_index = 0
         createFinish()
         return
     end
+    
+    local playerLen = getPlayerCount()
+    local player = _data.players[_colors[index]]
 
-    local player = _data.players[_player_index]
+    printTable(_data.players)
+    print(player)
+    printTable(player)
 
     emptyUI()
     setPanel(429, 103)
 
+
+    _debug(_color_index .. " " .. playerLen .. " " .. player.name)
+
+    print(player.name .. " " .. _current_player_index .. " " .. playerLen)
     local xml, panel = getPanel()
     panel.children = {
         createColorBand("player", 103),
         createText(
-            string.format("Character Mini - %s - %d/%d", player.name, _player_index, #_data.players), 
+            string.format("Character Mini - %s - %d/%d", player.name, _current_player_index, playerLen), 
             "22 3",
             "title player"
         ),
         createInput("Character mini GUID...", "22 27", "playerMiniGUID", 199, 30),
         createInput("Character manager GUID...", "224 27", "playerManagerGUID", 199, 30),
-        createButton("Confirm", "22 58", 401, 38, "UI_ConfirmPlayerTokens", nil)
+        createButton("Confirm", "22 58", 401, 38, "UI_ConfirmPlayerTokens(" .. _colors[index] .. ")", nil)
     }
     setUI(xml)
 end
+
+function getNextPlayerIndex(index)
+    if index == nil then index = 0 end
+
+    _debug("getNextPlayerIndex " .. index)
+
+    index = index + 1
+    for i = index, #_colors do
+        local color = _colors[i]
+        if _data.players[color] then
+            _debug("Found player " .. color)
+            _debug("Index " .. i)
+            _debug(_current_player_index)
+            _color_index = i
+            _current_player_index = _current_player_index + 1
+            return _color_index
+        end
+    end
+    _color_index = index
+    return _color_index
+end
+
+function getPlayerCount()
+    local count = 0
+    for i = 1, #_colors do
+        local color = _colors[i]
+        if _data.players[color] ~= nil then count = count + 1 end
+    end
+    return count
+end
+
+--function getNextExistingColor(index)
+--    if index == nil then index = 0 end
+--
+--    index = index + 1
+--    for i = index, #_colors do
+--        local color = _colors[i]
+--        local player = _data.players[color]
+--        if player ~= nil then
+--            _player_index = i
+--            return color
+--        end
+--    end
+--end
 
 function createFinish()
     emptyUI()
@@ -555,6 +679,11 @@ function UI_Close()
     loadXML()
 end
 
+function UI_FindToken(player, id)
+    local obj = getObjectFromGUID(id)
+    player.pingTable(obj.getPosition())
+    obj.highlightOn(Color.Green, 2)
+end
 
 function UI_NewTable(player, mouse)
     emptyUI()
@@ -624,7 +753,7 @@ function UI_UpdateTable(player, mouse)
                     pos,
                     90,
                     30,
-                    "none",
+                    "UI_FindToken(" .. guid .. ")",
                     "",
                     isInBag and "#0074D9" or "#2ECC40"
                 ))
@@ -659,16 +788,19 @@ function UI_UpdateTable(player, mouse)
         nil
     ))
 
-    for i, player in ipairs(_data.players) do
+
+    local i = 1
+    for color, player in pairs(_data.players) do
         table.insert(panel.children, createButton(
             player.name,
             18 + (78*(i-1)) .. " 217",
             75,
             50,
-            "none",
+            "UI_FindToken(" .. player.manager_guid .. ")",
             player.manager_guid,
-            player.color
+            color
         ))
+        i = i + 1
     end
 
     table.insert(panel.children, createButton(
@@ -724,13 +856,12 @@ function UI_ConfirmPlayers(player, mouse)
     lines = removeEmpty(lines)
     local players = {}
 
-    _data.players = {}
+    _data.players = emptyPlayers()
     for i, line in ipairs(lines) do
         local splitLine = split(line, "=")
         if splitLine[1] and splitLine[2] then
-            local name = splitLine[1]
-            local color = splitLine[2]
-            color = capitalize(color)
+            local name = capitalize(splitLine[1])
+            local color = capitalize(splitLine[2])
             if not validInput(name) or not validInput(color) then
                 broadcastError("Invalid input. Please try again.")
                 return
@@ -741,7 +872,7 @@ function UI_ConfirmPlayers(player, mouse)
                 return
             end
 
-            addPlayer(name, color)
+            addPlayer(color, name)
         else
             broadcastError("Invalid input. Please try again.")
             return
@@ -1083,17 +1214,15 @@ function UI_SetupPlayerInitiativeTokens(player, mouse)
 end
 
 function UI_ConfirmInitiativeMat2(player, mouse)
-    if _data.players == nil then
+    if getPlayerCount() == 0 then
         broadcastError("No players found. You should add players first.")
         return
     end
-    if _player_index == nil then _player_index = 1 end
-
     createPlayerPage()
 end
 
 
-function UI_ConfirmPlayerTokens(player, mouse)
+function UI_ConfirmPlayerTokens(player, color)
     local input = readInputs({ "playerMiniGUID", "playerManagerGUID"})
     local mini = input["playerMiniGUID"]
     local manager = input["playerManagerGUID"]
@@ -1103,21 +1232,20 @@ function UI_ConfirmPlayerTokens(player, mouse)
         return
     end
 
-    _data.players[_player_index].mini_guid = mini
-    _data.players[_player_index].manager_guid = manager
+    _data.players[color].mini_guid = mini
+    _data.players[color].manager_guid = manager
 
     updateObj(
         getObjectFromGUID(manager),
         "player_manager",
         function(o)
-            o.setName(_data.players[_player_index].name)
+            o.setName(_data.players[color].name)
             o.setDescription(mini)
         end
     )
 
     Wait.time(function()
-        broadcastNotice("Player " .. _data.players[_player_index].name .. " added.")
-        _player_index = _player_index + 1
+        broadcastNotice("Player " .. _data.players[color].name .. " added.")
         createPlayerPage()
     end, 1)
 
@@ -1353,19 +1481,12 @@ function updateSave()
     self.script_state = saved_data
 end
 
-function getPlayerByColor(color)
-    for i=1, #_data.players do
-        if _data.players[i].color == color then
-            return _data.players[i]
-        end
-    end
-    return nil
-end
-
 function getPlayerByName(name)
-    for i=1, #_data.players do
-        if _data.players[i].name == name then
-            return _data.players[i]
+    for i=1, #_colors do
+        local color = _colors[i]
+        local player = _data.players[color]
+        if player.name == name then
+            return player
         end
     end
     return nil
@@ -1378,11 +1499,18 @@ function validInput(input)
 end
 
 function validColor(color)
-    local colors = {"Green", "Purple", "Red", "Blue", "Yellow", "Brown", "White", "Teal", "Orange", "Pink"}
-    for i, c in ipairs(colors) do
+    for i, c in ipairs(_colors) do
         if c == color then return true end
     end
     return false
+end
+
+function emptyPlayers()
+    local returner = {}
+    for i=1, #_colors do
+        returner[_colors[i]] = nil
+    end
+    return returner
 end
 
 function getPlayers()
@@ -1397,9 +1525,12 @@ function getPlayers()
     return returner
 end
 
-function addPlayer(name, color)
-    local player = {name = name, color = color}
-    table.insert(_data.players, player)
+function addPlayer(color, name)
+    _data.players[color] = {
+        name = name,
+        manager_guid = nil,
+        mini_guid = nil
+    }
 end
 
 function placeInBag(objID, bagID, duplicate)
