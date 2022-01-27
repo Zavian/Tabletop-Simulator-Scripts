@@ -32,6 +32,7 @@ end
 -- Global variables --------------------- DO NOT TOUCH --------------------------
 local magic_word = "mr developer"
 local _require_restart = false
+local _accepting_players = false
 
 -- Github urls for the various scripts -- DO NOT TOUCH --------------------------
 local _URLs = {
@@ -161,6 +162,25 @@ end
 function onSave()
     updateSave()
     return self.script_state
+end
+
+function onCollisionEnter(collision_info)
+    -- collision_info table:
+    --   collision_object    Object
+    --   contact_points      Table     {Vector, ...}
+    --   relative_velocity   Vector
+    if _accepting_players then
+        if collision_info.collision_object.interactable then
+            local t = collision_info.collision_object.type
+            if t == "Tileset" then -- this is for the character mini
+                self.UI.setAttribute("playerMiniGUID", "text", collision_info.collision_object.guid)
+                self.UI.setAttribute("playerMiniGUID", "value", collision_info.collision_object.guid)
+            elseif t == "Checker" then -- this is for the character manager
+                self.UI.setAttribute("playerManagerGUID", "text", collision_info.collision_object.guid)
+                self.UI.setAttribute("playerManagerGUID", "value", collision_info.collision_object.guid)
+            end
+        end
+    end
 end
 
 function onChat(message, player)
@@ -556,6 +576,7 @@ end
 local _color_index = 0
 local _current_player_index = 0
 function createPlayerPage()
+    _accepting_players = true
     local index = getNextPlayerIndex(_color_index)
     if _color_index > #_colors then
         broadcastNotice("No more players to create.")
@@ -567,10 +588,6 @@ function createPlayerPage()
     
     local playerLen = getPlayerCount()
     local player = _data.players[_colors[index]]
-
-    printTable(_data.players)
-    print(player)
-    printTable(player)
 
     emptyUI()
     setPanel(429, 103)
@@ -611,7 +628,10 @@ function getNextPlayerIndex(index)
             return _color_index
         end
     end
-    _color_index = index
+
+    -- +1 needed for ending the whole process
+    -- this only happens when there is no player found
+    _color_index = index + 1
     return _color_index
 end
 
@@ -1118,7 +1138,7 @@ function UI_SetupPositionZero(player, mouse)
                             {
                                 input = {
                                     name = "Place me as\nfirst initiative",
-                                    modifier = i,
+                                    modifier = 1,
                                     pawn = "",
                                     side = "player",
                                     static = true
@@ -1211,8 +1231,9 @@ function UI_SetupPlayerInitiativeTokens(player, mouse)
                     
                 end
             })
-        end, i * 0.1)
-        i = i + 1
+            i = i + 1
+        end, i * 0.3)
+        
     end    
 end
 
