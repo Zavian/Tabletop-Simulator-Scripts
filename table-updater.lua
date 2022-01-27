@@ -296,8 +296,6 @@ function checkForUpdates()
             if component ~= "table_updater" then 
                 broadcastNotice(component .. " needs an update.")
             end
-        else
-            _debug(component .. " is up to date with version " .. version .. "(saved version: " .. _data.components[component].version .. ").")
         end
     end
 end
