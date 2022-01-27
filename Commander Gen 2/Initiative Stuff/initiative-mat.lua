@@ -190,7 +190,7 @@ function order_initiative(obj, color, alt)
         coordinate = vars["go_by"]
     end
 
-    local make_negative = nil
+    local make_negative = 1
     if vars["make_negative"] then
         make_negative = vars["make_negative"] == true and -1 or 1
     end

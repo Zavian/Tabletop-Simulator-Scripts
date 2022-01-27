@@ -36,7 +36,7 @@ local _require_restart = false
 -- Github urls for the various scripts -- DO NOT TOUCH --------------------------
 local _URLs = {
     _v = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/VERSIONS",
-    _self = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/.table-updater.lua",
+    _self = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/table-updater.lua",
     npc_commander = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/Commander%20Gen%202/NPC%20Commander.v2.lua",
     monster = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/Commander%20Gen%202/Monster%20Token/monster.lua",
     initiative_mat = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/Commander%20Gen%202/Initiative%20Stuff/initiative-mat.lua",
@@ -234,9 +234,10 @@ function start()
         if needsUpdate("_self") then
             updateObj(
                 self,
-                _URLs._self,
+                "_self",
                 function()
                     broadcastNotice("Updated self to latest version.")
+                    self.memo = _versions["_self"]
                     self.reload()
                 end
             )
@@ -262,10 +263,10 @@ function processVersions()
                     local splitLine = split(line, " ")
                     if splitLine[1] and splitLine[2] then
                         _debug(string.format("processVersions %s %s", splitLine[1], splitLine[2]))
+                        if splitLine[1] == "table_updater" then splitLine[1] = "_self" end
                         _versions[splitLine[1]] = splitLine[2]
                     end
                 end
-                printTable(_versions)
                 checkForUpdates()
             end
         end
@@ -290,7 +291,9 @@ function checkForUpdates()
     _debug("checkForUpdates")
     for component, version in pairs(_versions) do        
         if needsUpdate(component) then
-            broadcastNotice(component .. " needs an update.")
+            if component ~= "table_updater" then 
+                broadcastNotice(component .. " needs an update.")
+            end
         else
             _debug(component .. " is up to date with version " .. version .. "(saved version: " .. _data.components[component].version .. ").")
         end
@@ -298,10 +301,46 @@ function checkForUpdates()
 end
 
 function updateAll()
-    _debug("updateAll")
-    -- TODO: Implement function
-    
-    broadcastRestart()
+    broadcastNotice("Updating all components...")
+    for component, t in pairs(_data.components) do
+        _debug("updating " .. component .. " " .. t.guid)
+        if t then
+            if t.guid then
+                local obj = getObjectFromGUID(t.guid)
+                if obj then
+                    if isInfiniteBag(obj) then
+                        local o = extractObject(obj)
+                        Wait.time(function()
+                            if component == "boss" then
+                                component = {"monster", "boss"}
+                            end
+                            updateObj(
+                                o, component,
+                                function(updated)
+                                    obj.reset()
+                                    updated.setLock(false)
+                                    if type(component) == "table" then
+                                        setComponentGUID(component[2], obj.guid)
+                                    else setComponentGUID(component, obj.guid) end
+                                end
+                            )                    
+                        end, 1)
+                    else
+                        updateObj(obj, component, nil) 
+                    end
+                else broadcastError("Object not found: " .. t.guid .. " (" .. component ")") end
+            end
+        end
+    end
+    broadcastNotice("All components updated")
+    broadcastNotice("Updating players...")
+    for i, player in ipairs(_data.players) do
+        local obj = getObjectFromGUID(player.manager_guid)
+        if obj then
+            updateObj(obj, "player_manager", nil)
+        end
+    end
+    broadcastNotice("Players updated")
 end
 
 -- UI mod functions -------------------------------------------------------------
@@ -658,47 +697,7 @@ function UI_CancelUpdate()
 end
 
 function UI_UpdateAll()
-    broadcastNotice("Updating all components...")
-    for component, t in pairs(_data.components) do
-        _debug("updating " .. component .. " " .. t.guid)
-        if t then
-            if t.guid then
-                local obj = getObjectFromGUID(t.guid)
-                if obj then
-                    if isInfiniteBag(obj) then
-                        local o = extractObject(obj)
-                        Wait.time(function()
-                            if component == "boss" then
-                                component = {"monster", "boss"}
-                            end
-                            updateObj(
-                                o, component,
-                                function(updated)
-                                    obj.reset()
-                                    updated.setLock(false)
-                                    if type(component) == "table" then
-                                        setComponentGUID(component[2], obj.guid)
-                                    else setComponentGUID(component, obj.guid) end
-                                end
-                            )                    
-                        end, 1)
-                    else
-                        updateObj(obj, component, nil) 
-                    end
-                else broadcastError("Object not found: " .. t.guid .. " (" .. component ")") end
-            end
-        end
-    end
-    broadcastNotice("All components updated")
-    broadcastNotice("Updating players...")
-    printTable(_data.players)
-    for i, player in ipairs(_data.players) do
-        local obj = getObjectFromGUID(player.manager_guid)
-        if obj then
-            updateObj(obj, "player_manager", nil)
-        end
-    end
-    broadcastNotice("Players updated")
+    updateAll()
 end
 
 function UI_UpdateComponent(player, component)
@@ -1191,6 +1190,15 @@ function _debug(msg)
 end
 
 function needsUpdate(component)
+    if component == "_self" then
+        if self.memo then
+            if self.memo ~= _versions[component] then
+                return true
+            end
+        end
+    end
+
+    if not _data.components then _data.components = {} end
     if _data.components[component] then
         local version = _data.components[component].version
         if version and _versions[component] then
@@ -1219,7 +1227,6 @@ function getObj(GUID)
     if obj then
         if isInfiniteBag(obj) then
             _debug("obj is infinite bag")
-            -- TODO: Implement way to extract item from bag, update it and drop it back in the bag
         else
             _debug("obj is not infinite bag")
             return obj
@@ -1271,7 +1278,6 @@ function updateObj(obj, component, callback_function)
     WebRequest.get(
         link,
         function(request)
-            print(request.response_code)
             if request.is_error then
                 broadcastError(link .. "\n" .. request.error)
             else
@@ -1288,11 +1294,10 @@ function updateObj(obj, component, callback_function)
                         broadcastRestart(component == "player_manager" and "Please link the mini." or nil) 
                     end
 
-                    if not _data.debug then
-                        if type(component) == "table" then
-                            setVersion(component[1], _versions[component[1]])
-                        else setVersion(component, _versions[component]) end
-                    end
+                    if type(component) == "table" then
+                        setVersion(component[1], _versions[component[1]])
+                    else setVersion(component, _versions[component]) end
+                    
                     if callback_function then callback_function(obj) end
                 end,30)
             end
