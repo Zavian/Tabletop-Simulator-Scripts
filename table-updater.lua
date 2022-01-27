@@ -1181,7 +1181,9 @@ function UI_SetupPlayerInitiativeTokens(player, mouse)
     local iniMatRotation = iniMat.getRotation()
     
     local iniTokenBag = getObjectFromGUID(_data.components.initiative_token.guid)
-    for i, player in ipairs(_data.players) do
+
+    local i = 1
+    for color, player in pairs(_data.players) do
         local newPos = {x = iniMatPosition.x, y = iniMatPosition.y + 1 + i, z = iniMatPosition.z}
         Wait.time(function()
             iniTokenBag.takeObject({
@@ -1210,6 +1212,7 @@ function UI_SetupPlayerInitiativeTokens(player, mouse)
                 end
             })
         end, i * 0.1)
+        i = i + 1
     end    
 end
 
