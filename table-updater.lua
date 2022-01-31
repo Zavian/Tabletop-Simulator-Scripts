@@ -592,10 +592,10 @@ function createPlayerPage()
     emptyUI()
     setPanel(429, 103)
 
+    if player then
+        _debug(_color_index .. " " .. playerLen .. " " .. player.name)
+    end
 
-    _debug(_color_index .. " " .. playerLen .. " " .. player.name)
-
-    print(player.name .. " " .. _current_player_index .. " " .. playerLen)
     local xml, panel = getPanel()
     panel.children = {
         createColorBand("player", 103),
@@ -1319,7 +1319,7 @@ function broadcastError(msg)
 end
 
 function broadcastNotice(msg)
-    broadcastToAll(msg, {0.49,0.85,1})
+    broadcastToAll("[111111](Table Updater)[-]" .. msg, {0.49,0.85,1})
 end
 
 function broadcastRestart(prepend)
