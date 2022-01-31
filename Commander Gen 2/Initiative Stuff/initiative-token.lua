@@ -138,7 +138,7 @@ end
 
 function updateSave(value)
     local color = self.getColorTint()
-    guid = nil
+    local guid = nil
     if myToken then
         guid = myToken.getGUID()
     end
@@ -148,7 +148,7 @@ function updateSave(value)
         c = {color.r, color.g, color.b}
     }
     JSON.encode(myData)
-    self.script_state = saved_data
+    self.script_state = myData
 end
 
 function checkUpdates()
