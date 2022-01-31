@@ -1,2 +1,0 @@
-- name: Version Bumper
-  uses: michmich112/version-bumper@1.2.0
