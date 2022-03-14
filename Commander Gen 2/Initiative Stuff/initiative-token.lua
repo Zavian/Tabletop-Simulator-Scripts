@@ -147,7 +147,7 @@ function updateSave(value)
         t = guid,
         c = {color.r, color.g, color.b}
     }
-    JSON.encode(myData)
+    myData = JSON.encode(myData)
     self.script_state = myData
 end
 
