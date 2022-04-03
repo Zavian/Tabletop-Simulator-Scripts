@@ -1,17 +1,14 @@
 --Runs when the scripted button inside the button is clicked
 function buttonPress()
-    if lockout == false then
-        --Call on any other function here. For example:
-        --Global.call("Function Name", {table of parameters if needed})
-        --You could also add your own scrting here. For example:
-        --print("The button was pressed. Hoozah.")
-        local objs = Player["Black"].getSelectedObjects()
+    if lockout == false then        
+        local gm = self.getGMNotes()
+        local obj = getObjectFromGUID(gm)
 
         local img = self.getDescription()
-        for i = 1, #objs do
-            objs[i].setCustomObject({image = img})
-            objs[i].reload()
-        end
+        obj.setCustomObject({image = img})
+        obj.reload()
+
+        obj.highlightOn(Color.White, 2)
 
         self.AssetBundle.playTriggerEffect(0) --triggers animation/sound
         lockout = true --locks out the button
