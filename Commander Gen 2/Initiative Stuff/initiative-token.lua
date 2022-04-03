@@ -48,16 +48,19 @@ local textbox = {
 }
 
 function onLoad(save_state)
+    local color = {0, 0, 0.545098}
     local value = ""
     myData = JSON.decode(save_state)
     if myData ~= nil then
-        value = myData.v
+        value = myData['v']
         myToken = getObjectFromGUID(myData.t)
-        if myData.c == nil then
-            myData.c = {0, 0, 0.545098}
+        if myData.c ~= nil then
+            color = myData.c
         end
-        textbox.custom.color = myData.c
     end
+    textbox.custom.color = color
+    textbox.label = value
+    
     self.createInput(
         {
             input_function = "click_textbox",
@@ -89,7 +92,12 @@ function onLoad(save_state)
         }
     )
 
-    self.setColorTint(textbox.custom.color)
+    self.setColorTint(color)
+end
+
+function onSave()
+    self.getInputs()[1].value = myName
+    return updateSave(myName)
 end
 
 function onObjectDestroy(destroyedObj)
@@ -147,8 +155,9 @@ function updateSave(value)
         t = guid,
         c = {color.r, color.g, color.b}
     }
-    myData = JSON.encode(myData)
-    self.script_state = myData
+    local save_data = JSON.encode(myData)
+    self.script_state = save_data
+    return save_data
 end
 
 function checkUpdates()
