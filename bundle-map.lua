@@ -2,7 +2,11 @@ local _map_bag = "6ca58b"
 local _last_id = ""
 local loading = true
 
+-- local my_objects = []
+
 function onLoad()
+    
+
     local buttons = {
         {
             click_function = "bundle",
@@ -16,7 +20,7 @@ function onLoad()
             color = {0.118, 0.53, 1, 1}
         },
         {
-            click_function = "add_id",
+            click_function = "add_id_button",
             function_owner = self,
             label = "+",
             position = {-0.4, 1.79999995231628, 0.400000005960464},
@@ -63,7 +67,7 @@ function onCollisionEnter(info)
     end
 end
 
-function add_id(owner, color, alt_click)
+function add_id_button(owner, color, alt_click)
     if color == "Black" then
         local desc = self.getDescription()
         if _last_id then
@@ -71,6 +75,28 @@ function add_id(owner, color, alt_click)
             log("Added " .. _last_id)
             self.editButton({index = 1, label = countIDs()})
         end
+    end
+end
+
+function addId(id)
+    log("Entered addid")
+    local ids = nil
+
+    log(self.memo)
+    if self.memo ~= nil then
+        ids = JSON.decode(self.memo)
+    else ids = {} end
+
+    if type(id) == "string" then
+        table.insert(ids, id)
+        self.memo = JSON.encode(ids)
+        log("Added id: " .. id .. ". Total IDs: " .. #ids)
+    elseif type(id) == "table" then
+        for i=1,#id do
+            table.insert(ids, id[i])
+        end
+        self.memo = JSON.encode(ids)
+        log("Added " .. #id .. " ID(s). Total IDs: " .. #ids)
     end
 end
 
@@ -89,8 +115,11 @@ function create_area(owner, color, alt_click)
                         found = found + 1
                     end
                 end
-                local encoded = JSON.encode(array)
-                self.setGMNotes(encoded)
+
+                addId(array)
+                -- local encoded = JSON.encode(array)
+
+                -- self.setGMNotes(encoded)
                 destroyObject(_area)
                 _area = nil
 
@@ -139,40 +168,54 @@ end
 function bundle(owner, color, alt_click)
     if color == "Black" then
         if not alt_click then
-            local desc = self.getDescription()
-            local ids = strsplit(desc, "\n")
-            if #ids > 0 then
-                for i = 1, #ids do
-                    local obj = getObjectFromGUID(ids[i])
+            if self.memo ~= "" then
+                local ids = JSON.decode(self.memo)
+                for i, id in ipairs(ids) do
+                    local obj = getObjectFromGUID(id)
                     if obj then
                         processObj(obj)
                         obj.setScale({0.25, 0.25, 0.25})
                         obj.setLock(false)
-                        obj.setFogOfWarReveal(
-                            {
-                                reveal = false
-                            }
-                        )
+                        obj.setFogOfWarReveal({reveal = false})
                         self.putObject(obj)
                     end
                 end
-            end
-
-            local gm = self.getGMNotes()
-            if gm ~= nil and gm ~= "" then
-                local decoded = JSON.decode(gm)
-                for i = 1, #decoded do
-                    local obj = getObjectFromGUID(decoded[i])
-                    if obj then
-                        processObj(obj)
-                        obj.setScale({0.25, 0.25, 0.25})
-                        obj.setLock(false)
-                        obj.setFogOfWarReveal(
-                            {
-                                reveal = false
-                            }
-                        )
-                        self.putObject(obj)
+            elseif #self.getGMNotes() > 0 then
+                local desc = self.getDescription()
+                local ids = strsplit(desc, "\n")
+                if #ids > 0 then
+                    for i = 1, #ids do
+                        local obj = getObjectFromGUID(ids[i])
+                        if obj then
+                            processObj(obj)
+                            obj.setScale({0.25, 0.25, 0.25})
+                            obj.setLock(false)
+                            obj.setFogOfWarReveal(
+                                {
+                                    reveal = false
+                                }
+                            )
+                            self.putObject(obj)
+                        end
+                    end
+                end
+            elseif #self.getDescription() > 0 then
+                local gm = self.getGMNotes()
+                if gm ~= nil and gm ~= "" then
+                    local decoded = JSON.decode(gm)
+                    for i = 1, #decoded do
+                        local obj = getObjectFromGUID(decoded[i])
+                        if obj then
+                            processObj(obj)
+                            obj.setScale({0.25, 0.25, 0.25})
+                            obj.setLock(false)
+                            obj.setFogOfWarReveal(
+                                {
+                                    reveal = false
+                                }
+                            )
+                            self.putObject(obj)
+                        end
                     end
                 end
             end
