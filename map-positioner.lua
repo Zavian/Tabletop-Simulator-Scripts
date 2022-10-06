@@ -4,9 +4,11 @@ local _map_bag = "6ca58b"
 local _center_pos = {x = 54.26, y = 5.70, z = -3.65}
 --local _center_pos = {x = 88.40, y = -1.74, z = 22.10}
 
+-- local _bag_pos = {x  = 5.33, y = 4.72, z = -6.28}
 local _bag_pos = {x = 84.13, y = 6.00, z = -3.65}
 --local _bag_pos = {x = 38.25, y = 1.00, z = 38.25}
 
+-- local _piece_pos = {x = 5.33, y = 5.72, z = -3.44}
 local _piece_pos = {x = 84.13, y = 6.00, z = 18.17}
 --local _piece_pos = {x = 55.25, y = -1.74, z = 38.25}
 
@@ -217,6 +219,14 @@ function place_object(obj, tar_params, offset)
         obj.setScale(tar_params[3])
     end
     obj.setLock(true)
+
+    if obj.hasTag("light_component") then
+        Wait.time(function() 
+            obj.call("setLightState")
+            obj.call("initializeGui")
+        end
+        , 5)
+    end
 end
 
 function take_piece(obj)
