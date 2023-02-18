@@ -215,7 +215,8 @@ function onLoad(save_state)
         }
     )
 
-    self.addContextMenuItem("[b][3D9970]Visible[-][/b]", toggleVisibilityMenu, false)
+    -- self.addContextMenuItem("[b][3D9970]Visible[-][/b]", toggleVisibilityMenu, false)
+    addContextMenus(false)
 
     myData = JSON.decode(save_state)
     if myData ~= nil then
@@ -301,19 +302,71 @@ function toggleTokenVisibility(params)
     local menuString = "[b]" .. visibilityString .. "[/b]"
     -- need to do this since for some reason I can't edit context menues
     -- berserk, u can do better smh
-    self.clearContextMenu()
+    addContextMenus(true)
+end
+
+function addContextMenus(clear)
+    if clear then
+        self.clearContextMenu()
+    end
+
+    local visibilityString = _visible and "[3D9970]Visible[-]" or "[FF4136]Invisible[-]"
+    local menuString = "[b]" .. visibilityString .. "[/b]"
     self.addContextMenuItem(menuString, toggleVisibilityMenu, false)
+    self.addContextMenuItem("Fly Up", flyUp, true)
+    self.addContextMenuItem("Fly Down", flyDown, true)
+end
+
+local _flyOffset = 0
+local _floating = false
+local _myPosition = nil
+local OFFSET_VALUE = 1
+
+function flyUp(player_color)
+    if player_color ~= "Black" then
+        return
+    end
+    _flyOffset = _flyOffset + OFFSET_VALUE
+    setFloat()
+end
+function flyDown(player_color)
+    if player_color ~= "Black" then
+        return
+    end
+    if _floating then 
+        _flyOffset = _flyOffset - OFFSET_VALUE
+    end
+    setFloat()
+end
+
+function setFloat()
+    if _flyOffset == 0 then 
+        _floating = false 
+    else _floating = true end
+    _myPosition = self.getPosition()
+end
+
+function onUpdate()
+    if _floating then
+        if _myPosition == nil then
+            _myPosition = self.getPosition()
+        end
+
+        self.setPositionSmooth({_myPosition.x, _myPosition.y + _flyOffset, _myPosition.z}, false, false)
+    end
 end
 
 -- credits: https://steamcommunity.com/sharedfiles/filedetails/?id=2454472719
 
 function onPickUp(pcolor)
+    _floating = false
     destabilize()
     createMoveToken(pcolor, self)
 end
 
 function onDrop(dcolor)
     stabilize()
+    setFloat()
     destroyMoveToken()
 end
 
