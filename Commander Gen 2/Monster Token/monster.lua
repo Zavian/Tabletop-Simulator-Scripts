@@ -320,7 +320,7 @@ end
 local _flyOffset = 0
 local _floating = false
 local _myPosition = nil
-local OFFSET_VALUE = 1
+local OFFSET_VALUE = Grid.sizeX
 
 function flyUp(player_color)
     if player_color ~= "Black" then
@@ -343,7 +343,6 @@ function setFloat()
     if _flyOffset == 0 then 
         _floating = false 
     else _floating = true end
-    _myPosition = self.getPosition()
 end
 
 function onUpdate()
@@ -366,6 +365,7 @@ end
 
 function onDrop(dcolor)
     stabilize()
+    _myPosition = self.getPosition()
     setFloat()
     destroyMoveToken()
 end

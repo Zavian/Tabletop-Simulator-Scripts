@@ -194,14 +194,13 @@ function get_online_code(obj, player_clicker_color, alt_click)
         return
     end
 
-    if name:find("https://www.hastebin.com", 1, true) then
-        log("Hastebin detected.")
+    if name:find("hastebin", 1, true) then
         name = hastebinParser(name)
-    elseif name:find("https://www.toptal.com/", 1, true) then
-        log("Toptal detected.")
-        name = toptalParser(name)
     end
-
+    
+    if name:find("pastebin", 1, true) then
+       name = pastebinParser(name) 
+    end
     WebRequest.get(
         name,
         function(request)
@@ -245,21 +244,27 @@ function hastebinParser(url)
     return url
 end
 
-function toptalParser(url)
+function pastebinParser(url)
+    if url:find("https://pastebin.com/raw/") then
+        return url
+    end
+
+
+
     local rawPattern = "^.+/raw/.+$"
 
     log(url)
 
-    if not url:find(".lua") then
-        url = url .. ".lua"
-    end
+    -- if not url:find(".lua") then
+    --     url = url .. ".lua"
+    -- end
 
     if not url:find(rawPattern) then
-        local pageNamePattern = "^.+/(.+)%..+$"
+        local pageNamePattern = "^.+/(.+)$"
         local _,
             _,
             pageName = url:find(pageNamePattern)
-        url = "https://toptal.com/developers/hastebin/raw/" .. pageName
+        url = "https://pastebin.com/raw/" .. pageName
     end
 
     log(url)
@@ -272,7 +277,7 @@ function validDomain(name)
         "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/",
         "https://hastebin.com/",
         "https://pastebin.com/raw/",
-        "https://www.toptal.com/"
+        "https://pastebin.com/"
     }
 
     local valid = false
