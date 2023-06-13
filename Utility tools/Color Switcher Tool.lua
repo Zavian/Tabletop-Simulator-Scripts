@@ -280,8 +280,8 @@ function spawn_colors()
             snap_to_grid = false,
             callback_function = function(spawned)
                 if _PLAYER_COLORS[color] then
-                    spawned.setName(_PLAYER_COLORS[color])
-                end
+                    spawned.setName("[" .. getColorHex(color) .. "]" .. _PLAYER_COLORS[color] .. "[-]")
+                else spawned.setName("[" .. getColorHex(color) .. "]" .. color .. "[-]") end
                 spawned.setColorTint(color)
                 spawned.addTag(_TAG)
                 Wait.time(function() 
@@ -303,6 +303,27 @@ function spawn_colors()
     toggleVisibilities()
     
     FREEZE = false
+end
+
+function getColorHex(color)
+  color = color:lower()
+  
+  local colors = {
+    white = "FFFFFF",
+    teal = "39CCCC",
+    brown = "A5582A",
+    blue = "3498db",
+    red = "FF4136",
+    purple = "B10DC9",
+    orange = "FF851B",
+    pink = "FFC0CB",
+    yellow = "FFDC00",
+    grey = "AAAAAA",
+    green = "2ECC40",
+    black = "111111"
+  }
+  
+  return colors[color] or "Invalid color"
 end
 
 function set_objects()
