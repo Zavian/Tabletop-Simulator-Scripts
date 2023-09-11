@@ -2,6 +2,7 @@
 <Defaults>
     <Button class="heal" colors="#2ECC40|#55DF65|#43A34E|gray" TextColor="white" textAlignment="MiddleCenter" FontSize="25" />
     <Button class="damage" colors="#FF4136|#FB8881|#C93931|gray" TextColor="black" textAlignment="MiddleCenter" FontSize="25" />
+    <Button class="half" colors="#FFA500|#FFC825|#C46600|gray" TextColor="black" textAlignment="MiddleCenter" FontSize="25" />
     <InputField textAlignment="MiddleCenter" FontSize="30" placeholder=" " />
     <Button class="condition" width="150" height="150" iconWidth="85" iconColor="White" onclick="UI_AddCondition(id)" onmouseenter="UI_ShowCondition(id)" onmouseexit="UI_DefaultCondition()" />
     <Button class="shape" width="150" height="150" iconWidth="85" iconColor="White" onclick="UI_AddCondition(id)" onmouseenter="UI_ShowCondition(id)" onmouseexit="UI_DefaultCondition()" fontSize="25" fontStyle="Bold" textColor="#353c45" />
@@ -11,7 +12,8 @@
 <Panel position="440 0 -50" width="650" height="300" rotation="0 0 0" color="#FFFFFF50" id="main">
     <Button width="230" height="75" position="-200 80 0" class="heal" text="HEAL" id="healButton" />
     <InputField width="230" height="75" position="-200 0 0" id="hpVariance" text="" />
-    <Button width="230" height="75" position="-200 -80 0" class="damage" text="DAMAGE" id="damageButton" />
+    <Button width="150" height="75" position="-240 -80 0" class="damage" text="DAMAGE" id="damageButton" />
+    <Button width="80" height="75" position="-125 -80 0" class="half" text="1/2" id="damageHalfButton" />
 
     <Text text="CURRENT" width="105" height="75" FontSize="20" color="#E4E4E4" position="-10 55 0" />
     <InputField width="105" height="75" position="-20 0 0" id="currentHP" colors="#FFFFFF20|#E4E4E4|#FFFFFF|gray" text="" />
@@ -54,6 +56,7 @@ local linked = nil
 local elements = {
     heal = "healButton",
     damage = "damageButton",
+    half = "damageHalfButton",
     hp = "currentHP",
     maxhp = "maxHP",
     temphp = "tempHP",
@@ -74,6 +77,7 @@ function loadXML()
         local guid = self.getGUID()
         self.UI.setAttribute(elements.heal, "onClick", guid .. "/UIHealButton_Click()")
         self.UI.setAttribute(elements.damage, "onClick", guid .. "/UIDamageButton_Click()")
+        self.UI.setAttribute(elements.half, "onClick", guid .. "/UIDamageHalfButton_Click()")
         self.UI.setAttribute(elements.varhp, "onEndEdit", guid .. "/VarHPEndEdit(value)")
         self.UI.setAttribute(elements.hp, "onEndEdit", guid .. "/CurrentHPEndEdit(value)")
         self.UI.setAttribute(elements.maxhp, "onEndEdit", guid .. "/MaxHPEndEdit(value)")
@@ -124,57 +128,49 @@ function UIHealButton_Click(player, value, id)
     end
 end
 
-function UIDamageButton_Click(player, value, id)
-    local v = tonumber(self.UI.getAttribute(elements.varhp, "text"))
-    local t = self.UI.getAttribute(elements.temphp, "text")
-    local c = tonumber(self.UI.getAttribute(elements.hp, "text"))
-
-    if v == nil or c == nil then
-        broadcastToColor("You have to fill in the numbers!", player.color, {r = 1, g = 1, b = 1})
-        return
-    end
-
+function calculateDamage(value, temp_hp, current_hp, player)
     -- give the broadcast now as temporary hp damage is still calculated into the dc
     -- https://twitter.com/JeremyECrawford/status/503958007177166848
     if isUnderCondition("concentration") then
         broadcastToColor(
             string.format(
                 "You have taken [b]%s[/b] damage.\nYou need to succeed on a DC [FF4136][b]%s[/b][-] concentration check.",
-                v,
-                calcConcentrationCheck(v)
+                value,
+                calcConcentrationCheck(value)
             ),
             player.color,
             Color.White
         )
     end
 
-    if t ~= "" then
-        t = tonumber(t)
-        if t > 0 then
-            local minusT = t - v
+    if temp_hp ~= "" then
+        temp_hp = tonumber(temp_hp)
+        if temp_hp > 0 then
+
+            local minusT = temp_hp - value
             if minusT > 0 then
                 self.UI.setAttribute(elements.temphp, "text", minusT)
                 if linked then
                     linked.object.UI.setAttribute(elements.mini.temphp, "text", "TMP: " .. minusT)
                 end
-                v = 0
+                value = 0
             elseif minusT < 0 then
                 self.UI.setAttribute(elements.temphp, "text", "")
                 if linked then
                     linked.object.UI.setAttribute(elements.mini.temphp, "text", "")
                 end
-                v = -1 * minusT
+                value = -1 * minusT
             elseif minusT == 0 then
                 self.UI.setAttribute(elements.temphp, "text", "")
                 if linked then
                     linked.object.UI.setAttribute(elements.mini.temphp, "text", "")
                 end
-                v = 0
+                value = 0
             end
         end
     end
 
-    local newhp = c - v
+    local newhp = current_hp - value
     if newhp < 0 then
         newhp = 0
     end
@@ -185,6 +181,35 @@ function UIDamageButton_Click(player, value, id)
         linked.object.UI.setAttribute(elements.mini.bar, "percentage", (newhp / linked.maxHP) * 100)
         setPercentage(linked.object, linked.hp, linked.maxHP)
     end
+end
+
+function UIDamageButton_Click(player, value, id)
+    local v = tonumber(self.UI.getAttribute(elements.varhp, "text"))
+    local t = self.UI.getAttribute(elements.temphp, "text")
+    local c = tonumber(self.UI.getAttribute(elements.hp, "text"))
+
+    if v == nil or c == nil then
+        broadcastToColor("You have to fill in the numbers!", player.color, {r = 1, g = 1, b = 1})
+        return
+    end
+
+    calculateDamage(v, t, c, player)
+end
+
+function UIDamageHalfButton_Click(player, value, id)
+    local v = tonumber(self.UI.getAttribute(elements.varhp, "text"))
+    local t = self.UI.getAttribute(elements.temphp, "text")
+    local c = tonumber(self.UI.getAttribute(elements.hp, "text"))
+
+    v = math.floor(v/2)
+
+    if v == nil or c == nil then
+        broadcastToColor("You have to fill in the numbers!", player.color, {r = 1, g = 1, b = 1})
+        return
+    end
+
+    calculateDamage(v, t, c, player)
+    
 end
 
 function calcConcentrationCheck(damage)
