@@ -167,17 +167,17 @@ function onLoad(save_state)
 
     self.createButton(
         {
-            click_function = "destroy_all",
+            click_function = "resetFlyButton",
             function_owner = self,
-            label = "X",
-            position = _imMonster and {x = 1.6, y = ypos, z = 1.6} or {x = 0.8, y = ypos, z = 0},
+            label = "+999",
+            position = _imMonster and {x = 1.5, y = ypos, z = 1.6} or {x = 0.7, y = ypos, z = 0},
             rotation = {0, 180, 0},
-            width = 500,
+            width = 750,
             height = 500,
             font_size = 323,
-            color = {1, 0, 0},
-            font_color = {1, 1, 1},
-            tooltip = "Destroy Token",
+            color = {0,0.4550,0.8510, 1},
+            font_color = {1, 1, 1, 1},
+            tooltip = "Height",
             scale = _imMonster and {1, 1, 1} or {0.3, 0.3, 0.3}
         }
     )
@@ -223,6 +223,8 @@ function onLoad(save_state)
         _restore(myData)
     end
 end
+
+function none() end
 
 function _starter(params)
     self.setCustomObject(
@@ -339,10 +341,22 @@ function flyDown(player_color)
     setFloat()
 end
 
+function resetFlyButton(obj, color)
+    if color == "Black" then
+        _flyOffset = 0
+        setFloat()
+    end
+end
+
 function setFloat()
     if _flyOffset == 0 then 
-        _floating = false 
-    else _floating = true end
+        _floating = false
+        hideHeightButton()
+    else 
+        _floating = true 
+        showHeightButton()
+        setHeightText()
+    end
 end
 
 function onUpdate()
@@ -504,7 +518,28 @@ function setupUI()
 
     toggleVisualize({input = false})
     setOperation()
+
+    -- change the color of the height button
+    hideHeightButton()
 end
+
+function hideHeightButton()
+    -- rgb(0, 0.454902, 0.85098)
+    
+    self.editButton({index = 0, font_color = {1,1,1,0}})
+    self.editButton({index = 0, color = {0,0.4550,0.8510,0}})
+end
+
+function showHeightButton()
+    self.editButton({index = 0, font_color = {1,1,1,1}})
+    self.editButton({index = 0, color = {0,0.4550,0.8510,1}})
+end
+
+function setHeightText()
+    local height_index = _flyOffset / OFFSET_VALUE
+    self.editButton({index = 0, label = "+" .. height_index * 5})
+end
+
 
 function reset(obj, color)
     if color == "Black" then
