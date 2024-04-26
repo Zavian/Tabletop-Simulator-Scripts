@@ -161,6 +161,7 @@ function order_initiative(obj, color, alt)
             local name = obj.getName()
             if isToken(name) then
                 local tt = getLines(obj.getInputs()[1].value)
+                log(tt, name)
                 local ini = tonumber(tt[2])
                 local nn = tt[1]
                 table.insert(_initiativeTokens, {token = obj, initiative = ini, name = nn})
@@ -247,7 +248,6 @@ function sendToGlobal(objs)
         element.side = side
         table.insert(elements, element)
     end
-    --printTable(elements)
     Global.Call("setElements", {t = elements, mat = self.guid})
 end
 

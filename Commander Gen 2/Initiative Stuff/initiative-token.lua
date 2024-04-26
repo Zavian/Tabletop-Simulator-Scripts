@@ -57,9 +57,13 @@ function onLoad(save_state)
         if myData.c ~= nil then
             color = myData.c
         end
+
+        local lines = getLines(value)
+        myName = lines[1]
+        myRoll = lines[2]
     end
     textbox.custom.color = color
-    textbox.label = value
+    -- textbox.label = value
     
     self.createInput(
         {
@@ -75,6 +79,8 @@ function onLoad(save_state)
             value = value
         }
     )
+
+    self.editInput({index = 0, value = value})
 
     self.createButton(
         {
@@ -93,12 +99,15 @@ function onLoad(save_state)
     )
 
     self.setColorTint(color)
+
+    return JSON.encode(myData)
 end
 
-function onSave()
-    self.getInputs()[1].value = myName
-    return updateSave(myName)
-end
+-- function onSave()
+--     print(myName)
+--     self.getInputs()[1].value = myName
+--     return 
+-- end
 
 function onObjectDestroy(destroyedObj)
     if myToken then
@@ -111,7 +120,8 @@ function onObjectDestroy(destroyedObj)
 end
 
 function _init(params)
-    --initiative.call("_init", {input = {name = name, i = i, pawn = getObjectByID(id).obj.pawn.getGUID(), side = _side}})
+    --initiative.call("_init", 
+    -- {input = {name = name, i = i, pawn = getObjectByID(id).obj.pawn.getGUID(), side = _side}})
     --log(params, "Initiative parameters:")
     myName = params.input.name
     local modifier = params.input.modifier
@@ -155,6 +165,7 @@ function updateSave(value)
         t = guid,
         c = {color.r, color.g, color.b}
     }
+    -- log(myData)
     local save_data = JSON.encode(myData)
     self.script_state = save_data
     return save_data
@@ -172,11 +183,19 @@ function checkUpdates()
 end
 
 function onSave()
-    return JSON.encode(myData)
+    return updateSave(self.getInputs()[1].value)
 end
 
 function setSide(params)
     self.setColorTint(_states[params.side].color)
     self.setName(params.side .. "_token")
     self.tooltip = false
+end
+
+function getLines(text)
+    local returner = {}
+    for s in text:gmatch("[^\r\n]+") do
+        table.insert(returner, s)
+    end
+    return returner
 end

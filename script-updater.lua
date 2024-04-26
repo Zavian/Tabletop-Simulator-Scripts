@@ -201,6 +201,10 @@ function get_online_code(obj, player_clicker_color, alt_click)
     if name:find("pastebin", 1, true) then
        name = pastebinParser(name) 
     end
+
+    if name:find("pastery", 1, true) then
+        name = pasteryParser(name)
+    end
     WebRequest.get(
         name,
         function(request)
@@ -244,6 +248,22 @@ function hastebinParser(url)
     return url
 end
 
+function pasteryParser(url) 
+    -- find if there is /raw/ at the end
+    -- if so, simply return the url
+    if url:find("/raw/") then
+        return url
+    end
+    -- if url ends with / then add raw/ else add /raw/
+    if url:sub(-1) == "/" then
+        url = url .. "raw/"
+    else
+        url = url .. "/raw/"
+    end
+    return url
+
+end
+
 function pastebinParser(url)
     if url:find("https://pastebin.com/raw/") then
         return url
@@ -277,7 +297,8 @@ function validDomain(name)
         "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/",
         "https://hastebin.com/",
         "https://pastebin.com/raw/",
-        "https://pastebin.com/"
+        "https://pastebin.com/",
+        "https://www.pastery.net/"
     }
 
     local valid = false
