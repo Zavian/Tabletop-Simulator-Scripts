@@ -342,10 +342,10 @@ function ToggleHud()
         HideHud()
         roundCPos = nil
 
-        roundToken = getObjectFromGUID(_defaults.timeToken.rToken)
-        turnToken = getObjectFromGUID(_defaults.timeToken.tToken)
-        roundToken.setPositionSmooth(_defaults.timeToken.roundPos)
-        turnToken.setPositionSmooth(_defaults.timeToken.turnPos)
+        -- roundToken = getObjectFromGUID(_defaults.timeToken.rToken)
+        -- turnToken = getObjectFromGUID(_defaults.timeToken.tToken)
+        -- roundToken.setPositionSmooth(_defaults.timeToken.roundPos)
+        -- turnToken.setPositionSmooth(_defaults.timeToken.turnPos)
         statusCache = {}
         resetEpicBoons()
     else
@@ -355,13 +355,13 @@ end
 
 local roundCPos = nil
 function NextRound()
-    if roundCPos == nil then
-        roundCPos = {x = 101.65, y = 4.00, z = -28.57}
-    end
-    roundToken = getObjectFromGUID(_defaults.timeToken.rToken)
-    roundCPos.x = roundCPos.x + _defaults.timeToken.roundOffset
-    roundToken.setPositionSmooth(roundCPos, false, false)
-    roundToken.setRotationSmooth({0, 90, 0}, false, false)
+    -- if roundCPos == nil then
+    --     roundCPos = {x = 101.65, y = 4.00, z = -28.57}
+    -- end
+    -- roundToken = getObjectFromGUID(_defaults.timeToken.rToken)
+    -- roundCPos.x = roundCPos.x + _defaults.timeToken.roundOffset
+    -- roundToken.setPositionSmooth(roundCPos, false, false)
+    -- roundToken.setRotationSmooth({0, 90, 0}, false, false)
 
     for i = 1, #elements do
         if not isPlayer(elements[i].name) then

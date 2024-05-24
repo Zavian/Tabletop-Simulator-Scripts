@@ -96,21 +96,20 @@ function ReorderMat()
 end
 
 function setMat(matGUID)
-    if(debug) then
-        print("setMat: " .. matGUID)
-    end
     _defaults.initiative_mat = matGUID
+    local mat = getObjectFromGUID(_defaults.initiative_mat)
+    if mat.getGMNotes() ~= "" then
+        setupPlayerColors(mat.getGMNotes())
+    end
 end
 
-
--- /execute Global.call("setupPlayerColors", {players = {{"Zora", "Red"}, {"Amber", "Teal"}, {"Edwin", "Blue"}, {"Gilkan", "Green"}, {"Marcus", "White"}, {"Kottur", "Purple"}}})
-function setupPlayerColors(params)
+function setupPlayerColors(playerTable)
     local capitalize = function(str)
         return (str:gsub("^%l", string.upper))
     end
 
-    local players = params.players
-    if players then
+    local json = JSON.decode(playerTable)
+    if json.players then
         _defaults.players = {}
         _defaults.playersColors = {}
         -- {
@@ -119,14 +118,15 @@ function setupPlayerColors(params)
         --         ["Banana", "Orange"]
         --     ]
         -- }
-        for i = 1, #players do
-            local name = capitalize(players[i][1])
-            local color = capitalize(players[i][2])
+        for i = 1, #json.players do
+            local name = capitalize(json.players[i][1])
+            local color = capitalize(json.players[i][2])
             if name and color then
                 table.insert(_defaults.players, name)
                 _defaults.playersColors[string.lower(name)] = color
             end
         end
+
         if debug then
             printTable(_defaults.playersColors)
             printTable(_defaults.players)
@@ -342,10 +342,10 @@ function ToggleHud()
         HideHud()
         roundCPos = nil
 
-        roundToken = getObjectFromGUID(_defaults.timeToken.rToken)
-        turnToken = getObjectFromGUID(_defaults.timeToken.tToken)
-        roundToken.setPositionSmooth(_defaults.timeToken.roundPos)
-        turnToken.setPositionSmooth(_defaults.timeToken.turnPos)
+        -- roundToken = getObjectFromGUID(_defaults.timeToken.rToken)
+        -- turnToken = getObjectFromGUID(_defaults.timeToken.tToken)
+        -- roundToken.setPositionSmooth(_defaults.timeToken.roundPos)
+        -- turnToken.setPositionSmooth(_defaults.timeToken.turnPos)
         statusCache = {}
         resetEpicBoons()
     else
@@ -355,13 +355,13 @@ end
 
 local roundCPos = nil
 function NextRound()
-    if roundCPos == nil then
-        roundCPos = {x = 101.65, y = 4.00, z = -28.57}
-    end
-    roundToken = getObjectFromGUID(_defaults.timeToken.rToken)
-    roundCPos.x = roundCPos.x + _defaults.timeToken.roundOffset
-    roundToken.setPositionSmooth(roundCPos, false, false)
-    roundToken.setRotationSmooth({0, 90, 0}, false, false)
+    -- if roundCPos == nil then
+    --     roundCPos = {x = 101.65, y = 4.00, z = -28.57}
+    -- end
+    -- roundToken = getObjectFromGUID(_defaults.timeToken.rToken)
+    -- roundCPos.x = roundCPos.x + _defaults.timeToken.roundOffset
+    -- roundToken.setPositionSmooth(roundCPos, false, false)
+    -- roundToken.setRotationSmooth({0, 90, 0}, false, false)
 
     for i = 1, #elements do
         if not isPlayer(elements[i].name) then
