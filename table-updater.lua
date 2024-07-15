@@ -41,7 +41,7 @@ local _URLs = {
     npc_commander = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/Commander%20Gen%202/NPC%20Commander.v2.lua",
     monster = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/Commander%20Gen%202/Monster%20Token/monster.lua",
     initiative_mat = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/Commander%20Gen%202/Initiative%20Stuff/initiative-mat.lua",
-    player_manager = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/player_manager/.player-manager.lua",
+    player_manager = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/player_manager/player-manager.lua",
     initiative_token = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/Commander%20Gen%202/Initiative%20Stuff/initiative-token.lua",
     note = "https://raw.githubusercontent.com/Zavian/Tabletop-Simulator-Scripts/master/Clever%20Notecard/notecard.lua"
 }
