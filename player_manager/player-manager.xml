@@ -4,11 +4,11 @@
     <InputField textAlignment="MiddleCenter" FontSize="30" placeholder=" " />
     <Button class="condition" width="150" height="150" iconWidth="85" iconColor="White" onclick="UI_AddCondition(id)" onmouseenter="UI_ShowCondition(id)" onmouseexit="UI_DefaultCondition()" />
     <Button class="shape" width="150" height="150" iconWidth="85" iconColor="White" onclick="UI_AddCondition(id)" onmouseenter="UI_ShowCondition(id)" onmouseexit="UI_DefaultCondition()" fontSize="25" fontStyle="Bold" textColor="#353c45" />
-
+    <Button class="reminder" width="150" height="85" />
 </Defaults>
 
 
-<Panel position="440 0 -50" width="650" height="300" rotation="0 0 0" color="#FFFFFF50" id="main">
+<Panel showAnimation="FadeIn" position="440 0 -50" width="650" height="300" rotation="0 0 0" color="#FFFFFF50" id="main">
     <Button width="230" height="75" position="-200 80 0" class="heal" text="HEAL" id="healButton" />
     <InputField width="230" height="75" position="-200 0 0" id="hpVariance" text="" />
     <Button width="230" height="75" position="-200 -80 0" class="damage" text="DAMAGE" id="damageButton" />
@@ -28,7 +28,7 @@
 
 </Panel>
 
-<Panel id="ConditionMenu" width="550" height="425" position="-310 0 -50" color="#FFFFFF50" scale=".75 .75 .75">
+<Panel showAnimation="FadeIn" id="ConditionMenu" width="550" height="425" position="-310 0 -50" color="#FFFFFF50" scale=".75 .75 .75">
     <GridLayout id="condSelector" constraint="FixedColumnCount" constraintCount="5" startCorner="UpperRight" childAlignment="UpperRight" spacing="5" padding="10 10 10 10">
         <Button color="#ffffff" id="btn_blinded" class="condition" icon="blinded"></Button>
         <Button color="#ffffff" id="btn_charmed" class="condition" icon="charmed"></Button>
@@ -46,4 +46,10 @@
         <Button color="#ffffff" id="btn_stunned" class="condition" icon="stunned"></Button>
     </GridLayout>
     <Button offsetXY="0 10" rectAlignment="LowerCenter" fontStyle="Bold" fontSize="32" color="#ffffff00" width="530" height="70" id="ConditionType">Condition</Button>
+</Panel>
+
+<Panel showAnimation="FadeIn" id="ReminderMenu" width="435" height="175" position="0 -280 -50" color="#FFFFFF50" scale=".75 .75 .75">
+    <Text rectAlignment="UpperCenter" offsetXY="0 -10" fontStyle="Bold" fontSize="28" color="#ffffff00">Manage Reminders</Text>
+    <Button class="reminder" offsetXY="-90 0">Start</Button>
+    <Button class="reminder" offsetXY="90 0">End</Button>
 </Panel>

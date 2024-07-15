@@ -6,12 +6,12 @@ function UI_SideToggle()
     if closed then
         -- to open
         -- button stuff
-        self.UI.setAttribute("TopButton", "offsetXY", "75 -182")
+        self.UI.setAttribute("TopButton", "offsetXY", "75 -295")
         self.UI.setAttribute("TopButton", "text", "▲")
         self.UI.setAttribute("TopButton", "textColor", "#f0f0f0") -- dno why i gotta do this, but alas, shitty program
 
         -- panel stuff
-        self.UI.setAttribute("TopPanel", "active", "true")
+        self.UI.show("TopPanel")
     else
         -- to close
         -- button stuff
@@ -20,7 +20,7 @@ function UI_SideToggle()
         self.UI.setAttribute("TopButton", "textColor", "#f0f0f0") -- dno why i gotta do this, but alas, shitty program
 
         -- panel stuff
-        self.UI.setAttribute("TopPanel", "active", "false")
+        self.UI:hide("TopPanel")
     end
 end
 
@@ -86,7 +86,37 @@ function UI_MassRoll(player, request, id)
     end
 end
 
+local _MassReminder = ""
+
+function MassReminder(player, time)
+    local count = 0
+    local objs = Player[player.color].getSelectedObjects()
+    for i = 1, #objs do
+        local gm = objs[i].getGMNotes()
+        if gm == "monster_token" or gm == "boss_token" then
+            local monster = objs[i]
+            monster.call("setReminder", {time = time, message = _MassReminder})
+            count = count + 1
+            monster.highlightOn(Color.White, 1.5)
+        end
+    end
+    -- print to color with color #7FDBFF
+    printToColor("Set to " .. count .. " the reminder: " .. _MassReminder, "Black", Color.Blue)
+end
+
+function UI_MassEndReminder(player, request, id)
+    MassReminder(player, "_end")
+end
+
+function UI_MassStartReminder(player, request, id)
+    MassReminder(player, "_start")
+end
+
 function UI_UpdateMassMod(player, value)
     _MassModifier = value
+end
+
+function UI_UpdateMassReminder(player, value)
+    _MassReminder = value
 end
 -- #endregion

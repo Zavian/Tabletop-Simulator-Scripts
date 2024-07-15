@@ -13,12 +13,13 @@
     <Button class="opened" color="rgba(0,0,0,0)" offsetXY="0 0" rectAlignment="UpperLeft" />
     <Button class="activator" color="rgba(0,0,0,0)" offsetXY="160 0" width="154" rectAlignment="MiddleLeft" />
     <Button class="finder" tooltipBackgroundColor="black" tooltipTextColor="white" tooltipBorderColor="white" tooltip="Find pawn." tooltipPosition="Above" color="rgba(0,0,0,0)" offsetXY="340 0" rectAlignment="MiddleLeft" width="25" />
-    <Button class="InitiativeHud" colors="#282828FF|#c8329bFF|#ff9b38FF|#00000000" />
+    <Button class="InitiativeHud" colors="#282828FF|#e18d15FF|#8b8b8bFF|#00000000" />
 
 
     <Text active="true" rectAlignment="MiddleLeft" textAlignment="MiddleCenter" />
     <Text class="initiative" fontSize="22" width="25" offsetXY="340 0" />
     <Text class="name" fontSize="24" offsetXY="160 0" width="154" />
+    <Text class="reminder" fontSize="24" offsetXY="110 0" width="25" color="White" />
 
     <Toggle width="21" height="21" rectAlignment="MiddleRight" colors="#FFFFFF50|#FFFFFFFF|#B2B2B2FF|#FFFFFF00" active="true" />
     <Toggle class="conc" tooltipBackgroundColor="black" tooltipTextColor="white" tooltipBorderColor="white" tooltip="The creature is concentrating" tooltipPosition="Above" offsetXY="30 0" rectAlignment="MiddleLeft" />
@@ -48,6 +49,7 @@
 <Image class="player" active="false" id="teal" visibility="Teal" />
 <Image class="player" active="false" id="orange" visibility="Orange" />
 <Image class="player" active="false" id="pink" visibility="Pink" />
+
 
 <Panel active="false" class="initiative_box" visibility="Green" id="green_box">
     <Image class="player_request" active="true" id="green_request" />
@@ -100,4 +102,3 @@
     <Button fontSize="17" rectAlignment="LowerCenter" text="SUBMIT" width="75%" height="30" colors="#695e3e|#594F30|#574D2F|#000000" textColor="white" onClick="submitRequest" />
 </Panel>
 <!--   #endregion   -->
-

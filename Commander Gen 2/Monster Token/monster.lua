@@ -32,7 +32,7 @@
     <Image class="state" active="false" id="grappled" image="grappled" />
     <Image class="state" active="false" id="incapacitated" image="incapacitated" />
     <Image class="state" active="false" id="invisible" image="invisible" />
-    <Image class="state" active="false" id="on fire" image="on fire" />
+    <Image class="state" active="false" id="on_fire" image="on fire" />
     <Image class="state" active="false" id="paralyzed" image="paralyzed" />
     <Image class="state" active="false" id="petrified" image="petrified" />
     <Image class="state" active="false" id="poisoned" image="poisoned" />
@@ -317,7 +317,10 @@ function addContextMenus(clear)
     self.addContextMenuItem(menuString, toggleVisibilityMenu, false)
     self.addContextMenuItem("Fly Up", flyUp, true)
     self.addContextMenuItem("Fly Down", flyDown, true)
+    self.addContextMenuItem("Manage Reminders", showRemindersMenu, false)
 end
+
+
 
 local _flyOffset = 0
 local _floating = false
@@ -926,11 +929,13 @@ end
 local _conditions = {
     blinded = {
         desc = "A blinded creature can't see and automatically fails any ability check that requires sight.\nAttack rolls against the creature have advantage, and the creature's attack rolls have disadvantage.",
-        image = "http://cloud-3.steamusercontent.com/ugc/772860839275757198/B9460859AEC458C86D9657C1E2B1580623F8B5BC/"
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275757198/B9460859AEC458C86D9657C1E2B1580623F8B5BC/",
+        message = "I have disadvantage on attack rolls."
     },
     charmed = {
         desc = "A charmed creature can't attack the charmer or target the charmer with harmful abilities or magical effects.\nThe charmer has advantage on any ability check to interact socially with the creature.",
-        image = "http://cloud-3.steamusercontent.com/ugc/772860839275760191/6D2618C57A6A8D5752E50125742B960D0D414D6D/"
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275760191/6D2618C57A6A8D5752E50125742B960D0D414D6D/",
+        message = "I cannot attack the charmer."
     },
     concentration = {
         desc = "Whenever you take damage while you are concentrating on a spell, you must make a Constitution saving throw to maintain your Concentration. The DC equals 10 or half the damage you take, whichever number is higher. If you take damage from multiple sources, such as an arrow and a dragon’s breath, you make a separate saving throw for each source of damage.",
@@ -942,19 +947,23 @@ local _conditions = {
     },
     frightened = {
         desc = "A frightened creature has disadvantage on ability checks and attack rolls while the source of its fear is within line of sight.\nThe creature can't willingly move closer to the source of its fear.",
-        image = "http://cloud-3.steamusercontent.com/ugc/772860839275761396/8C91C898822015B04A84DF5D906C1D168775BF1E/"
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275761396/8C91C898822015B04A84DF5D906C1D168775BF1E/",
+        message = "I have disadvantage on ability and attack checks while the source of my fear is on my line of sight."
     },
     grappled = {
         desc = "A grappled creature's speed becomes 0, and it can't benefit from any bonus to its speed.\nThe condition ends if the grappler is incapacitated.\nThe condition also ends if an effect removes the grappled creature from the reach of the grappler or grappling effect, such as when a creature is hurled away by the thunderwave spell.",
-        image = "http://cloud-3.steamusercontent.com/ugc/772860839275761896/5F051E43B6A18D016B30EA7743A55FE4F9A09B8F/"
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275761896/5F051E43B6A18D016B30EA7743A55FE4F9A09B8F/",
+        message = "My speed is 0, and I can't benefit from any bonus to my speed."
     },
     incapacitated = {
         desc = "An incapacitated creature can't take actions or reactions.",
-        image = "http://cloud-3.steamusercontent.com/ugc/772860839275762313/53D74876998BEE4A165CEBFF9B368731F71E5BCD/"
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275762313/53D74876998BEE4A165CEBFF9B368731F71E5BCD/",
+        message = "I am incapacitated and can't take actions or reactions."
     },
     invisible = {
         desc = "An invisible creature is impossible to see without the aid of magic or a special sense. For the purpose of hiding, the creature is heavily obscured. The creature's location can be detected by any noise it makes or any tracks it leaves.\nAttack rolls against the creature have disadvantage, and the creature's attack rolls have advantage.",
-        image = "http://cloud-3.steamusercontent.com/ugc/772860839275762789/7E623448A878DC2413455BEF0F9424636CB684B6/"
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275762789/7E623448A878DC2413455BEF0F9424636CB684B6/",
+        message = "I have advantage on attack rolls."
     },
     on_fire = {
         desc = "A creature who is on fire takes 2d6 damage at the start of each of their turns.\nThe creature sheds bright light in a 20-foot radius and dim light for an additional 20 feet.\nThe effect can be ended early with the Extinguish action.",
@@ -962,23 +971,28 @@ local _conditions = {
     },
     paralyzed = {
         desc = "A paralyzed creature is incapacitated and can't move or speak.\nThe creature automatically fails Strength and Dexterity saving throws.\nAttack rolls against the creature have advantage.\nAny attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature.",
-        image = "http://cloud-3.steamusercontent.com/ugc/772860839275763685/0015B9C114E51C9FDDA0BB646DEE5C2D33BA3996/"
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275763685/0015B9C114E51C9FDDA0BB646DEE5C2D33BA3996/",
+        message = "I cannot take any actions."
     },
     petrified = {
         desc = "A petrified creature is transformed, along with any nonmagical object it is wearing or carrying, into a solid inanimate substance (usually stone). Its weight increases by a factor of ten, and it ceases aging.\nThe creature is incapacitated, can't move or speak, and is unaware of its surroundings.\nAttack rolls against the creature have advantage.",
-        image = "http://cloud-3.steamusercontent.com/ugc/772860839275764185/EECDE8DEC9F8652B7C039D25465E8005F27EADD6/"
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275764185/EECDE8DEC9F8652B7C039D25465E8005F27EADD6/",
+        message = "I cannot take any actions."
     },
     poisoned = {
         desc = "A poisoned creature has disadvantage on attack rolls and ability checks.",
-        image = "http://cloud-3.steamusercontent.com/ugc/772860839275764643/52B35B1737B0E3B7CF037E15F4BEED36FB72385B/"
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275764643/52B35B1737B0E3B7CF037E15F4BEED36FB72385B/",
+        message = "I have disadvantage on attack rolls and ability checks."
     },
     restrained = {
         desc = "A restrained creature's speed becomes 0, and it can't benefit from any bonus to its speed.\nAttack rolls against the creature have advantage, and the creature's attack rolls have disadvantage.\nThe creature has disadvantage on Dexterity saving throws.",
-        image = "http://cloud-3.steamusercontent.com/ugc/772860839275765227/4AC985009CE1EE4CB2D3797194FD6E57567C3951/"
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275765227/4AC985009CE1EE4CB2D3797194FD6E57567C3951/",
+        message = "My speed is 0, and I can't benefit from any bonus to my speed."
     },
     stunned = {
         desc = "A stunned creature is incapacitated, can't move, and can speak only falteringly.\nThe creature automatically fails Strength and Dexterity saving throws.\nAttack rolls against the creature have advantage.",
-        image = "http://cloud-3.steamusercontent.com/ugc/772860839275765722/2700DCCA22E84BA5297581E0B5C75581616D92E8/"
+        image = "http://cloud-3.steamusercontent.com/ugc/772860839275765722/2700DCCA22E84BA5297581E0B5C75581616D92E8/",
+        message = "I cannot take any actions."
     }
 }
 
@@ -991,6 +1005,21 @@ function manage_state(player, request, v)
     else
         printToColor(v .. ": " .. _conditions[(v:gsub(" ", "_"))].desc, player.color, {r = 1, g = 1, b = 1})
     end
+end
+
+function hasCondition(name)
+    name = string.lower(name)
+    -- iterate through key names of _conditions
+    for k, v in pairs(_conditions) do
+        local state = self.UI.getAttribute(k, "active")
+        
+        log(state)
+        if state == "true" and name == k then
+            log("Has condition: " .. name)
+            return true
+        end
+    end
+    return false
 end
 
 local areaObj = nil
@@ -1008,6 +1037,9 @@ function onCollisionEnter(info)
                 removeArea()
             elseif isAreaObject(name) then
                 makeJoined(obj)
+            elseif isReminderObject(name) then
+                processReminderObject(obj)
+                obj.destruct()
             end
         end
     end
@@ -1078,6 +1110,110 @@ function isAreaObject(name)
         end
     end
     return false
+end
+
+local TURN_NOTIFICATION = {
+    _start = "",
+    _end = ""
+}
+
+function showRemindersMenu()
+    Global.UI.show("reminder_dialogue")
+
+    local myColor = self.getColorTint():toHex()
+    local name = self.getName()
+    local guid = self.getGUID()
+
+    Global.UI.setAttributes("reminder_details", {
+        text = name .. " (" .. guid .. ")",
+        color = "#" .. myColor,
+    })
+
+    Global.UI.setAttribute("reminder_input_start", "text", TURN_NOTIFICATION._start)
+    Global.UI.setAttribute("reminder_input_end", "text", TURN_NOTIFICATION._end)
+
+end
+
+-- Summary: Sets a reminder for the current turn.
+-- Parameters:
+--   - params: A table containing the time and message of the reminder.
+--   - params.time: A string that can only be "_start" or "_end" indicating when the reminder should be displayed.
+--   - params.message: A string containing the reminder message.
+-- Returns: None.
+function setReminder(params)
+    local time = params.time
+    local message = params.message
+
+    if time ~= "_start" and time ~= "_end" then
+        printToColor("[FF0000]Invalid reminder time![-]", "Black", Color.White)
+    end
+    
+    TURN_NOTIFICATION[time] = message
+end
+function start_turn()
+    local myName = self.getName()
+    local myColor = self.getColorTint()
+    local colorHex = myColor:toHex()
+
+
+    -- iterate through all conditions
+    -- if the condition has a message send it
+    local gotACondition = false
+    for k, v in pairs(_conditions) do
+        if v.message ~= nil then
+            if hasCondition(k) then
+                printToColor("[" .. colorHex .. "] " .. myName .. "[-]: " .. v.message, "Black", Color.White)
+                gotACondition = true
+            end
+        end
+    end
+
+    if gotACondition then
+        broadcastToColor("You have one or more conditions!", "Black", Color.White)
+    end
+
+    if TURN_NOTIFICATION._start == "" then return end
+
+    local message = "[" .. colorHex .. "] " .. myName .. "[-]: " .. TURN_NOTIFICATION._start
+    broadcastToColor(message,"Black", Color.White)
+end
+
+function end_turn()
+    local myName = self.getName()
+    local myColor = self.getColorTint()
+    local colorHex = myColor:toHex()
+
+    if TURN_NOTIFICATION._end == "" then return end
+
+    local message = "[" .. colorHex .. "] " .. myName .. "[-]: " .. TURN_NOTIFICATION._end
+    broadcastToColor(message,"Black", Color.White)
+end
+
+function isReminderObject(name)
+    -- local reminderObjectName = {
+    --     "reminder_start",
+    --     "reminder_end"
+    -- }
+    if name == "reminder_start" or name == "reminder_end" then
+        return true
+    end
+    return false
+
+end
+
+function processReminderObject(obj)
+    local time = obj.getName():gsub("reminder_", "") == "start" and "start" or "end"
+    if time == "start" then
+        TURN_NOTIFICATION._start = obj.getDescription()
+    elseif time == "end" then
+        TURN_NOTIFICATION._end = obj.getDescription()
+    end
+    self.highlightOn(Color.White, 1.5)
+    printToColor("[" .. self.getColorTint():toHex() .. "] (Reminder " .. time .. ") " 
+    .. self.getName() .. "[-]: " .. obj.getDescription(), "Black", Color.White)
+
+    Global.UI.setAttribute(self.getGUID(), "active", "true")
+
 end
 
 function UI_RemoveArea(player)

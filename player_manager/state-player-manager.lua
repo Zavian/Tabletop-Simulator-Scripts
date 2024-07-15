@@ -1,26 +1,26 @@
-local set = nil
+local master_obj = nil
 local areaObj = nil
 
 function manage_state(player, request, v)
     -- request is the requested variable (in this case ID)
     -- v is the value of said variable. in this case we are in the button
     if master ~= "" then
-        set = getObjectFromGUID(master)
+        master_obj = getObjectFromGUID(master)
     end
     if player.color == "Black" then
         self.UI.setAttribute(v, "active", "false")
     else
         self.UI.setAttribute(v, "active", "false")
-        set.call("manage_condition", {c = v})
+        master_obj.call("manage_condition", {c = v})
     end
 end
 
 function onCollisionEnter(info)
     if master ~= "" then
-        set = getObjectFromGUID(master)
+        master_obj = getObjectFromGUID(master)
     end
 
-    if set ~= nil then
+    if master_obj ~= nil then
         local obj = info.collision_object
         if isCondition((obj.getName():gsub(" ", "_"))) then
             self.UI.setAttribute(string.lower(obj.getName()), "active", "true")
@@ -29,8 +29,30 @@ function onCollisionEnter(info)
             removeArea()
         elseif isAreaObject(obj.getName()) then
             makeJoined(obj)
+        elseif isReminderObject(obj.getName()) then
+            processReminderObject(obj)
+            obj.destruct()
         end
     end
+end
+
+function isReminderObject(name)
+    if name == "reminder_start" or name == "reminder_end" then
+        return true
+    end
+    return false
+end
+
+function processReminderObject(obj)
+    local time = obj.getName():gsub("reminder_", "") == "start" and "start" or "end"
+    
+    master_obj.call("makeReminderFromParams", {time = "_" .. time, reminder = obj.getDescription()})    
+
+    self.highlightOn(Color.White, 1.5)
+    printToColor("[" .. self.getColorTint():toHex() .. "] (Reminder " .. time .. ") " 
+    .. self.getName() .. "[-]: " .. obj.getDescription(), master_obj.call("getOwnerColor"), Color.White)
+
+    Global.UI.setAttribute(self.getGUID(), "active", "true")
 end
 
 function isCondition(condition)

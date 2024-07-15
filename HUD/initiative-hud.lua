@@ -50,6 +50,10 @@ local _defaults = {
     initiative_mat = nil
 }
 
+local _player_reminders = {
+
+}
+
 -- ITEMS LEGEND:
 --  id .. a = button, aka Activator for the overlay
 --  id .. c = Closing button, aka while panel is open
@@ -57,14 +61,27 @@ local _defaults = {
 --  id .. n = text, aka the Name of the initiative
 --  id .. o = Opening button, aka while panel is close
 --  id .. p = Panel, aka the panel that comes while open
---  id .. r = Toggle, aka Reaction used
---  id .. t = button, aka iniTiative button
---  id .. x = Toggle, aka Concentration used
+--  id .. t = button, aka the find pawn button
+--  id .. b = text, aka the reminder bubble
 --  id .. y = image, aka overlaY for the item to be active
 
 local activated = ""
 local id = 1
+
+
+-- legend for elements
+--[[
+    element = {
+        ini = nil,  -- number
+        name = nil, -- string
+        side = nil, -- string
+        pawn = nil  -- guid
+    }
+    element is a table that contains the element's data
+]]
 local elements = {}
+---------------
+
 local xmlElements = {}
 
 local statusCache = {}
@@ -200,6 +217,7 @@ function ElementBuilder(element)
         print("\t" .. element.initiative)
         print("\t" .. element.name)
         print("color = " .. parseColor(element.side))
+        print("id = " .. element.id)
         element.name = element.name .. "." .. element.id
     end
     local toAdd = {
@@ -246,6 +264,15 @@ function ElementBuilder(element)
                             onclick = "findPawn(id)",
                             pawn = element.pawn,
                             active = element.pawn ~= nil and "true" or "false"
+                        }
+                    },
+                    {
+                        tag = "Text",
+                        attributes = {
+                            id = element.pawn or element.id .. "b",
+                            class = "reminder",
+                            text = "֎",
+                            active = "false",
                         }
                     },
                     {
@@ -318,10 +345,17 @@ function BuildWidget(xmlEle)
 end
 
 function NextTurn()
-    if activated == "" then
+    -- notify_end_turn()
+    if activated == "" then -- first turn ever
         UI.setAttribute(elements[1].id .. "y", "active", "true")
         activated = elements[1].name .. "|" .. elements[1].id
-    else
+
+        -- TODO: LOW PRIO: Notify for the very first... should never ever happen
+
+    else -- any other turn
+        notify_end_turn() -- notifies the current person at the of their turn
+
+        -- UI STUFF - Set to next in initiative
         local myId = mysplit(activated, "|")[2]
         local myPos = findMe(myId)
         local nextPos = myPos + 1 > #elements and 1 or myPos + 1
@@ -333,7 +367,10 @@ function NextTurn()
         UI.setAttribute(myId .. "y", "active", "false")
         UI.setAttribute(elements[nextPos].id .. "y", "active", "true")
         activated = elements[nextPos].name .. "|" .. elements[nextPos].id
-        notify()
+        -------------------
+        
+        notify_start_turn() -- notifies the current person at the start of the turn (most reminders)
+        notify_next()       -- notifies the next person in line
     end
 end
 
@@ -438,14 +475,6 @@ function findPawn(player, request, v)
     local guid = UI.getAttribute(v, "pawn")
     local pawn = getObjectFromGUID(guid)
     pawn.call("toggleVisualize", {input = "true", color = "Black"})
-    --Player["Black"].lookAt(
-    --    {
-    --        position = pawn.getPosition(),
-    --        distance = 60,
-    --        pitch = 60,
-    --        yaw = 270
-    --    }
-    --)
 end
 
 function seeCache(name, initiative, pawn, thing)
@@ -477,6 +506,8 @@ function widgetReduce(player, request, v)
 end
 
 function widgetActivate(player, request, v)
+    notify_end_turn()
+
     local id = tonumber(string.sub(v, 1, -2))
     if activated ~= "" then
         local currentId = mysplit(activated, "|")[2]
@@ -484,11 +515,88 @@ function widgetActivate(player, request, v)
     end
     local name = UI.getAttribute(id .. "n", "text")
     activated = name .. "|" .. id
-    notify()
     UI.setAttribute(id .. "y", "active", "true")
+    
+    notify_next()
+    notify_start_turn()
 end
 
-function notify()
+function sendReminderToColor(color, reminder, time)
+    local time_string = ""
+    if time == "_start" then
+        time_string = "(Turn Start)"
+    elseif time == "_end" then
+        time_string = "(Turn End)"
+    end
+
+    broadcastToColor(time_string .. " " .. reminder, color, color)
+
+    printToColor(time_string .. " Reminder: " .. reminder, color, color)
+end
+function notify_start_turn()
+    local myId = mysplit(activated, "|")[2]
+    local myPos = findMe(myId)
+
+    if isPlayer(elements[myPos].name) then
+        local color = getColorByPlayer(elements[myPos].name)
+        if _player_reminders[color] then
+            if _player_reminders[color]["_start"] then
+                sendReminderToColor(color, _player_reminders[color]["_start"], "_start")
+            end
+        end
+    else
+        local guid = elements[myPos].pawn
+        getObjectFromGUID(guid).call("start_turn")
+    end
+end
+
+function notify_end_turn()
+    local myId = mysplit(activated, "|")[2]
+    local myPos = findMe(myId)
+
+    if isPlayer(elements[myPos].name) then
+        local color = getColorByPlayer(elements[myPos].name)
+        if _player_reminders[color] then
+            if _player_reminders[color]["_end"] then
+                sendReminderToColor(color, _player_reminders[color]["_end"], "_end")
+            end
+        end
+    else
+        local guid = elements[myPos].pawn
+        getObjectFromGUID(guid).call("end_turn")
+    end
+end
+
+--- Sets a reminder for a specific color at a designated time.
+--- @param params table containing reminder (string), time (string: "_start" or "_end"), and color (string)
+function setReminderForColor(params)
+    print(params.color)
+    print(params.time)
+    print(params.reminder)
+
+    if not _player_reminders[params.color] then
+        _player_reminders[params.color] = {}
+        if not _player_reminders[params.color][params.time] then
+            _player_reminders[params.color][params.time] = ""
+        end
+    end
+
+
+    _player_reminders[params.color][params.time] = params.reminder
+end
+
+--- Gets a reminder for a specific color at a designated time.
+--- @param params table containing time (string: "_start" or "_end"), and color (string)
+function getReminderForColor(params)
+    if _player_reminders[params.color] then
+        if _player_reminders[params.color][params.time] then
+            return _player_reminders[params.color][params.time]
+        end
+    end
+    return ""
+end
+
+function notify_next()
     local myId = mysplit(activated, "|")[2]
     local myPos = findMe(myId)
     if myPos then
@@ -526,6 +634,7 @@ function isPlayer(name)
             return true
         end
     end
+    return false
 end
 
 function isStatic(name)
@@ -785,4 +894,23 @@ function getPlayerByColor(color)
     return nil
 end
 
---#endregion
+
+function reminderUpdateText(player, value, id)
+    -- this activates while the player is writing on its little box
+    self.UI.setAttribute(id, "value", value)
+end
+
+local PLAYER_MANAGERS = {}
+
+function setPlayerManager(params)
+    PLAYER_MANAGERS[params.color] = params.guid
+end
+
+function getColorByPlayer(player)
+    for k, v in pairs(_defaults.playersColors) do
+        if k == player then
+            return v
+        end
+    end
+    return nil
+end

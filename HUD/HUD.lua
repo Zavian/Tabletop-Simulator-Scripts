@@ -333,7 +333,7 @@ function NextTurn()
         UI.setAttribute(myId .. "y", "active", "false")
         UI.setAttribute(elements[nextPos].id .. "y", "active", "true")
         activated = elements[nextPos].name .. "|" .. elements[nextPos].id
-        notify()
+        notify_next()
     end
 end
 
@@ -484,7 +484,7 @@ function widgetActivate(player, request, v)
     end
     local name = UI.getAttribute(id .. "n", "text")
     activated = name .. "|" .. id
-    notify()
+    notify_next()
     UI.setAttribute(id .. "y", "active", "true")
 end
 
@@ -1031,7 +1031,6 @@ end
 
 --#endregion
 
-local debug = false
 function printTable(t)
     local printTable_cache = {}
 
