@@ -1118,7 +1118,7 @@ local TURN_NOTIFICATION = {
 }
 
 function showRemindersMenu()
-    Global.UI.show("reminder_dialogue")
+    Global.UI.setAttribute("reminder_dialogue", "active", "true")
 
     local myColor = self.getColorTint():toHex()
     local name = self.getName()
@@ -1172,7 +1172,7 @@ function start_turn()
         broadcastToColor("You have one or more conditions!", "Black", Color.White)
     end
 
-    if TURN_NOTIFICATION._start == "" then return end
+    if TURN_NOTIFICATION._start == "" or TURN_NOTIFICATION._start == nil then return end
 
     local message = "[" .. colorHex .. "] " .. myName .. "[-]: " .. TURN_NOTIFICATION._start
     broadcastToColor(message,"Black", Color.White)
@@ -1183,7 +1183,7 @@ function end_turn()
     local myColor = self.getColorTint()
     local colorHex = myColor:toHex()
 
-    if TURN_NOTIFICATION._end == "" then return end
+    if TURN_NOTIFICATION._end == "" or TURN_NOTIFICATION._end == nil then return end
 
     local message = "[" .. colorHex .. "] " .. myName .. "[-]: " .. TURN_NOTIFICATION._end
     broadcastToColor(message,"Black", Color.White)
