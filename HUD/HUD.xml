@@ -40,14 +40,6 @@
     <Button class="Reminder" tooltip="Add reminder at start or end of turn" colors="#E7A251|#C78B46|#FFB259|#00000000" />
     <!--   #endregion   -->
 
-    <!-- #region average-hud -->
-    <Panel class="average_box" width="150" height="120" allowDragging="true" returnToOriginalPositionWhenReleased="false" rectAlignment="Center" offsetXY="0 -100" />
-    <Button class="average_submit" fontSize="14" rectAlignment="LowerCenter" text="NORMAL" width="50%" height="30" colors="#60686c|#A9A9A9|#C0C0C0|#000000" textColor="white" />
-    <Button class="average_submit_fail" fontSize="10" rectAlignment="LowerLeft" text="NAT 1" width="25%" height="30" colors="#A31D1D|#8B3737|#EE2A2A|#000000" textColor="white" onClick="submitAverage(one)" />
-    <Button class="average_submit_crit" fontSize="10" rectAlignment="LowerRight" text="NAT 20" width="25%" height="30" colors="#1DA323|#378B41|#3CEE2A|#000000" textColor="white" onClick="submitAverage(crit)" />
-    <InputField class="average_input" value="" textColor="white" characterValidation="Integer" alignment="MiddleCenter" colors="#000000aa|#000000bb|#000000bc|#ffffff00" placeholder=" " resizeTextForBestFit="true" rectAlignment="MiddleLeft" width="82%" height="48" offsetXY="15 0" />
-    <!-- #endregion average-hud -->
-
     <!-- #region epic-reminder -->
     <Image class="close-reminder" raycastTarget="true" offsetXY="-85 0" height="50%" preserveAspect="true" image="reminder-open" onClick="UIEpicReminderClose" />
     <Image class="open-reminder" raycastTarget="true" offsetXY="50 0" height="50%" preserveAspect="true" image="reminder-closed" onClick="UIEpicReminderOpen" />
@@ -55,8 +47,8 @@
     <Panel class="Epic_Reminder" width="162" height="617" rectAlignment="MiddleRight" allowDragging="false" />
     <Button class="Epic_Boon" tooltipPosition="Left" tooltipBackgroundColor="Black" tooltipBorderColor="#A52CFA" colors="#C573FF|#B349FD|#8931C6|Black" />
     <!-- #endregion-->
-</Defaults>
 
+</Defaults>
 
 <!--   #region initiative hud   -->
 <Button id="toggle" class="InitiativeHud" textColor="#f0f0f0ff" visibility="black" text="_" width="35" height="35" rectAlignment="LowerRight" onClick="ToggleHud" offsetXY="0 255" />
@@ -79,6 +71,7 @@
 <Image class="player" active="false" id="teal" visibility="Teal" />
 <Image class="player" active="false" id="orange" visibility="Orange" />
 <Image class="player" active="false" id="pink" visibility="Pink" />
+
 
 <Panel active="false" class="initiative_box" visibility="Green" id="green_box">
     <Image class="player_request" active="true" id="green_request" />
@@ -134,7 +127,7 @@
 
 <!--   #region breaker hud   -->
 <Button id="TopButton" class="TopButton" rectAlignment="UpperLeft" offsetXY="75 5" onClick="UI_SideToggle" />
-<Panel active="false" id="TopPanel" class="TopPanel" width="300" height="300" rectAlignment="UpperLeft" offsetXY="75 0">
+<Panel visibility="Black" active="false" id="TopPanel" class="TopPanel" width="300" height="300" rectAlignment="UpperLeft" offsetXY="75 0">
 
     <!-- mass hp -->
     <Panel offsetXY="0 -10">
@@ -164,80 +157,6 @@
 
 </Panel>
 <!--   #endregion   -->
-
-
-<!-- #region average-hud -->
-<Panel class="average_box" active="false" id="white_average_box" visibility="white">
-    <Image height="76" width="150" image="average" />
-    <InputField id="white_average" class="average_input" onValueChanged="updateAverage" />
-    <Button class="average_submit" onClick="submitAverage" />
-    <Button class="average_submit_fail" />
-    <Button class="average_submit_crit" />
-</Panel>
-<Panel class="average_box" active="false" id="teal_average_box" visibility="teal">
-    <Image height="76" width="150" image="average" />
-    <InputField id="teal_average" class="average_input" onValueChanged="updateAverage" />
-    <Button class="average_submit" onClick="submitAverage" />
-    <Button class="average_submit_fail" />
-    <Button class="average_submit_crit" />
-</Panel>
-<Panel class="average_box" active="false" id="brown_average_box" visibility="brown">
-    <Image height="76" width="150" image="average" />
-    <InputField id="brown_average" class="average_input" onValueChanged="updateAverage" />
-    <Button class="average_submit" onClick="submitAverage" />
-    <Button class="average_submit_fail" />
-    <Button class="average_submit_crit" />
-</Panel>
-<Panel class="average_box" active="false" id="blue_average_box" visibility="blue">
-    <Image height="76" width="150" image="average" />
-    <InputField id="blue_average" class="average_input" onValueChanged="updateAverage" />
-    <Button class="average_submit" onClick="submitAverage" />
-    <Button class="average_submit_fail" />
-    <Button class="average_submit_crit" />
-</Panel>
-<Panel class="average_box" active="false" id="red_average_box" visibility="red">
-    <Image height="76" width="150" image="average" />
-    <InputField id="red_average" class="average_input" onValueChanged="updateAverage" />
-    <Button class="average_submit" onClick="submitAverage" />
-    <Button class="average_submit_fail" />
-    <Button class="average_submit_crit" />
-</Panel>
-<Panel class="average_box" active="false" id="purple_average_box" visibility="purple">
-    <Image height="76" width="150" image="average" />
-    <InputField id="purple_average" class="average_input" onValueChanged="updateAverage" />
-    <Button class="average_submit" onClick="submitAverage" />
-    <Button class="average_submit_fail" />
-    <Button class="average_submit_crit" />
-</Panel>
-<Panel class="average_box" active="false" id="orange_average_box" visibility="orange">
-    <Image height="76" width="150" image="average" />
-    <InputField id="orange_average" class="average_input" onValueChanged="updateAverage" />
-    <Button class="average_submit" onClick="submitAverage" />
-    <Button class="average_submit_fail" />
-    <Button class="average_submit_crit" />
-</Panel>
-<Panel class="average_box" active="false" id="pink_average_box" visibility="pink">
-    <Image height="76" width="150" image="average" />
-    <InputField id="pink_average" class="average_input" onValueChanged="updateAverage" />
-    <Button class="average_submit" onClick="submitAverage" />
-    <Button class="average_submit_fail" />
-    <Button class="average_submit_crit" />
-</Panel>
-<Panel class="average_box" active="false" id="yellow_average_box" visibility="yellow">
-    <Image height="76" width="150" image="average" />
-    <InputField id="yellow_average" class="average_input" onValueChanged="updateAverage" />
-    <Button class="average_submit" onClick="submitAverage" />
-    <Button class="average_submit_fail" />
-    <Button class="average_submit_crit" />
-</Panel>
-<Panel class="average_box" active="false" id="green_average_box" visibility="green">
-    <Image height="76" width="150" image="average" />
-    <InputField id="green_average" class="average_input" onValueChanged="updateAverage" />
-    <Button class="average_submit" onClick="submitAverage" />
-    <Button class="average_submit_fail" />
-    <Button class="average_submit_crit" />
-</Panel>
-<!-- #endregion average-hud -->
 
 <!-- #region epic-reminder -->
 <Image class="reminder-glow" id="Epic_Glow" color="#A52CFA" active="false" width="162" height="617" rectAlignment="MiddleRight" allowDragging="false" preserveAspect="true" />
@@ -412,8 +331,9 @@
 </Panel>
 <!-- #endregion-->
 
+
 <!-- #region reminder-hud -->
-<Panel showAnimation="Grow" width="465" height="200" visibility="Black" active="false" color="#141414EE" id="reminder_dialogue" allowDragging="true" returnToOriginalPositionWhenReleased="false" rectAlignment="Center" outline="#1e1e1e" outlineSize="10 10">
+<Panel width="465" height="200" visibility="black" active="false" color="#141414EE" id="reminder_dialogue" allowDragging="true" returnToOriginalPositionWhenReleased="false" rectAlignment="Center" outline="#1e1e1e" outlineSize="10 10">
     <Button rectAlignment="UpperRight" colors="#282828FF|#e18d15FF|#8b8b8bFF|#00000000" width="35" height="35" textColor="#b60808" onClick="UI_ReminderClose">X</Button>
     <Panel rectAlignment="UpperCenter" height="20%">
         <Text color="#ffffff" fontSize="20">Show Reminders</Text>
