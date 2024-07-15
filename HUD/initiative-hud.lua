@@ -10,7 +10,7 @@ local _defaults = {
     },
     players = {
         "Zora",
-        "Amber",
+        "Thommas",
         "Edwin",
         "Gilkan",
         "Marcus",
@@ -18,7 +18,7 @@ local _defaults = {
     },
     playersColors = {
         zora = "Red",
-        amber = "Teal",
+        thommas = "Teal",
         edwin = "Blue",
         gilkan = "Green",
         marcus = "White",
@@ -506,8 +506,10 @@ function widgetReduce(player, request, v)
 end
 
 function widgetActivate(player, request, v)
-    notify_end_turn()
-
+    if activated ~= "" then 
+        notify_end_turn()
+    end
+    
     local id = tonumber(string.sub(v, 1, -2))
     if activated ~= "" then
         local currentId = mysplit(activated, "|")[2]
@@ -535,7 +537,10 @@ function sendReminderToColor(color, reminder, time)
 end
 function notify_start_turn()
     local myId = mysplit(activated, "|")[2]
+    if myId == "" then return end
+
     local myPos = findMe(myId)
+
 
     if isPlayer(elements[myPos].name) then
         local color = getColorByPlayer(elements[myPos].name)
@@ -552,7 +557,10 @@ end
 
 function notify_end_turn()
     local myId = mysplit(activated, "|")[2]
+    if not myId then return end
+
     local myPos = findMe(myId)
+    if not myPos then return end
 
     if isPlayer(elements[myPos].name) then
         local color = getColorByPlayer(elements[myPos].name)
@@ -907,6 +915,7 @@ function setPlayerManager(params)
 end
 
 function getColorByPlayer(player)
+    player = string.lower(player)
     for k, v in pairs(_defaults.playersColors) do
         if k == player then
             return v
@@ -914,3 +923,4 @@ function getColorByPlayer(player)
     end
     return nil
 end
+-- #endregion
