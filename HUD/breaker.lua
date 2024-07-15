@@ -11,7 +11,7 @@ function UI_SideToggle()
         self.UI.setAttribute("TopButton", "textColor", "#f0f0f0") -- dno why i gotta do this, but alas, shitty program
 
         -- panel stuff
-        self.UI.show("TopPanel")
+        self.UI.setAttribute("TopPanel", "active", "true")
     else
         -- to close
         -- button stuff
@@ -20,7 +20,7 @@ function UI_SideToggle()
         self.UI.setAttribute("TopButton", "textColor", "#f0f0f0") -- dno why i gotta do this, but alas, shitty program
 
         -- panel stuff
-        self.UI:hide("TopPanel")
+        self.UI.setAttribute("TopPanel", "active", "hide")
     end
 end
 

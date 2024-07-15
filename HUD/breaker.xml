@@ -17,7 +17,7 @@
 
 <!--   #region breaker hud   -->
 <Button id="TopButton" class="TopButton" rectAlignment="UpperLeft" offsetXY="75 5" onClick="UI_SideToggle" />
-<Panel active="false" id="TopPanel" class="TopPanel" width="300" height="300" rectAlignment="UpperLeft" offsetXY="75 0">
+<Panel visibility="Black" active="false" id="TopPanel" class="TopPanel" width="300" height="300" rectAlignment="UpperLeft" offsetXY="75 0">
 
     <!-- mass hp -->
     <Panel offsetXY="0 -10">
@@ -41,8 +41,8 @@
     <!--  mass reminder -->
     <Panel offsetXY="0 -210">
         <InputField id="MassReminder" placeholder="Enter reminder..." width="80%" height="40" fontSize="20" rectAlignment="UpperCenter" textAlignment="MiddleCenter" onEndEdit="UI_UpdateMassReminder(value)" />
-        <Button id="MassStartReminder" width="35%" class="TopPanel Reminder" text="START" rectAlignment="UpperCenter" onClick="UI_MassRoll" offsetXY="-60 -48" />
-        <Button id="MassEndReminder" width="35%" class="TopPanel Reminder" text="END" rectAlignment="UpperCenter" onClick="UI_MassRoll" offsetXY="60 -48" />
+        <Button id="MassStartReminder" width="35%" class="TopPanel Reminder" text="START" rectAlignment="UpperCenter" onClick="UI_MassStartReminder" offsetXY="-60 -48" />
+        <Button id="MassEndReminder" width="35%" class="TopPanel Reminder" text="END" rectAlignment="UpperCenter" onClick="UI_MassEndReminder" offsetXY="60 -48" />
     </Panel>
 
 </Panel>

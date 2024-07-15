@@ -23,7 +23,7 @@ function UI_ReminderSave()
     else
         broadcastToColor("Invalid GUID", "Black", "White")
     end
-    self.UI.hdie("reminder_dialogue")
+    self.UI.hide("reminder_dialogue")
 end
 
 function UI_ReminderClose()
