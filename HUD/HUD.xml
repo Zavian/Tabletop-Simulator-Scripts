@@ -327,27 +327,29 @@
             <Button active="false" class="Epic_Boon" id="Green_Epic_Boon_6" />
         </VerticalLayout>
         <Image class="close-reminder" color="#A52CFA" />
-        <!-- #endregion-->
+    </Panel>
+</Panel>
+<!-- #endregion-->
 
 
-        <!-- #region reminder-hud -->
-        <Panel width="465" height="200" visibility="black" active="false" color="#141414EE" id="reminder_dialogue" allowDragging="true" returnToOriginalPositionWhenReleased="false" rectAlignment="Center" outline="#1e1e1e" outlineSize="10 10">
-            <Button rectAlignment="UpperRight" colors="#282828FF|#e18d15FF|#8b8b8bFF|#00000000" width="35" height="35" textColor="#b60808" onClick="UI_ReminderClose">X</Button>
-            <Panel rectAlignment="UpperCenter" height="20%">
-                <Text color="#ffffff" fontSize="20">Show Reminders</Text>
-                <Text id="reminder_details" fontStyle="Bold" color="#ffffff" fontSize="16" offsetXY="0 -20">Ajax (aaaaaa)</Text>
-            </Panel>
-            <HorizontalLayout padding="10 10 20 20" spacing="10" height="60%" offsetXY="0 15">
-                <VerticalLayout>
-                    <Text color="white">Turn Start</Text>
-                    <InputField onValueChanged="reminderUpdateText" id="reminder_input_start" height="21" colors="#282828FF|#e18d15FF|#8b8b8bFF|#00000000" textColor="white"></InputField>
-                </VerticalLayout>
-                <VerticalLayout>
-                    <Text color="white">Turn End</Text>
-                    <InputField onValueChanged="reminderUpdateText" id="reminder_input_end" height="21" colors="#282828FF|#e18d15FF|#8b8b8bFF|#00000000" textColor="white"></InputField>
-                </VerticalLayout>
-            </HorizontalLayout>
-            <Button colors="#282828FF|#e18d15FF|#8b8b8bFF|#00000000" fontSize="20" textColor="white" height="20%" width="45%" offsetXY="15 10" rectAlignment="LowerLeft" onClick="UI_ReminderClose">Cancel</Button>
-            <Button colors="#282828FF|#e18d15FF|#8b8b8bFF|#00000000" fontSize="20" textColor="white" height="20%" width="45%" offsetXY="-15 10" rectAlignment="LowerRight" onClick="UI_ReminderSave">Save</Button>
-        </Panel>
-        <!-- #endregion -->
+<!-- #region reminder-hud -->
+<Panel width="465" height="200" visibility="black" active="false" color="#141414EE" id="reminder_dialogue" allowDragging="true" returnToOriginalPositionWhenReleased="false" rectAlignment="Center" outline="#1e1e1e" outlineSize="10 10">
+    <Button rectAlignment="UpperRight" colors="#282828FF|#e18d15FF|#8b8b8bFF|#00000000" width="35" height="35" textColor="#b60808" onClick="UI_ReminderClose">X</Button>
+    <Panel rectAlignment="UpperCenter" height="20%">
+        <Text color="#ffffff" fontSize="20">Show Reminders</Text>
+        <Text id="reminder_details" fontStyle="Bold" color="#ffffff" fontSize="16" offsetXY="0 -20">Ajax (aaaaaa)</Text>
+    </Panel>
+    <HorizontalLayout padding="10 10 20 20" spacing="10" height="60%" offsetXY="0 15">
+        <VerticalLayout>
+            <Text color="white">Turn Start</Text>
+            <InputField onValueChanged="reminderUpdateText" id="reminder_input_start" height="21" colors="#282828FF|#e18d15FF|#8b8b8bFF|#00000000" textColor="white"></InputField>
+        </VerticalLayout>
+        <VerticalLayout>
+            <Text color="white">Turn End</Text>
+            <InputField onValueChanged="reminderUpdateText" id="reminder_input_end" height="21" colors="#282828FF|#e18d15FF|#8b8b8bFF|#00000000" textColor="white"></InputField>
+        </VerticalLayout>
+    </HorizontalLayout>
+    <Button colors="#282828FF|#e18d15FF|#8b8b8bFF|#00000000" fontSize="20" textColor="white" height="20%" width="45%" offsetXY="15 10" rectAlignment="LowerLeft" onClick="UI_ReminderClose">Cancel</Button>
+    <Button colors="#282828FF|#e18d15FF|#8b8b8bFF|#00000000" fontSize="20" textColor="white" height="20%" width="45%" offsetXY="-15 10" rectAlignment="LowerRight" onClick="UI_ReminderSave">Save</Button>
+</Panel>
+<!-- #endregion -->
