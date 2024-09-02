@@ -358,7 +358,13 @@ function NextTurn()
         -- UI STUFF - Set to next in initiative
         local myId = mysplit(activated, "|")[2]
         local myPos = findMe(myId)
-        local nextPos = myPos + 1 > #elements and 1 or myPos + 1
+        local nextPos = 0
+
+        if myPos then -- This is to avoid the problems for very first initiative
+            nextPos = myPos + 1 > #elements and 1 or myPos + 1
+        else 
+            nextPos = 1
+        end
 
         if nextPos == 1 then
             NextRound()
