@@ -1,5 +1,5 @@
 <!-- #region reminder-hud -->
-<Panel width="465" height="200" visibility="black" active="false" color="#141414EE" id="reminder_dialogue" allowDragging="true" returnToOriginalPositionWhenReleased="false" rectAlignment="Center" outline="#1e1e1e" outlineSize="10 10">
+<Panel width="465" height="200" visibility="Black" active="false" color="#141414EE" id="reminder_dialogue" allowDragging="true" returnToOriginalPositionWhenReleased="false" rectAlignment="Center" outline="#1e1e1e" outlineSize="10 10">
     <Button rectAlignment="UpperRight" colors="#282828FF|#e18d15FF|#8b8b8bFF|#00000000" width="35" height="35" textColor="#b60808" onClick="UI_ReminderClose">X</Button>
     <Panel rectAlignment="UpperCenter" height="20%">
         <Text color="#ffffff" fontSize="20">Show Reminders</Text>
