@@ -114,7 +114,27 @@ local names = {
     "Rosaura",
     "Jesusita",
     "Adela",
-    "Lashon"
+    "Lashon",
+    "Barry",
+    "Cade",
+    "Stu",
+    "Pid",
+    "Moe",
+    "Lester",
+    "Piss",
+    "Stachio",
+    "Ray",
+    "Diation",
+    "Stan",
+    "Still",
+    "Earl",
+    "Lee Bird",
+    "Ward",
+    "Robe",
+    "Doug",
+    "Hole",
+    "Ollie",
+    "Garchy"
 }
 
 debug = false
